@@ -82,7 +82,15 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
             preparedStatement.executeUpdate();
         }
     }
-    
+
+    private UtenteVeicolo MysqlToUtenteVeicolo(ResultSet resultSet) throws Exception {
+        UtenteVeicolo uv = new UtenteVeicolo();
+        uv.setId(resultSet.getLong("id"));
+        uv.setIdUtente(resultSet.getLong("id_utente"));
+        uv.setIdVeicolo(resultSet.getLong("id_veicolo"));
+        uv.setAggiuntaServizio(resultSet.getBigDecimal("aggiuntaServizio"));
+        return uv;
+    }
     @Override
     public List<UtenteVeicolo> selectByUtente(long idUtente) {
         String sql = "SELECT * FROM utente_veicolo WHERE id_utente = ?";
@@ -99,7 +107,7 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
                         resultSet.getLong("id"),
                         resultSet.getLong("id_utente"),
                         resultSet.getLong("id_veicolo"),
-                        resultSet.getBigDecimal("aggiunta_servizio")
+                        resultSet.getBigDecimal("aggiuntaServizio")
                     ));
                 }
             }
@@ -108,15 +116,7 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
         }
         return listaVeicoliUtente;
     }
-    
-    private UtenteVeicolo MysqlToUtenteVeicolo(ResultSet resultSet) throws Exception {
-        UtenteVeicolo uv = new UtenteVeicolo();
-        uv.setId(resultSet.getLong("id"));
-        uv.setIdUtente(resultSet.getLong("id_utente"));
-        uv.setIdVeicolo(resultSet.getLong("id_veicolo"));
-        uv.setAggiuntaServizio(resultSet.getBigDecimal("aggiuntaServizio"));
-        return uv;
-    }
+
 
 
 }

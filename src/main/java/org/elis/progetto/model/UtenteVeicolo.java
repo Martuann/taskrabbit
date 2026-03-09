@@ -17,6 +17,13 @@ public class UtenteVeicolo {
 		this.idVeicolo = idVeicolo;
 		this.aggiuntaServizio = aggiuntaServizio;
 	}
+	
+	public UtenteVeicolo(Long idUtente, Long idVeicolo, BigDecimal aggiuntaServizio) {
+		super();
+		this.idUtente = idUtente;
+		this.idVeicolo = idVeicolo;
+		this.aggiuntaServizio = aggiuntaServizio;
+	}
 	public Long getId() {
 		return id;
 	}
