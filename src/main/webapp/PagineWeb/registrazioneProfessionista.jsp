@@ -5,28 +5,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registrazione Utente - Taskly</title>
+<title>Registrazione Professionista - Taskly</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/PagineWeb/css/Style.css">
 </head>
 <body>
-	<img src="${pageContext.request.contextPath}/PagineWeb/immagini/logo.png"
+	<img src="${pageContext.request.contextPath}/PagineWeb/immaginig/logo.png"
 		alt="Taskly Logo" class="logo-top-left">
 
 	<div class="registrazione-container">
-		<h1>Crea il tuo account Utente</h1>
-		<p>Unisciti alla nostra community per accedere ai servizi.</p>
+		<h1>Crea il tuo account Professionista</h1>
+		<p>Unisciti alla nostra rete di esperti.</p>
 
-		<form action="RegistrazioneUtenteServlet" method="POST">
-			<input type="hidden" name="tipoUtente" value="CLIENTE">
+		<form action="RegistrazioneProfessionistaServlet" method="POST">
+			<input type="hidden" name="tipoProfessionista" value="PROFESSIONISTA">
 
 			<div class="input-dati">
-				<input type="text" id="Nome" name="nome" placeholder="Nome"
+				<input type="text" id="nome" name="nome" placeholder="Nome"
 					minlength="2" required>
 			</div>
 
 			<div class="input-dati">
-				<input type="text" id="Cognome" name="cognome" placeholder="Cognome"
+				<input type="text" id="cognome" name="cognome" placeholder="Cognome"
 					minlength="2" required>
 			</div>
 
@@ -36,11 +36,20 @@
 					di Nascita:</label> <input type="date" id="dataNascita" name="dataNascita"
 					required>
 			</div>
-
 			<div class="input-dati">
 				<input type="text" id="codiceFiscale" name="codiceFiscale"
 					placeholder="Codice Fiscale" minlength="16" maxlength="16"
 					style="text-transform: uppercase;" required>
+			</div>
+
+			<div class="input-dati">
+				<select name="professione" required class="custom-select">
+					<option value="" disabled selected>Seleziona la tua
+						specializzazione</option>
+					<option value="IDRAULICO">Idraulico</option>
+					<option value="ELETTRICISTA">Elettricista</option>
+					<option value="MURATORE">Muratore</option>
+				</select>
 			</div>
 
 			<div class="input-dati">
@@ -55,9 +64,9 @@
 
 			<div class="input-dati">
 				<input type="password" id="password" name="password"
-					placeholder="Password (min. 8 caratteri)" minlength="8" required
-					title="La password deve  essere almeno di 8 caratteri">
+					placeholder="Password (min. 8 caratteri)" minlength="8" required>
 			</div>
+
 
 			<div class="input-row">
 				<div class="input-citta">
@@ -80,8 +89,8 @@
 				Hai già un account? <a href="loginUtente.jsp">Accedi qui</a>
 			</p>
 			<p>
-				Sei un professionista? <a href="registrazioneProf.jsp">Registrati
-					come Professionista</a>
+				Sei un Utente? <a href="registrazioneUtente.jsp">Registrati come
+					Utente</a>
 			</p>
 		</div>
 	</div>
