@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+body{
+	
+	 background-image: url("../PagineWeb/immagini/sfondo.png");
+		 background-image: url("../PagineWeb/immagini/sfondo.png");
+background-repeat: no-repeat;  /* Impedisce la duplicazione */
+    background-size: cover;        /* Ridimensiona l'immagine per coprire tutto lo spazio */
+    background-position: center;   /* Centra l'immagine */
+    background-attachment: fixed;  /* Opzionale: mantiene lo sfondo fermo mentre scorri */
+}
+	
+
+
+.offerta{
+	
+	display:flex;
+	justify-content:center;
+	
+}
+
+h1{
+	display:flex;
+	justify-content:center;
+	color:blue;
+	
+}
+
+h3{
+	
+	color:red;
+	
+}
+
+.primo{
+	display:flex;
+	justify-content:center;
+	font-size:30px;
+}
+
+.secondo{
+	display:flex;
+	justify-content:center;
+	font-size:30px;
+}
+
+.terzo{
+	display:flex;
+	justify-content:center;
+	font-size:30px;
+}
+
+.quarto{
+	display:flex;
+	justify-content:center;
+	font-size:30px;
+
+}
+
+.altro{
+	display:flex;
+	justify-content:center;
+	font-size:25px;
+}
+
+button{
+	display: block;
+	margin: 15px auto;
+	font-size: 15px;
+	padding: 10px 20px;
+
+	
+}

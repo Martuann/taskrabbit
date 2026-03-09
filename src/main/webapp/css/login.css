@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+*{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+	
+}
+body{
+	
+	 background-image: url("../PagineWeb/immagini/sfondo.png");
+background-repeat: no-repeat;  /* Impedisce la duplicazione */
+    background-size: cover;        /* Ridimensiona l'immagine per coprire tutto lo spazio */
+    background-position: center;   /* Centra l'immagine */
+    background-attachment: fixed;  /* Opzionale: mantiene lo sfondo fermo mentre scorri */
+}
+
+.accedi{
+	
+	text-align:center;
+	font-size:20px;
+	
+}
+
+.email{
+	text-align:center;
+	font-size:20px;
+}
+
+.password{
+	
+	text-align:center;
+	font-size:20px;
+}
+.registrazione-homepage{
+	text-align:center;
+}
+.login-container{
+	backdrop-filter:blur(10px);
+	width: 100%;
+	padding:40px;
+	border-radious:50px;
+	
+                            
+    display: inline-block;                      
+    
+	
+}
