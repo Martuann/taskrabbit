@@ -173,7 +173,7 @@ public class GestioneServiziServlet extends HttpServlet {
 
 private BigDecimal validaEConvertiPrezzo(String prezzoStr) throws IllegalArgumentException {
  if (prezzoStr == null || prezzoStr.trim().isEmpty()) {
-     throw new IllegalArgumentException("Il prezzo non può essere vuoto");
+     throw new IllegalArgumentException("Aggiungere un prezzo al servizio");
  }
  
  prezzoStr = prezzoStr.replace(",", ".");
