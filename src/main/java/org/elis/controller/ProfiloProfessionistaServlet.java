@@ -18,7 +18,6 @@ import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteVeicoloDao;
 import org.elis.dao.definition.VeicoloDao;
 import org.elis.dao.definition.UtenteProfessioneDAO;
-import org.elis.dao.definition.professioneDao;
 import org.elis.dao.mysql.MySqlVeicoloDao;
 import org.elis.dao.mysql.MysqlImmagineDao;
 import org.elis.dao.mysql.MysqlProfessioneDao;
@@ -64,7 +63,7 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			UtenteDao utenteDao = new MysqlUtenteDAO(ds);
 			ProfessioneDao professioneDao = new MysqlProfessioneDao(ds);
 			ImmagineDAO immagineDao = new MysqlImmagineDao(ds);
-			RecensioneDAO recensioneDao = new mysqlRecensioneDAO(connection);
+			RecensioneDAO recensioneDao = new mysqlRecensioneDAO(ds);
 			UtenteVeicoloDao utenteVeicoloDao = new MysqlUtenteVeicoloDao(ds);
 			VeicoloDao veicoloDao = new MySqlVeicoloDao(ds);
 			UtenteProfessioneDAO utenteProfessioneDao = new MysqlUtenteProfessioneDao(ds);
