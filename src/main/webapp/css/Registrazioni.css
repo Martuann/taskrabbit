@@ -8,7 +8,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-image: url('../Img/Sfondo.jpeg');
+	background-image: url('../PagineWeb/immagini/sfondo.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
