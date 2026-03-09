@@ -15,7 +15,7 @@ import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
 import org.elis.dao.definition.ImmagineDAO;
 import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.definition.professioniDao;
+import org.elis.dao.definition.professioneDao;
 
 public class MainTest {
 	public static void main(String[] args) throws Exception {

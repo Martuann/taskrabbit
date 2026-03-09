@@ -17,7 +17,7 @@ import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteVeicoloDao;
 import org.elis.dao.definition.VeicoloDao;
 import org.elis.dao.definition.UtenteProfessioneDAO;
-import org.elis.dao.definition.professioniDao;
+import org.elis.dao.definition.professioneDao;
 import org.elis.dao.mysql.MySqlVeicoloDao;
 import org.elis.dao.mysql.MysqlImmagineDao;
 import org.elis.dao.mysql.MysqlProfessioneDao;
@@ -61,14 +61,14 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 		}
 		try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskrabbit", "root", "root")){
 			UtenteDao utenteDao = new MysqlUtenteDAO(ds);
-			professioniDao professioniDao = new MysqlProfessioneDao(connection);
+			professioneDao professioneDao = new MysqlProfessioneDao(connection);
 			ImmagineDAO immagineDao = new MysqlImmagineDao(connection);
 			RecensioneDAO recensioneDao = new mysqlRecensioneDAO(connection);
 			UtenteVeicoloDao utenteVeicoloDao = new MysqlUtenteVeicoloDao(ds);
 			VeicoloDao veicoloDao = new MySqlVeicoloDao(ds);
 			UtenteProfessioneDAO utenteProfessioneDao = new MysqlUtenteProfessioneDao(connection);
 			Utente professionista = utenteDao.ricercaPerId(idProfessionista);
-			Professione professione = professioniDao.selectById(idProfessione);
+			Professione professione = professioneDao.selectById(idProfessione);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);
 			List<Recensione> recensioni = recensioneDao.selectByIdUtenteRicevente(idProfessionista);
 			List<Utente> recensori = new ArrayList<>();

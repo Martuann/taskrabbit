@@ -10,4 +10,6 @@ public interface UtenteProfessioneDAO {
 	void update(UtenteProfessione u);
 	void delete(Long id);
 	UtenteProfessione selectByIdUtenteIdProfessione(Long idUtente, Long idProfessione);
+	public List<UtenteProfessione> selectByUtente(long idUtente);
+
 }

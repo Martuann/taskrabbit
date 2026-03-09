@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.definition.professioniDao;
+import org.elis.dao.definition.professioneDao;
 import org.elis.dao.mysql.MysqlProfessioneDao;
 import org.elis.dao.mysql.MysqlRichiestaDao;
 import org.elis.dao.mysql.MysqlUtenteDAO;
@@ -48,7 +48,7 @@ public class RegisterServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UtenteDao  utentiInterni= new MysqlUtenteDAO();
-        professioniDao professioniInterne= new MysqlProfessioneDao();
+        professioneDao professioniInterne= new MysqlProfessioneDao();
 		String nome = request.getParameter("nome");
 		String cognome = request.getParameter("cognome");
 		String email = request.getParameter("email");
