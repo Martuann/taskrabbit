@@ -128,7 +128,25 @@ public class MysqlUtenteProfessioneDao implements UtenteProfessioneDAO {
 	}
     
 
-    
+	@Override
+	public UtenteProfessione selectByIdUtenteIdProfessione(Long idUtente, Long idProfessione) {
+		String sql = "SELECT * FROM utente_professione WHERE id_utente="+idUtente+" AND id_professione="+idProfessione;
+		try (PreparedStatement select = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			 ResultSet rs = select.executeQuery();
+			 if(rs.next()) {
+				 return new UtenteProfessione(
+					rs.getLong("id"),
+					rs.getLong("id_utente"),
+					rs.getLong("id_professione"),
+					(BigDecimal) rs.getObject("tariffaH")
+				 );
+			 }
+	     }
+		catch (Exception e) {
+			 e.printStackTrace();
+		}
+		return null;
+	}
     
     
     
