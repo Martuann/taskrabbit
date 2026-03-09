@@ -138,13 +138,13 @@ public class MysqlUtenteProfessioneDao implements UtenteProfessioneDAO {
 			select.setLong(1, idUtente);
 			select.setLong(2, idProfessione);
 			
-			try (ResultSet rs = select.executeQuery()) {
-				if(rs.next()) {
+			try (ResultSet resultSet = select.executeQuery()) {
+				if(resultSet.next()) {
 					return new UtenteProfessione(
-						rs.getLong("id"),
-						rs.getLong("id_utente"),
-						rs.getLong("id_professione"),
-						rs.getBigDecimal("tariffaH") 
+							resultSet.getLong("id"),
+							resultSet.getLong("id_utente"),
+							resultSet.getLong("id_professione"),
+							resultSet.getBigDecimal("tariffaH") 
 					);
 				}
 			}
@@ -163,4 +163,4 @@ public class MysqlUtenteProfessioneDao implements UtenteProfessioneDAO {
     
     
     
-}
+}}
