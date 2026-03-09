@@ -138,8 +138,8 @@ public class GestioneServiziServlet extends HttpServlet {
                 utenteVeicoloDao.associaVeicolo(new UtenteVeicolo(utenteLoggatoInSessione.getId(), idVeicolo, sovrapprezzo));
 
             } else if ("rimuovi_veicolo".equals(operazioneRichiesta)) {
-                long idAssociazioneVeicolo = Long.parseLong(request.getParameter("idVeicoloDaRimuovere"));
-                utenteVeicoloDao.rimuoviAssociazione(utenteLoggatoInSessione.getId(), idAssociazioneVeicolo);
+                long idVeicoloDaRimuovere = Long.parseLong(request.getParameter("idVeicoloDaRimuovere"));
+                utenteVeicoloDao.rimuoviAssociazione(utenteLoggatoInSessione.getId(), idVeicoloDaRimuovere);
 
             } else if ("modifica_sovrapprezzo".equals(operazioneRichiesta)) {
                 long idVeicolo = Long.parseLong(request.getParameter("idVeicolo"));

@@ -177,7 +177,7 @@
 								style="margin: 0;">
 								<input type="hidden" name="azione" value="rimuovi_veicolo">
 								<input type="hidden" name="idVeicoloDaRimuovere"
-									value="<%= uv.getId() %>">
+									value="<%= uv.getIdVeicolo() %>">
 								<button type="submit" class="btn-delete"
 									onclick="return confirm('Vuoi eliminare questo veicolo?')">Elimina</button>
 							</form>
