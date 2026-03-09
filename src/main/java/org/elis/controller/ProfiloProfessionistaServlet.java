@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.sql.DataSource;
 import org.elis.dao.definition.ImmagineDAO;
+import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RecensioneDAO;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteVeicoloDao;
@@ -61,12 +62,12 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 		}
 		try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskrabbit", "root", "root")){
 			UtenteDao utenteDao = new MysqlUtenteDAO(ds);
-			professioneDao professioneDao = new MysqlProfessioneDao(connection);
-			ImmagineDAO immagineDao = new MysqlImmagineDao(connection);
+			ProfessioneDao professioneDao = new MysqlProfessioneDao(ds);
+			ImmagineDAO immagineDao = new MysqlImmagineDao(ds);
 			RecensioneDAO recensioneDao = new mysqlRecensioneDAO(connection);
 			UtenteVeicoloDao utenteVeicoloDao = new MysqlUtenteVeicoloDao(ds);
 			VeicoloDao veicoloDao = new MySqlVeicoloDao(ds);
-			UtenteProfessioneDAO utenteProfessioneDao = new MysqlUtenteProfessioneDao(connection);
+			UtenteProfessioneDAO utenteProfessioneDao = new MysqlUtenteProfessioneDao(ds);
 			Utente professionista = utenteDao.ricercaPerId(idProfessionista);
 			Professione professione = professioneDao.selectById(idProfessione);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);
