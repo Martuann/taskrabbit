@@ -8,13 +8,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Pagina Profilo Professionista</title>
+<link rel="stylesheet" href="css/profilo_professionista.css">
 </head>
 <body>
 	<header>
 		<img id='propicprofilo' src='<%= request.getAttribute("propicprofilo") %>'>
-		<strong id="nomecognome"><%= request.getAttribute("nomecognome") %></strong>
-		<p id="veicoli">Veicoli: <%= request.getAttribute("veicoli") %></p>
-		<p id="tariffa">Tariffa: <%= request.getAttribute("tariffa") %> €/h</p>
+		<div id="infoprofilo">
+			<h1 id="nomeprofilo"><%= request.getAttribute("nomeprofilo") %></h1>
+			<p id="veicoli">Veicoli: <%= request.getAttribute("veicoli") %></p>
+			<p id="tariffa">Tariffa: <%= request.getAttribute("tariffa") %> €/h</p>
+		</div>
 	</header>
 	<section>
 		<h2>Foto di lavoro: </h2>
@@ -26,23 +29,23 @@
 		</div>
 	</section>
 	<footer>
-		<h2>Recensioni per <%= request.getAttribute("task") %>: </h2>
+		<h2>Recensioni:</h2>
 		<% 
 		List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni"); 
 		List<Utente> recensori = (List<Utente>) request.getAttribute("recensori"); 
 		for(int i=0; i<recensioni.size(); i++) { %>
 		<div class="recensione">
 			<div class="top">
-				<img id="propic" src="<%= request.getAttribute("propic"+i) %>">
-				<strong id="nomecognome"><%= request.getAttribute("nomecognome"+i) %></strong>
-				<p id="rating">Rating: <%= request.getAttribute("rating"+i) %>/5</p>
+				<img class="propic" src="<%= request.getAttribute("propic"+i) %>">
+				<strong class="nomeutente"><%= request.getAttribute("nomeutente"+i) %></strong>
+				<p class="rating">Rating: <%= request.getAttribute("rating"+i) %>/5</p>
 			</div>
 			<div class="center">
-				<p id="task">Task: <%= request.getAttribute("task"+i) %></p>
-				<p id="data">Data: <%= request.getAttribute("data"+i) %></p>
+				<p class="task">Task: <%= request.getAttribute("task"+i) %></p>
+				<p class="data">Data: <%= request.getAttribute("data"+i) %></p>
 			</div>
 			<div class="bottom">
-				<p id="descrizione"><%= request.getAttribute("descrizione"+i) %></p>
+				<p class="descrizione"><%= request.getAttribute("descrizione"+i) %></p>
 			</div>
 		</div>
 		<% } %>
