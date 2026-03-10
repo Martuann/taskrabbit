@@ -6,11 +6,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registrazione Utente - Taskly</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/PagineWeb/css/Style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/Registrazioni.css?v=1.1">
 </head>
 <body>
-	<img src="${pageContext.request.contextPath}/PagineWeb/immagini/logo.png"
+	<img
+		src="${pageContext.request.contextPath}/PagineWeb/immagini/logo.png"
 		alt="Taskly Logo" class="logo-top-left">
 
 	<div class="registrazione-container">
@@ -77,10 +77,10 @@
 
 		<div class="collegamenti-links">
 			<p>
-				Hai già un account? <a href="loginUtente.jsp">Accedi qui</a>
+				Hai già un account? <a href="login.html">Accedi qui</a>
 			</p>
 			<p>
-				Sei un professionista? <a href="registrazioneProf.jsp">Registrati
+				Sei un professionista? <a href="registrazioneProfessionista.jsp">Registrati
 					come Professionista</a>
 			</p>
 		</div>
