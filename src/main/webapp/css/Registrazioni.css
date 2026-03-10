@@ -129,7 +129,30 @@ hr {
     padding: 12px 5px; /* Padding ridotto ai lati */
 }
 
+.boxErrori {
+    color: #d32f2f;
+    background-color: #fee2e2;
+    border: 1px solid #ef5350;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
 
+.titoloErrore {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.ListaErrori {
+    margin-left: 20px;
+    font-size: 14px;
+    text-align: left;
+}
+
+.ListaErrori li {
+    margin-bottom: 5px; 
+}
 
 
 

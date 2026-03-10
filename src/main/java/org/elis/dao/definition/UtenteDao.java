@@ -13,7 +13,7 @@ public interface UtenteDao {
 	
 
 
-    void aggiungiUtente(Utente utente) throws Exception;
+    Long aggiungiUtente(Utente utente) throws Exception;
     
 
     void aggiornaUtente(Utente utente) throws Exception;

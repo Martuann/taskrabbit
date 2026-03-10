@@ -21,6 +21,28 @@
 		<h1>Crea il tuo account Professionista</h1>
 		<p>Unisciti alla nostra rete di esperti.</p>
 
+
+<% 
+		    List<String> listaErrori = (List<String>) request.getAttribute("listaErrori");
+		    if (listaErrori != null && !listaErrori.isEmpty()) { 
+		%>
+		    <div class="boxErrori">
+		        <strong class="titoloErrore">Attenzione, controlla questi campi:</strong>
+		        <ul class="ListaErrori">
+		            <% for (String err : listaErrori) { %>
+		                <li><%= err %></li>
+		            <% } %>
+		        </ul>
+		    </div>
+		<% 
+		    } 
+		%>
+	
+		<form action="<%= request.getContextPath()%>/RegistrazioneProfessionistaServlet" method="POST">
+			<input type="hidden" name="tipoProfessionista" value="PROFESSIONISTA">
+
+
+
 		<form action="<%= request.getContextPath()%>/RegistrazioneProfessionistaServlet" method="POST">
 			<input type="hidden" name="tipoProfessionista" value="PROFESSIONISTA">
 
