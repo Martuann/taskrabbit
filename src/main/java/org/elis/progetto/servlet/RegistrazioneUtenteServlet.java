@@ -41,20 +41,15 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 	String codiceFiscale = request.getParameter("codiceFiscale");
 
 	try {
-	    // 1. Gestione della data (parsing stringa -> LocalDate)
 	    LocalDate ddn = LocalDate.parse(dataDiNascita);
 
-	    // 2. Logica per la Città (Esempio ipotetico del tuo DAO)
-	    // Se non hai ancora l'ID, dovresti prima salvare/cercare la città
-	    long id_citta = 1; // Qui dovresti avere un metodo: cittaDao.getOrCreate(nomeCitta, provincia)
+	    long id_citta = 1;
 
-	    // 3. Creazione oggetto Utente (Assicurati che il costruttore corrisponda)
-	    // Nota: Ho aggiunto Ruolo.CLIENTE come esempio se hai un Enum
+
 	    Utente nuovoUtente = new Utente(nome, cognome, email, numero, password, ddn, codiceFiscale, Ruolo.UTENTE_BASE, id_citta);
 
 	    utentiInterni.aggiungiUtente(nuovoUtente);
 
-	    // Redirect al successo
 	    response.sendRedirect(request.getContextPath() + "/loginUtente.jsp");
 
 	} catch (RegisterException e) {
