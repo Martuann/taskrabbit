@@ -3,7 +3,7 @@ package org.elis.dao.definition;
 import java.util.List;
 import org.elis.progetto.model.Recensione;
 
-public interface RecensioneDAO {
+public interface RecensioneDao {
 	void insert(Recensione r);
 	Recensione selectById(Long id);
 	List<Recensione> selectAll();

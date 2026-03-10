@@ -6,17 +6,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
-
-import org.elis.dao.definition.RecensioneDAO;
+import org.elis.dao.definition.RecensioneDao;
 import org.elis.progetto.model.Recensione;
 
-public class mysqlRecensioneDAO implements RecensioneDAO {
+public class mysqlRecensioneDao implements RecensioneDao {
 	
 	private DataSource dataSource;
 	
-	public mysqlRecensioneDAO(DataSource dataSource) {
+	public mysqlRecensioneDao(DataSource dataSource) {
 		super();
 		this.dataSource = dataSource;
 	}

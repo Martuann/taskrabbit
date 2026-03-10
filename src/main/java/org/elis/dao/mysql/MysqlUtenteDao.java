@@ -14,10 +14,10 @@ import org.elis.dao.definition.UtenteDao;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 
-public class MysqlUtenteDAO implements UtenteDao {
+public class MysqlUtenteDao implements UtenteDao {
 	private DataSource dataSource;
 
-    public MysqlUtenteDAO(DataSource dataSource) {
+    public MysqlUtenteDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
    // Long id, String nome,String cognome ,String email, String telefono, String password, LocalDate ddn, String cf,

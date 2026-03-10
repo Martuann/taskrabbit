@@ -3,7 +3,7 @@ package org.elis.dao.definition;
 import java.util.List;
 import org.elis.progetto.model.UtenteProfessione;
 
-public interface UtenteProfessioneDAO {
+public interface UtenteProfessioneDao {
 	void insert(UtenteProfessione u);
 	UtenteProfessione selectById(Long id);
 	List<UtenteProfessione> selectAll();

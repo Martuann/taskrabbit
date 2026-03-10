@@ -1,4 +1,4 @@
-package org.elis.controller;
+package org.elis.progetto.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,20 +11,20 @@ import java.sql.DriverManager;
 import java.util.List;
 import java.util.ArrayList;
 import javax.sql.DataSource;
-import org.elis.dao.definition.ImmagineDAO;
+import org.elis.dao.definition.ImmagineDao;
 import org.elis.dao.definition.ProfessioneDao;
-import org.elis.dao.definition.RecensioneDAO;
+import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteVeicoloDao;
 import org.elis.dao.definition.VeicoloDao;
-import org.elis.dao.definition.UtenteProfessioneDAO;
+import org.elis.dao.definition.UtenteProfessioneDao;
 import org.elis.dao.mysql.MySqlVeicoloDao;
 import org.elis.dao.mysql.MysqlImmagineDao;
 import org.elis.dao.mysql.MysqlProfessioneDao;
-import org.elis.dao.mysql.MysqlUtenteDAO;
+import org.elis.dao.mysql.MysqlUtenteDao;
 import org.elis.dao.mysql.MysqlUtenteProfessioneDao;
 import org.elis.dao.mysql.MysqlUtenteVeicoloDao;
-import org.elis.dao.mysql.mysqlRecensioneDAO;
+import org.elis.dao.mysql.mysqlRecensioneDao;
 import org.elis.progetto.model.Immagine;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Recensione;
@@ -60,13 +60,13 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskrabbit", "root", "root")){
-			UtenteDao utenteDao = new MysqlUtenteDAO(ds);
+			UtenteDao utenteDao = new MysqlUtenteDao(ds);
 			ProfessioneDao professioneDao = new MysqlProfessioneDao(ds);
-			ImmagineDAO immagineDao = new MysqlImmagineDao(ds);
-			RecensioneDAO recensioneDao = new mysqlRecensioneDAO(ds);
+			ImmagineDao immagineDao = new MysqlImmagineDao(ds);
+			RecensioneDao recensioneDao = new mysqlRecensioneDao(ds);
 			UtenteVeicoloDao utenteVeicoloDao = new MysqlUtenteVeicoloDao(ds);
 			VeicoloDao veicoloDao = new MySqlVeicoloDao(ds);
-			UtenteProfessioneDAO utenteProfessioneDao = new MysqlUtenteProfessioneDao(ds);
+			UtenteProfessioneDao utenteProfessioneDao = new MysqlUtenteProfessioneDao(ds);
 			Utente professionista = utenteDao.ricercaPerId(idProfessionista);
 			Professione professione = professioneDao.selectById(idProfessione);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);

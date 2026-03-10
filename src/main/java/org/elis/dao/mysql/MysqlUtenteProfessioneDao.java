@@ -1,16 +1,15 @@
 package org.elis.dao.mysql;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
-import org.elis.dao.definition.UtenteProfessioneDAO;
+import org.elis.dao.definition.UtenteProfessioneDao;
 import org.elis.progetto.model.UtenteProfessione;
 
-public class MysqlUtenteProfessioneDao implements UtenteProfessioneDAO {
+public class MysqlUtenteProfessioneDao implements UtenteProfessioneDao {
     private DataSource dataSource;
 
     public MysqlUtenteProfessioneDao(DataSource dataSource) {

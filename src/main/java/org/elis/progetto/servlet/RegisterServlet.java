@@ -13,14 +13,15 @@ import java.util.List;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.definition.professioneDao;
+import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.mysql.MysqlProfessioneDao;
 import org.elis.dao.mysql.MysqlRichiestaDao;
-import org.elis.dao.mysql.MysqlUtenteDAO;
+import org.elis.dao.mysql.MysqlUtenteDao;
 import org.elis.progetto.model.Citta;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
+import org.elis.utilities.DataSourceConfig;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -49,8 +50,8 @@ public class RegisterServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UtenteDao  utentiInterni= new MysqlUtenteDAO();
-        ProfessioneDao professioniInterne= new MysqlProfessioneDao();
+		UtenteDao  utentiInterni= new MysqlUtenteDao(DataSourceConfig.getDataSource());
+        ProfessioneDao professioniInterne= new MysqlProfessioneDao(DataSourceConfig.getDataSource());
 		String nome = request.getParameter("nome");
 		String cognome = request.getParameter("cognome");
 		String email = request.getParameter("email");
@@ -62,7 +63,7 @@ public class RegisterServlet extends HttpServlet {
         String provincia=request.getParameter("provincia");
         Citta citta=new Citta(nomeCitta,provincia);
 		try {
-			utentiInterni.Register(new Utente(nome, cognome, email, password,LocalDate.parse(dataDiNascita),codiceFiscale,numero));
+			utentiInterni.aggiungiUtente(new Utente(nome, cognome, email, password,LocalDate.parse(dataDiNascita),codiceFiscale,numero));
 			response.sendRedirect(request.getContextPath() + "/login");
 		}
 		catch(RegisterException e) {

@@ -5,13 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
-
-import org.elis.dao.definition.ImmagineDAO;
+import org.elis.dao.definition.ImmagineDao;
 import org.elis.progetto.model.Immagine;
 
-public class MysqlImmagineDao implements ImmagineDAO {
+public class MysqlImmagineDao implements ImmagineDao {
 	
 	private DataSource dataSource;
 	
