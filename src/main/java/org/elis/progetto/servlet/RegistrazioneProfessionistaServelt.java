@@ -30,7 +30,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	UtenteDao utentiInterni = new MysqlUtenteDAO();
 
-	// Recupero parametri (NOMI ALLINEATI AL JSP)
+	// Recupero parametri
 	String nome = request.getParameter("Nome");
 	String cognome = request.getParameter("Cognome");
 	String email = request.getParameter("email");
@@ -44,9 +44,9 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 
 	try {
 	    LocalDate ddn = LocalDate.parse(dataDiNascita);
-	    long id_citta = 1; // Placeholder: qui andrebbe la logica del CittaDAO
+	    long id_citta = 1;
 
-	    // Creazione oggetto Professionista (Assicurati che esista questo costruttore)
+
 	    Professionista nuovoProf = new Professionista(
 		    nome, cognome, email, numero, password, ddn,
 		    codiceFiscale, Ruolo.PROFESSIONISTA, id_citta, specializzazione
