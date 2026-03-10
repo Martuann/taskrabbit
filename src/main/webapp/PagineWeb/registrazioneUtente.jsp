@@ -6,11 +6,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registrazione Utente - Taskly</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/Registrazioni.css?v=1.1">
+<link rel="stylesheet"
+	href="<%= request.getContextPath() %>/css/Registrazioni.css?v=1.1">
 </head>
 <body>
 	<img
-		src="${pageContext.request.contextPath}/PagineWeb/immagini/logo.png"
+		src="<%= request.getContextPath() %>/PagineWeb/immagini/logo.png"
 		alt="Taskly Logo" class="logo-top-left">
 
 	<div class="registrazione-container">
