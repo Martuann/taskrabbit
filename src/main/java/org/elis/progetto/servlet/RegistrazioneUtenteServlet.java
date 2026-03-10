@@ -12,6 +12,7 @@ import org.elis.dao.mysql.MysqlUtenteDAO;
 import org.elis.exception.RegisterException;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
+import org.elis.utilities.DataSourceConfig;
 
 @WebServlet("/RegistrazioneUtenteServlet")
 public class RegistrazioneUtenteServlet extends HttpServlet {
@@ -26,7 +27,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 	    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	UtenteDao utentiInterni = (UtenteDao) new MysqlUtenteDAO();
+	UtenteDao utentiInterni = (UtenteDao) new MysqlUtenteDAO(DataSourceConfig.getDataSource());
 
 	// Recupero parametri
 	String nome = request.getParameter("nome");
@@ -51,7 +52,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 	    // Nota: Ho aggiunto Ruolo.CLIENTE come esempio se hai un Enum
 	    Utente nuovoUtente = new Utente(nome, cognome, email, numero, password, ddn, codiceFiscale, Ruolo.UTENTE_BASE, id_citta);
 
-	    utentiInterni.Register(nuovoUtente);
+	    utentiInterni.aggiungiUtente(nuovoUtente);
 
 	    // Redirect al successo
 	    response.sendRedirect(request.getContextPath() + "/loginUtente.jsp");

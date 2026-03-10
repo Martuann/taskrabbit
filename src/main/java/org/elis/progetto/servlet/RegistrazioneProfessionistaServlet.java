@@ -8,6 +8,24 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import org.elis.dao.definition.CittaDao;
+import org.elis.dao.definition.UtenteDao;
+import org.elis.dao.mysql.MysqlCittaDao;
+import org.elis.dao.mysql.MysqlUtenteDAO;
+import org.elis.exception.RegisterException;
+import org.elis.progetto.model.Citta;
+import org.elis.progetto.model.Ruolo;
+import org.elis.progetto.model.Utente;
+import org.elis.utilities.DataSourceConfig;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDate;
+
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.mysql.MysqlUtenteDAO;
 import org.elis.exception.RegisterException;
@@ -17,6 +35,7 @@ import org.elis.progetto.model.Utente;
 
 @WebServlet("/RegistrazioneProfessionistaServlet")
 public class RegistrazioneProfessionistaServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
 
     public RegistrazioneProfessionistaServlet() {
@@ -28,9 +47,9 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	UtenteDao utentiInterni = new MysqlUtenteDAO();
+	UtenteDao utentiInterni = new MysqlUtenteDAO(DataSourceConfig.getDataSource());
+	CittaDao cittaInterna = new MysqlCittaDao(DataSourceConfig.getDataSource());
 
-	// Recupero parametri (NOMI ALLINEATI AL JSP)
 	String nome = request.getParameter("Nome");
 	String cognome = request.getParameter("Cognome");
 	String email = request.getParameter("email");
@@ -40,19 +59,20 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	String nomeCitta = request.getParameter("citta");
 	String provincia = request.getParameter("provincia");
 	String codiceFiscale = request.getParameter("codiceFiscale");
-	String specializzazione = request.getParameter("professione");
+	String specializzazione[] = request.getParameterValues("professione");
 
 	try {
 	    LocalDate ddn = LocalDate.parse(dataDiNascita);
-	    long id_citta = 1; // Placeholder: qui andrebbe la logica del CittaDAO
+	    Citta citta =new Citta(nomeCitta, provincia);
+	    cittaInterna.getOrCreateCitta(citta);
+	
 
-	    // Creazione oggetto Professionista (Assicurati che esista questo costruttore)
-	    Professionista nuovoProf = new Professionista(
+
+	    Utente nuovoProf = new Utente(
 		    nome, cognome, email, numero, password, ddn,
-		    codiceFiscale, Ruolo.PROFESSIONISTA, id_citta, specializzazione
-		    );
+		    codiceFiscale, Ruolo.PROFESSIONISTA,cittaInterna.getOrCreateCitta(citta)  );
 
-	    utentiInterni.Register(nuovoProf);
+	    utentiInterni.aggiungiUtente(nuovoProf);
 
 	    response.sendRedirect(request.getContextPath() + "/loginUtente.jsp?success=prof");
 

@@ -22,7 +22,7 @@ public class Utente {
 		this.id = id;
 	}
 	
-	public Utente(String nome, String email, String cognome, String telefono, String password, LocalDate ddn, String cf,
+	public Utente(String nome, String cognome,String email,  String telefono, String password, LocalDate ddn, String cf,
 			Ruolo ruolo, Long idCitta) {
 		super();
 		this.nome = nome;

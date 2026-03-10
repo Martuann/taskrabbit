@@ -97,4 +97,23 @@ public class MysqlProfessioneDao implements ProfessioneDao {
             e.printStackTrace();
         }
     }
+    
+/*    @Override
+    public Professione getProfessionibynome() throws Exception {
+        List<Professione> professioni = new ArrayList<>();
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM professione");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Professione p = new Professione(resultSet.getLong("id"), resultSet.getString("nome"));
+                professioni.add(p);
+            }
+        }
+        return professioni;
+    }
+    
+    
+    */
+    
+    
 }
