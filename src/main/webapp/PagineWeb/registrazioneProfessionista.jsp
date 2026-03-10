@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registrazione Professionista - Taskly</title>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/PagineWeb/css/Style.css">
+	href="<%=request.getContextPath()%>/PagineWeb/css/Style.css">
 </head>
 <body>
-	<img src="${pageContext.request.contextPath}/PagineWeb/immaginig/logo.png"
+	<img src="${request.getContextPath()}/PagineWeb/immaginig/logo.png"
 		alt="Taskly Logo" class="logo-top-left">
 
 	<div class="registrazione-container">
