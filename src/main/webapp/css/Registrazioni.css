@@ -128,3 +128,66 @@ hr {
     text-align: center;
     padding: 12px 5px; /* Padding ridotto ai lati */
 }
+
+
+
+
+
+
+
+
+
+
+.select2-container--default .select2-selection--multiple {
+    border-radius: 10px !important; 
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1.5px solid rgba(0,0,0,0.1) !important;
+    min-height: 45px !important; 
+    padding: 3px 10px !important;
+    transition: 0.3s ease;
+}
+
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #3357d6 !important; 
+    background: white !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #3357d6 !important; 
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important; 
+    padding: 4px 10px !important;
+    margin-top: 6px !important;
+    font-size: 13px;
+}
+
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: white !important;
+    margin-right: 6px !important;
+    border: none !important;
+    font-weight: bold;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+    color: #ff4d4d !important;
+    background: transparent !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

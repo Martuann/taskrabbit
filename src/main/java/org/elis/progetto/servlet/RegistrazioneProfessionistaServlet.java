@@ -7,13 +7,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.elis.dao.definition.CittaDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.mysql.MysqlCittaDao;
+import org.elis.dao.mysql.MysqlProfessioneDao;
 import org.elis.dao.mysql.MysqlUtenteDAO;
 import org.elis.exception.RegisterException;
 import org.elis.progetto.model.Citta;
+import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 import org.elis.utilities.DataSourceConfig;
@@ -43,8 +46,20 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	request.getRequestDispatcher("registrazioneProfessionista.jsp").forward(request, response);
+	
+	List<Professione> tutteLeProfessioni = new MysqlProfessioneDao(DataSourceConfig.getDataSource()).selectAll();
+	
+	request.setAttribute("listaProfessioni", tutteLeProfessioni);
+	request.getRequestDispatcher("/PagineWeb/registrazioneProfessionista.jsp").forward(request, response);	
+	
+	
+	
+	
+	
+	
+	
     }
+    
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	UtenteDao utentiInterni = new MysqlUtenteDAO(DataSourceConfig.getDataSource());
@@ -59,7 +74,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	String nomeCitta = request.getParameter("citta");
 	String provincia = request.getParameter("provincia");
 	String codiceFiscale = request.getParameter("codiceFiscale");
-	String specializzazione[] = request.getParameterValues("professione");
+	String listaIdProfessioni[] = request.getParameterValues("professione");
 
 	try {
 	    LocalDate ddn = LocalDate.parse(dataDiNascita);

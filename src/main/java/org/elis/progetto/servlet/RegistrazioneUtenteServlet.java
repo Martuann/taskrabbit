@@ -43,13 +43,15 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 	try {
 	    LocalDate ddn = LocalDate.parse(dataDiNascita);
 
-	    long id_citta = 1;
-
-
+	   
+get
+	   
+	    
 	    Utente nuovoUtente = new Utente(nome, cognome, email, numero, password, ddn, codiceFiscale, Ruolo.UTENTE_BASE, id_citta);
 
 	    utentiInterni.aggiungiUtente(nuovoUtente);
 
+	    // Redirect al successo
 	    response.sendRedirect(request.getContextPath() + "/loginUtente.jsp");
 
 	} catch (RegisterException e) {
