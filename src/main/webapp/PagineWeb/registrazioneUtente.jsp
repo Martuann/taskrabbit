@@ -10,13 +10,21 @@
 	href="<%= request.getContextPath() %>/css/Registrazioni.css?v=1.1">
 </head>
 <body>
-	<img
-		src="<%= request.getContextPath() %>/PagineWeb/immagini/logo.png"
+	<img src="<%= request.getContextPath() %>/PagineWeb/immagini/logo.png"
 		alt="Taskly Logo" class="logo-top-left">
 
 	<div class="registrazione-container">
 		<h1>Crea il tuo account Utente</h1>
 		<p>Unisciti alla nostra community per accedere ai servizi.</p>
+
+		<%
+    String msg = (String) request.getAttribute("messaggio");
+    if (msg != null) {
+%>
+		<p style="color: red; text-align: center; font-weight: bold;">
+			<%= msg %>
+		</p>
+		<% } %>
 
 		<form action="RegistrazioneUtenteServlet" method="POST">
 			<input type="hidden" name="tipoUtente" value="CLIENTE">
