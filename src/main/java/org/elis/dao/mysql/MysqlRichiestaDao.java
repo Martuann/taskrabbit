@@ -1,6 +1,5 @@
 package org.elis.dao.mysql;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -158,5 +157,37 @@ public class MysqlRichiestaDao implements RichiestaDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto) {
+		String sql = "SELECT * FROM richiesta WHERE id_utenteRichiesto="+idUtenteRichiesto;
+		List<Richiesta> richieste = new ArrayList<>();
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement select = connection.prepareStatement(sql);
+			 ResultSet rs = select.executeQuery()) {
+			
+			while(rs.next()) {
+				richieste.add(new Richiesta(
+					rs.getLong("id"),
+					rs.getString("descrizione"),
+					rs.getDate("data").toLocalDate(),
+					rs.getTime("ora_inizio").toLocalTime(),
+					rs.getTime("ora_fine").toLocalTime(),
+					rs.getBigDecimal("costoeffettivo"),
+					rs.getString("indirizzo"),
+					StatoRichiesta.values()[rs.getInt("stato")],
+					rs.getLong("id_utenteRichiedente"),
+					rs.getLong("id_utenteRichiesto"),
+					rs.getLong("id_professione"),
+					rs.getLong("id_veicolo")
+				));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return richieste;
 	}
 }
