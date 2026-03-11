@@ -16,12 +16,25 @@ public class Utente {
     
 	public Utente() {};
 	
-	public Utente(Long id, String nome, String cognome, String email, String telefono, String password, LocalDate ddn, String cf,
-			Ruolo ruolo, Long idCitta) {
-		this(nome,cognome,email,telefono,password,ddn,cf,ruolo,idCitta);
-		this.id = id;
-	}
+
 	
+	public Utente(Long id, String nome, String cognome, String email, String telefono, String password, LocalDate ddn,
+			String cf, Ruolo ruolo, Long idCitta) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
+		this.telefono = telefono;
+		this.password = password;
+		this.ddn = ddn;
+		this.cf = cf;
+		this.ruolo = ruolo;
+		this.idCitta = idCitta;
+	}
+
+
+
 	public Utente(String nome, String cognome,String email,  String telefono, String password, LocalDate ddn, String cf,
 			Ruolo ruolo, Long idCitta) {
 		super();
