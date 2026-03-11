@@ -33,6 +33,7 @@
 		<% 
 		List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni"); 
 		List<Utente> recensori = (List<Utente>) request.getAttribute("recensori"); 
+		if(recensioni!=null){
 		for(int i=0; i<recensioni.size(); i++) { %>
 		<div class="recensione">
 			<div class="top">
@@ -48,7 +49,7 @@
 				<p class="descrizione"><%= request.getAttribute("descrizione"+i) %></p>
 			</div>
 		</div>
-		<% } %>
+		<% }} %>
 	</footer>
 </body>
 </html>

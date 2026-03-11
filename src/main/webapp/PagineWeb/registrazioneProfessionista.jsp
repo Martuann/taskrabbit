@@ -1,3 +1,5 @@
+<%@page import="org.elis.progetto.model.Professione"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -6,17 +8,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registrazione Professionista - Taskly</title>
-<link rel="stylesheet" href="<%= request.getContextPath() %>/css/Registrazioni.css?v=1.1">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<link rel="stylesheet" href="<%= request.getContextPath()%>/css/Registrazioni.css?v=1.1">
+
 </head>
 <body>
-<img src="<%= request.getContextPath() %>/PagineWeb/immagini/logo.png" 
+<img src="<%= request.getContextPath()%>/PagineWeb/immagini/logo.png" 
          alt="Taskly Logo" class="logo-top-left">
 
 	<div class="registrazione-container">
 		<h1>Crea il tuo account Professionista</h1>
 		<p>Unisciti alla nostra rete di esperti.</p>
 
-		<form action="RegistrazioneProfessionistaServlet" method="POST">
+
+<% 
+		    List<String> listaErrori = (List<String>) request.getAttribute("listaErrori");
+		    if (listaErrori != null && !listaErrori.isEmpty()) { 
+		%>
+		    <div class="boxErrori">
+		        <strong class="titoloErrore">Attenzione, controlla questi campi:</strong>
+		        <ul class="ListaErrori">
+		            <% for (String err : listaErrori) { %>
+		                <li><%= err %></li>
+		            <% } %>
+		        </ul>
+		    </div>
+		<% 
+		    } 
+		%>
+	
+		<form action="<%= request.getContextPath()%>/RegistrazioneProfessionistaServlet" method="POST">
+			<input type="hidden" name="tipoProfessionista" value="PROFESSIONISTA">
+
+
+
+		<form action="<%= request.getContextPath()%>/RegistrazioneProfessionistaServlet" method="POST">
 			<input type="hidden" name="tipoProfessionista" value="PROFESSIONISTA">
 
 			<div class="input-dati">
@@ -42,13 +69,30 @@
 			</div>
 
 			<div class="input-dati">
-				<select name="professione" required class="custom-select">
-					<option value="" disabled selected>Seleziona la tua
-						specializzazione</option>
-					<option value="IDRAULICO">Idraulico</option>
-					<option value="ELETTRICISTA">Elettricista</option>
-					<option value="MURATORE">Muratore</option>
-				</select>
+				
+				<select class="selettoreprofessioni" name="professione" multiple="multiple" style="width: 100%; required">
+
+<%        	
+List<Professione> listaProfessioni =(List<Professione>)request.getAttribute("listaProfessioni");
+	
+if(listaProfessioni != null&&listaProfessioni.size()>0){
+	for(int i=0;i<listaProfessioni.size();i++){%>
+		<option value="<%=listaProfessioni.get(i).getId()%>"> <%=listaProfessioni.get(i).getNome() %></option>
+		
+		
+		
+		
+<% 	}
+	}
+
+%>		
+</select>
+				
+				
+				
+				
+	
+				
 			</div>
 
 			<div class="input-dati">
@@ -93,5 +137,17 @@
 			</p>
 		</div>
 	</div>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	
+	<script>
+		$(document).ready(function() {
+		    $('.selettoreprofessioni').select2({
+		    	placeholder: "Seleziona le tue specializzazioni",
+		    	allowClear: true
+		    });
+		});
+	</script>
 </body>
 </html>

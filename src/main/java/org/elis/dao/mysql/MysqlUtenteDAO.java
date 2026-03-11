@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,23 +25,39 @@ public class MysqlUtenteDao implements UtenteDao {
 //	Ruolo ruolo, Long idCitta
 
 	@Override
-	public void aggiungiUtente(Utente utente) throws Exception {
-String query = "INSERT INTO utente (nome, cognome, email, telefono, password, ddn,cf,ruolo,id_citta) VALUES (?, ?, ?, ?, ?, ?,?,?,?)";
+	public Long aggiungiUtente(Utente utente) throws Exception {
+		String query = "INSERT INTO utente (nome, cognome, email, telefono, password, ddn, cf, ruolo, id_citta) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement insertStatement = connection.prepareStatement(query)) {
+             PreparedStatement insertStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             
         	insertStatement.setString(1, utente.getNome());
         	insertStatement.setString(2, utente.getCognome());
         	insertStatement.setString(3, utente.getEmail());
         	insertStatement.setString(4, utente.getTelefono());
-
         	insertStatement.setString(5, utente.getPassword());
         	insertStatement.setDate(6, Date.valueOf(utente.getDdn()));
         	insertStatement.setString(7, utente.getCf());
         	insertStatement.setInt(8, utente.getRuolo().ordinal());            
         	insertStatement.setLong(9, utente.getIdCitta());
-        	insertStatement.executeUpdate();
+        	
+        	int colonneInserite = insertStatement.executeUpdate();
+        	
+        	if (colonneInserite == 0) {
+                throw new Exception("La creazione dell'utente è fallita, nessuna riga aggiunta nel DB.");
+            }
+
+            try (ResultSet IdGenerator = insertStatement.getGeneratedKeys()) {
+                if (IdGenerator.next()) {
+                    Long nuovoId = IdGenerator.getLong(1); 
+                    
+                    utente.setId(nuovoId); 
+                    
+                    return nuovoId; 
+                } else {
+                    throw new Exception("La creazione dell'utente è fallita, non è stato possibile ottenere l'ID.");
+                }
+            }
         }		
 	}
 
