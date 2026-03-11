@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -17,16 +18,24 @@
 		<h1>Crea il tuo account Utente</h1>
 		<p>Unisciti alla nostra community per accedere ai servizi.</p>
 
-		<%
-    String msg = (String) request.getAttribute("messaggio");
-    if (msg != null) {
-%>
-		<p style="color: red; text-align: center; font-weight: bold;">
-			<%= msg %>
-		</p>
-		<% } %>
+<% 
+		    List<String> listaErrori = (List<String>) request.getAttribute("listaErrori");
+		    if (listaErrori != null && !listaErrori.isEmpty()) { 
+		%>
+		    <div class="boxErrori">
+		        <strong class="titoloErrore">Attenzione, controlla questi campi:</strong>
+		        <ul class="ListaErrori">
+		            <% for (String err : listaErrori) { %>
+		                <li><%= err %></li>
+		            <% } %>
+		        </ul>
+		    </div>
+		<% 
+		    } 
+		%>
 
-		<form action="RegistrazioneUtenteServlet" method="POST">
+
+		<form action="<%= request.getContextPath() %>/RegistrazioneUtenteServlet" method="POST">
 			<input type="hidden" name="tipoUtente" value="CLIENTE">
 
 			<div class="input-dati">
@@ -85,13 +94,12 @@
 		<hr>
 
 		<div class="collegamenti-links">
-			<p>
-				Hai già un account? <a href="login.html">Accedi qui</a>
-			</p>
-			<p>
-				Sei un professionista? <a href="registrazioneProfessionista.jsp">Registrati
-					come Professionista</a>
-			</p>
+		<p>
+    Hai già un account? <a href="<%= request.getContextPath() %>/loginUtente.jsp">Accedi qui</a>
+	</p>
+	<p>
+    Sei un professionista? <a href="<%= request.getContextPath() %>/PagineWeb/registrazioneProfessionista.jsp">Registrati come Professionista</a>
+	</p>
 		</div>
 	</div>
 </body>

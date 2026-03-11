@@ -106,7 +106,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
             Period eta = Period.between(ddn, oggi);
             
             if (eta.getYears() < 18) {
-                errori.add("Devi essere maggiorenne (avere almeno 18 anni) per registrarti come professionista.");
+                errori.add("Devi essere maggiorenne per registrarti come professionista.");
             }
             
         } catch (DateTimeParseException e) {
