@@ -1,73 +1,137 @@
-@charset "UTF-8";
-
-body{
-	
-	 background-image: url("../PagineWeb/immagini/sfondo.png");
-		 background-image: url("../PagineWeb/immagini/sfondo.png");
-background-repeat: no-repeat;  /* Impedisce la duplicazione */
-    background-size: cover;        /* Ridimensiona l'immagine per coprire tutto lo spazio */
-    background-position: center;   /* Centra l'immagine */
-    background-attachment: fixed;  /* Opzionale: mantiene lo sfondo fermo mentre scorri */
-}
-	
-
-
-.offerta{
-	
-	display:flex;
-	justify-content:center;
-	
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
 }
 
-h1{
-	display:flex;
-	justify-content:center;
-	color:blue;
-	
+body {
+    background-color: #f4f7f6;
+    color: #333;
 }
 
-h3{
-	
-	color:red;
-	
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 8%;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.primo{
-	display:flex;
-	justify-content:center;
-	font-size:30px;
+.logo {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0047FF;
 }
 
-.secondo{
-	display:flex;
-	justify-content:center;
-	font-size:30px;
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 25px;
 }
 
-.terzo{
-	display:flex;
-	justify-content:center;
-	font-size:30px;
+.auth-buttons a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
 }
 
-.quarto{
-	display:flex;
-	justify-content:center;
-	font-size:30px;
-
+.btn-login {
+    color: #0047FF !important;
+    font-weight: 600;
 }
 
-.altro{
-	display:flex;
-	justify-content:center;
-	font-size:25px;
+.btn-register {
+    background: #0047FF;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
 }
 
-button{
-	display: block;
-	margin: 15px auto;
-	font-size: 15px;
-	padding: 10px 20px;
-
-	
+/* HERO */
+.hero {
+    height: 500px;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                url('../PagineWeb/immagini/sfondo.png'); 
+    background-size: cover;
+    background-position: center 25%;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
 }
+
+.hero-content h1 { font-size: 3.5rem; margin-bottom: 10px; }
+.hero-content p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; }
+
+/* SEARCH BAR */
+.search-container {
+    background: white;
+    padding: 8px;
+    border-radius: 50px;
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-container input {
+    border: none;
+    padding: 12px 20px;
+    flex: 1;
+    outline: none;
+}
+
+.search-container button {
+    background: #0047FF;
+    color: white;
+    border: none;
+    padding: 0 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* GRIGLIA */
+.services-section {
+    padding: 60px 8%;
+    text-align: center;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.service-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.service-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* CORREZIONE PITTURA */
+.pittura-card img {
+    object-position: center 22%; 
+}
+
+.card-text { padding: 20px; text-align: left; }
+.view-more { color: #0047FF; font-weight: bold; text-decoration: none; }
+
+footer { padding: 40px; text-align: center; color: #999; background: #fff; }
