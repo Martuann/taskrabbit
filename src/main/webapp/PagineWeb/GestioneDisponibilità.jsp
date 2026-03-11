@@ -39,20 +39,20 @@
 	<div><a href="?offSet=<%=offSet-1%>">Indietro</a><a href="?offSet=<%=offSet+1%>">Avanti</a></div>
 	
 	
-	<div class="Lunedi">Lunedì
+	<div class="Giorno">Lunedì
 	<%=LunediDellaSettimana.getDayOfMonth() %>
 	</div>
-		<div class="Martedi">Martedì
+		<div class="Giorno">Martedì
 		<%=LunediDellaSettimana.plusDays(1).getDayOfMonth() %></div>
-		<div class="mercoledi">Mercoledì
+		<div class="Giorno">Mercoledì
 		<%=LunediDellaSettimana.plusDays(2).getDayOfMonth() %></div>
-		<div class="giovedi">Giovedì
+		<div class="Giorno">Giovedì
 		<%=LunediDellaSettimana.plusDays(3).getDayOfMonth() %></div>
-		<div class="venerdi">Venerdì
+		<div class="Giorno">Venerdì
 		<%=LunediDellaSettimana.plusDays(4).getDayOfMonth() %></div>
-		<div class="sabato">Sabato
+		<div class="Giorno">Sabato
 		<%=LunediDellaSettimana.plusDays(5).getDayOfMonth() %></div>
-		<div class="domenica">Domenica
+		<div class="Giorno">Domenica
 		<%=LunediDellaSettimana.plusDays(6).getDayOfMonth() %></div>
 	
 	</div>
