@@ -64,8 +64,8 @@ public class MysqlRichiestaDao implements RichiestaDao {
 						rs.getLong("id"),
 						rs.getString("descrizione"),
 						rs.getDate("data").toLocalDate(),
-						rs.getTime("ora_inizio").toLocalTime(),
-						rs.getTime("ora_fine").toLocalTime(),
+						rs.getTime("orario_inizio").toLocalTime(),
+						rs.getTime("orario_fine").toLocalTime(),
 						rs.getBigDecimal("costoeffettivo"),
 						rs.getString("indirizzo"),
 						StatoRichiesta.values()[rs.getInt("stato")],
@@ -98,8 +98,8 @@ public class MysqlRichiestaDao implements RichiestaDao {
 					rs.getLong("id"),
 					rs.getString("descrizione"),
 					rs.getDate("data").toLocalDate(),
-					rs.getTime("ora_inizio").toLocalTime(),
-					rs.getTime("ora_fine").toLocalTime(),
+					rs.getTime("orario_inizio").toLocalTime(),
+					rs.getTime("orario_fine").toLocalTime(),
 					rs.getBigDecimal("costoeffettivo"),
 					rs.getString("indirizzo"),
 					StatoRichiesta.values()[rs.getInt("stato")],
@@ -119,7 +119,7 @@ public class MysqlRichiestaDao implements RichiestaDao {
 
 	@Override
 	public void update(Richiesta r) {
-		String sql = "UPDATE richiesta SET descrizione=?, data=?, ora_inizio=?, ora_fine=?, costoeffettivo=?, indirizzo=?, stato=?, id_utenteRichiedente=?, id_utenteRichiesto=?, id_professione=?, id_veicolo=? WHERE id=?";
+		String sql = "UPDATE richiesta SET descrizione=?, data=?, orario_inizio=?, orario_fine=?, costoeffettivo=?, indirizzo=?, stato=?, id_utenteRichiedente=?, id_utenteRichiesto=?, id_professione=?, id_veicolo=? WHERE id=?";
 		
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement update = connection.prepareStatement(sql)) {
@@ -172,8 +172,8 @@ public class MysqlRichiestaDao implements RichiestaDao {
 					rs.getLong("id"),
 					rs.getString("descrizione"),
 					rs.getDate("data").toLocalDate(),
-					rs.getTime("ora_inizio").toLocalTime(),
-					rs.getTime("ora_fine").toLocalTime(),
+					rs.getTime("orario_inizio").toLocalTime(),
+					rs.getTime("orario_fine").toLocalTime(),
 					rs.getBigDecimal("costoeffettivo"),
 					rs.getString("indirizzo"),
 					StatoRichiesta.values()[rs.getInt("stato")],
