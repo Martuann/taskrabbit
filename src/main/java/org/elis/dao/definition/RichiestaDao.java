@@ -9,4 +9,5 @@ public interface RichiestaDao {
 	List<Richiesta> selectAll();
 	void update(Richiesta r);
 	void delete(Long id);
+	List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto);
 }
