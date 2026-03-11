@@ -15,7 +15,7 @@ import java.util.List;
 import org.elis.dao.definition.CittaDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.mysql.MysqlCittaDao;
-import org.elis.dao.mysql.MysqlUtenteDAO;
+import org.elis.dao.mysql.MysqlUtenteDao;
 import org.elis.exception.RegisterException;
 import org.elis.progetto.model.Citta;
 import org.elis.progetto.model.Ruolo;
@@ -35,7 +35,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 	    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	UtenteDao utentiInterni = new MysqlUtenteDAO(DataSourceConfig.getDataSource());
+    	UtenteDao utentiInterni = new MysqlUtenteDao(DataSourceConfig.getDataSource());
     	CittaDao cittaInterna = new MysqlCittaDao(DataSourceConfig.getDataSource());
       
 

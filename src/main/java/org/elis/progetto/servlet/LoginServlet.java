@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.mysql.MysqlUtenteDAO;
+import org.elis.dao.mysql.MysqlUtenteDao;
 
 import java.io.IOException;
 
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 	    String password = request.getParameter("password");
 
 	   
-	    UtenteDao dao = new MysqlUtenteDAO (DataSourceConfig.getDataSource());
+	    UtenteDao dao = new MysqlUtenteDao(DataSourceConfig.getDataSource());
 
 	    try {
 	       
