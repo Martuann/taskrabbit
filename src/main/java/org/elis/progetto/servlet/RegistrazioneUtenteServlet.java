@@ -40,6 +40,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 	String codiceFiscale = request.getParameter("codiceFiscale");
 
 	try {
+
 	    LocalDate ddn = LocalDate.parse(dataDiNascita);
 
 	    long id_citta = 1;
