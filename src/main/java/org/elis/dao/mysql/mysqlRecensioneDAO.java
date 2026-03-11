@@ -38,7 +38,7 @@ public class mysqlRecensioneDAO implements RecensioneDAO {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}//ciao
+		}
 	}
 
 	@Override
