@@ -37,7 +37,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	UtenteDao utentiInterni = new MysqlUtenteDao(DataSourceConfig.getDataSource());
     	CittaDao cittaInterna = new MysqlCittaDao(DataSourceConfig.getDataSource());
-      
+
 
     	String nome = request.getParameter("nome");
     	String cognome = request.getParameter("cognome");
@@ -54,7 +54,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     	if (nome == null || nome.trim().length() < 2) {
             errori.add("Il nome deve contenere almeno 2 caratteri.");
         }
-        
+
         if (email == null || !email.contains("@")) {
             errori.add("Per favore, inserisci un indirizzo email valido.");
         }
@@ -63,64 +63,63 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
                 errori.add("Questa email è già registrata. Usa un'altra email o fai il login.");
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
             errori.add("Si è verificato un problema tecnico durante il controllo dell'email. Riprova più tardi.");
         }
-        
-        
+
+
         if (password == null || password.length() < 8) {
             errori.add("La password deve essere lunga almeno 8 caratteri.");
         }
-        
-     
-        
+
+
+
         if (dataDiNascita == null || dataDiNascita.trim().isEmpty()) {
             errori.add("La data di nascita è obbligatoria.");
         } else {
             try {
                ddn = LocalDate.parse(dataDiNascita);
-                
+
                 LocalDate oggi = LocalDate.now();
-                
+
                 Period eta = Period.between(ddn, oggi);
-                
+
                 if (eta.getYears() < 18) {
                     errori.add("Devi essere maggiorenne per registrarti.");
                 }
-                
+
             } catch (DateTimeParseException e) {
                 errori.add("Il formato della data di nascita non è valido.");
             }}
-        
+
 
         if (!errori.isEmpty()) {
-            
-       
-            
-          
-            request.setAttribute("listaErrori", errori); 
-            
-          
+
+
+
+
+            request.setAttribute("listaErrori", errori);
+
+
             request.getRequestDispatcher("/PagineWeb/registrazioneUtente.jsp").forward(request, response);
-            return; 
+            return;
         }
 
-    	
-    	
-    	
-    	
+
+
+
     	try {
     	    Citta citta =new Citta(nomeCitta, provincia);
-    	    
+
 
 
     	    Utente nuovoUtente = new Utente(
     		    nome, cognome, email, numero, password, ddn,
     		    codiceFiscale, Ruolo.UTENTE_BASE,cittaInterna.getOrCreateCitta(citta)  );
-    	  
+
 
     	   utentiInterni.aggiungiUtente(nuovoUtente);
-    	
+
     	   response.sendRedirect(request.getContextPath() + "/loginUtente.jsp");
 
     	} catch (RegisterException e) {
