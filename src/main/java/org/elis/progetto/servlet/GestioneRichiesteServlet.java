@@ -27,10 +27,6 @@ import org.elis.utilities.DataSourceConfig;
 @WebServlet("/GestioneRichiesteServlet")
 public class GestioneRichiesteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private RichiestaDao richiestaDao = new MysqlRichiestaDao(DataSourceConfig.getDataSource());
-	private UtenteDao utenteDao = new MysqlUtenteDao(DataSourceConfig.getDataSource());
-	private ProfessioneDao professioneDao = new MysqlProfessioneDao(DataSourceConfig.getDataSource());
-	private VeicoloDao veicoloDao = new MySqlVeicoloDao(DataSourceConfig.getDataSource());
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -46,6 +42,10 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idProfessionista = Long.parseLong(request.getParameter("id"));
 		try {
+			RichiestaDao richiestaDao = new MysqlRichiestaDao(DataSourceConfig.getDataSource());
+			UtenteDao utenteDao = new MysqlUtenteDao(DataSourceConfig.getDataSource());
+			VeicoloDao veicoloDao = new MySqlVeicoloDao(DataSourceConfig.getDataSource());
+			ProfessioneDao professioneDao = new MysqlProfessioneDao(DataSourceConfig.getDataSource());
 			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
 			List<Richiesta> richieste = new ArrayList<>();
 			int counter=0;
@@ -63,7 +63,19 @@ public class GestioneRichiesteServlet extends HttpServlet {
 				Utente richiedente = utenteDao.ricercaPerId(r.getIdUtenteRichiedente());
 				request.setAttribute("nomeutente"+counter,richiedente.getNome()+" "+richiedente.getCognome());
 				
-				request.setAttribute("statoRichiesta"+counter, nomeStatoRichiesta(r.getStato()));
+				switch(r.getStato()) {
+				case in_attesa:
+					request.setAttribute("statoRichiesta"+counter, "in attesa di conferma");
+					request.setAttribute("coloreStato"+counter, "#E4A11B");
+					break;
+				case in_corso:
+					request.setAttribute("statoRichiesta"+counter, "in corso");
+					request.setAttribute("coloreStato"+counter, "#E4A11B");
+					break;
+				case completato:
+					request.setAttribute("statoRichiesta"+counter, "completato");
+					request.setAttribute("coloreStato"+counter, "#14A44D");
+				}
 				
 				String professione = professioneDao.selectById(r.getIdProfessione()).getNome();
 				request.setAttribute("task"+counter,professione);
@@ -103,14 +115,5 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
-	}
-	
-	private String nomeStatoRichiesta(StatoRichiesta stato) {
-		switch(stato) {
-		case in_attesa: return "in attesa di conferma";
-		case in_corso: return "in corso";
-		case completato: return "completato";
-		}
-		return null;
 	}
 }
