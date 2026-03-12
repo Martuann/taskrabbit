@@ -1,24 +1,41 @@
 @charset "UTF-8";
+
 form {
     max-width: 800px;
     margin: 20px auto;
     background: #fff;
-    padding: 20px;
+    padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.alert-success, .alert-error {
+    padding: 15px;
+    margin: 10px auto;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    max-width: 800px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 .riga-giorno {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
     padding: 15px 10px;
     border-bottom: 1px solid #eee;
-    transition: background 0.3s;
-}
-
-.riga-giorno:hover {
-    background-color: #f9f9f9;
+    min-height: 75px;
 }
 
 .riga-giorno strong {
@@ -28,37 +45,73 @@ form {
     text-transform: capitalize;
 }
 
+.toggle-lavoro {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
 
-.riga-giorno label {
-    width: 130px;
+.testo-stato {
+    margin-left: 10px;
+    min-width: 130px;
+    font-weight: 500;
+}
+
+.testo-stato.disponibile {
+    display: none;
+    color: #28a745;
+}
+
+.testo-stato.non-disponibile {
+    display: inline;
+    color: #dc3545;
+}
+
+.toggle-lavoro:checked ~ .testo-stato.disponibile {
+    display: inline;
+}
+
+.toggle-lavoro:checked ~ .testo-stato.non-disponibile {
+    display: none;
+}
+
+.controlli-orario {
     display: flex;
     align-items: center;
-    cursor: pointer;
-    font-weight: 500;
-    color: #555;
+    margin-left: auto;
+    gap: 15px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
-.riga-giorno input[type="checkbox"] {
-    margin-right: 10px;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
+.toggle-lavoro:checked ~ .controlli-orario {
+    visibility: visible;
+    opacity: 1;
 }
 
-.riga-giorno input[type="time"] {
-    padding: 8px;
+.label-orario {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+input[type="time"] {
+    padding: 8px 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    margin: 0 10px;
+    border-radius: 6px;
     font-family: inherit;
-    font-size: 1rem;
-    color: #444;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    outline: none;
 }
 
-.riga-giorno .label-orario {
-    margin-left: 10px;
-    color: #888;
-    font-size: 0.9rem;
+input[type="time"]:focus {
+    border-color: #28a745;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
 }
 
 .btn-salva {
@@ -66,20 +119,16 @@ form {
     width: 100%;
     margin-top: 30px;
     padding: 15px;
-    background-color: #2ecc71; 
+    background-color: #28a745;
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    cursor: pointer;
     font-size: 1.1rem;
     font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
+    transition: background-color 0.3s;
 }
 
-
-
-
-
-
-
-
-
+.btn-salva:hover {
+    background-color: #218838;
+}
