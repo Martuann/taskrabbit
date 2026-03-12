@@ -26,7 +26,9 @@ public class MysqlRichiestaDao implements RichiestaDao {
 	@Override
 	public void insert(Richiesta r) {
 		String sql = "INSERT INTO richiesta (descrizione, data, orario_inizio, orario_fine, costoeffettivo, indirizzo, stato, id_utenteRichiedente, id_utenteRichiesto, id_professione, id_veicolo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		
+		if(r.getIdVeicolo()==null) {
+			sql = "INSERT INTO richiesta (descrizione, data, orario_inizio, orario_fine, costoeffettivo, indirizzo, stato, id_utenteRichiedente, id_utenteRichiesto, id_professione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		}
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement insert = connection.prepareStatement(sql)) {
 			
@@ -40,7 +42,9 @@ public class MysqlRichiestaDao implements RichiestaDao {
 			insert.setLong(8, r.getIdUtenteRichiedente());
 			insert.setLong(9, r.getIdUtenteRichiesto());
 			insert.setLong(10, r.getIdProfessione());
-			insert.setLong(11, r.getIdVeicolo());
+			if(r.getIdVeicolo()!=null) {
+				insert.setLong(11, r.getIdVeicolo());
+			}
 			
 			insert.executeUpdate();
 			
@@ -60,7 +64,7 @@ public class MysqlRichiestaDao implements RichiestaDao {
 			
 			try (ResultSet rs = select.executeQuery()) {
 				if(rs.next()) {
-					return new Richiesta(
+					Richiesta richiesta = new Richiesta(
 						rs.getLong("id"),
 						rs.getString("descrizione"),
 						rs.getDate("data").toLocalDate(),
@@ -72,8 +76,11 @@ public class MysqlRichiestaDao implements RichiestaDao {
 						rs.getLong("id_utenteRichiedente"),
 						rs.getLong("id_utenteRichiesto"),
 						rs.getLong("id_professione"),
-						rs.getLong("id_veicolo")
-					);
+						rs.getLong("id_veicolo"));
+					if(rs.wasNull()) {
+						richiesta.setIdVeicolo(null);
+					}
+					return richiesta;
 				}
 			}
 			
@@ -94,7 +101,7 @@ public class MysqlRichiestaDao implements RichiestaDao {
 			 ResultSet rs = select.executeQuery()) {
 			
 			while(rs.next()) {
-				richieste.add(new Richiesta(
+				Richiesta richiesta = new Richiesta(
 					rs.getLong("id"),
 					rs.getString("descrizione"),
 					rs.getDate("data").toLocalDate(),
@@ -106,8 +113,11 @@ public class MysqlRichiestaDao implements RichiestaDao {
 					rs.getLong("id_utenteRichiedente"),
 					rs.getLong("id_utenteRichiesto"),
 					rs.getLong("id_professione"),
-					rs.getLong("id_veicolo")
-				));
+					rs.getLong("id_veicolo"));
+				if(rs.wasNull()) {
+					richiesta.setIdVeicolo(null);
+				}
+				richieste.add(richiesta);
 			}
 			
 		} catch (Exception e) {
@@ -119,8 +129,10 @@ public class MysqlRichiestaDao implements RichiestaDao {
 
 	@Override
 	public void update(Richiesta r) {
-		String sql = "UPDATE richiesta SET descrizione=?, data=?, orario_inizio=?, orario_fine=?, costoeffettivo=?, indirizzo=?, stato=?, id_utenteRichiedente=?, id_utenteRichiesto=?, id_professione=?, id_veicolo=? WHERE id=?";
-		
+		String sql = "UPDATE richiesta SET descrizione=?, data=?, orario_inizio=?, orario_fine=?, costoeffettivo=?, indirizzo=?, stato=?, id_utenteRichiedente=?, id_utenteRichiesto=?, id_professione=?, id_veicolo=? WHERE id="+r.getId();
+		if(r.getIdVeicolo()==null) {
+			sql = "UPDATE richiesta SET descrizione=?, data=?, orario_inizio=?, orario_fine=?, costoeffettivo=?, indirizzo=?, stato=?, id_utenteRichiedente=?, id_utenteRichiesto=?, id_professione=? WHERE id="+r.getId();
+		}
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement update = connection.prepareStatement(sql)) {
 			
@@ -134,8 +146,9 @@ public class MysqlRichiestaDao implements RichiestaDao {
 			update.setLong(8, r.getIdUtenteRichiedente());
 			update.setLong(9, r.getIdUtenteRichiesto());
 			update.setLong(10, r.getIdProfessione());
-			update.setLong(11, r.getIdVeicolo());
-			update.setLong(12, r.getId());
+			if(r.getIdVeicolo()!=null) {
+				update.setLong(11, r.getIdVeicolo());
+			}
 			
 			update.executeUpdate();
 			
@@ -168,7 +181,7 @@ public class MysqlRichiestaDao implements RichiestaDao {
 			 ResultSet rs = select.executeQuery()) {
 			
 			while(rs.next()) {
-				richieste.add(new Richiesta(
+				Richiesta richiesta = new Richiesta(
 					rs.getLong("id"),
 					rs.getString("descrizione"),
 					rs.getDate("data").toLocalDate(),
@@ -180,8 +193,11 @@ public class MysqlRichiestaDao implements RichiestaDao {
 					rs.getLong("id_utenteRichiedente"),
 					rs.getLong("id_utenteRichiesto"),
 					rs.getLong("id_professione"),
-					rs.getLong("id_veicolo")
-				));
+					rs.getLong("id_veicolo"));
+				if(rs.wasNull()) {
+					richiesta.setIdVeicolo(null);
+				}
+				richieste.add(richiesta);
 			}
 			
 		} catch (Exception e) {
