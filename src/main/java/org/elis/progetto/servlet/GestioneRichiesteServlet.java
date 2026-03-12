@@ -19,7 +19,6 @@ import org.elis.dao.mysql.MysqlUtenteDao;
 import org.elis.progetto.model.Richiesta;
 import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
-import org.elis.progetto.model.Veicolo;
 import org.elis.utilities.DataSourceConfig;
 
 /**
@@ -32,7 +31,6 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	private UtenteDao utenteDao = new MysqlUtenteDao(DataSourceConfig.getDataSource());
 	private ProfessioneDao professioneDao = new MysqlProfessioneDao(DataSourceConfig.getDataSource());
 	private VeicoloDao veicoloDao = new MySqlVeicoloDao(DataSourceConfig.getDataSource());
-	private static int counter;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -48,28 +46,55 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idProfessionista = Long.parseLong(request.getParameter("id"));
 		try {
-			List<Richiesta> richieste = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
-			List<Richiesta> richiesteAccettate = new ArrayList<>();
-			int size = richieste.size();
-			for(int i=0;i<size;i++) {
-				if(richieste.get(i).getStato()!=StatoRichiesta.in_attesa) {
-					richiesteAccettate.add(richieste.get(i));
-					richieste.remove(i);
+			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
+			List<Richiesta> richieste = new ArrayList<>();
+			int counter=0;
+			for(Richiesta r : query) {
+				if(r.getStato()!=StatoRichiesta.in_attesa) {
+					richieste.add(r);
+				}
+				else {
+					richieste.add(counter++,r);
 				}
 			}
 			request.setAttribute("richieste", richieste);
-			request.setAttribute("richiesteAccettate", richiesteAccettate);
-			
 			counter=0;
-			
-			aggiornaRichieste(richieste, request);
+			for(Richiesta r : richieste) {
+				Utente richiedente = utenteDao.ricercaPerId(r.getIdUtenteRichiedente());
+				request.setAttribute("nomeutente"+counter,richiedente.getNome()+" "+richiedente.getCognome());
+				
+				request.setAttribute("statoRichiesta"+counter, nomeStatoRichiesta(r.getStato()));
+				
+				String professione = professioneDao.selectById(r.getIdProfessione()).getNome();
+				request.setAttribute("task"+counter,professione);
+				
+				request.setAttribute("data"+counter, r.getData().toString());
+				
+				request.setAttribute("orario"+counter, r.getOrarioInizio().toString()+" - "+r.getOrarioFine().toString());
+				
+				if(r.getIdVeicolo()==null) {
+					request.setAttribute("veicolo"+counter, "nessuno");
+				}
+				else {
+					String veicolo = veicoloDao.ricercaPerId(r.getIdVeicolo()).getCategoria();
+					request.setAttribute("veicolo"+counter, veicolo);
+				}
+				
+				request.setAttribute("indirizzo"+counter, r.getIndirizzo());
 
-			aggiornaRichieste(richiesteAccettate, request);
+				request.setAttribute("costoeffettivo"+counter, r.getCostoEffettivo());
+				
+				request.setAttribute("idRichiesta"+counter, r.getId());
+				
+				counter++;
+			}
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 	    }
-		request.getRequestDispatcher("/PagineWeb/gestioneRichieste.jsp").forward(request, response);
+		request.getRequestDispatcher("/PagineWeb/gestioneRichieste.jsp")
+			   .forward(request, response);
 	}
 
 	/**
@@ -87,35 +112,5 @@ public class GestioneRichiesteServlet extends HttpServlet {
 		case completato: return "completato";
 		}
 		return null;
-	}
-	
-	private void aggiornaRichieste(List<Richiesta> richieste, HttpServletRequest request) throws Exception {
-		for(Richiesta r : richieste) {
-			Utente richiedente = utenteDao.ricercaPerId(r.getIdUtenteRichiedente());
-			request.setAttribute("nomeutente"+counter,richiedente.getNome()+" "+richiedente.getCognome());
-			
-			request.setAttribute("statoRichiesta"+counter, nomeStatoRichiesta(r.getStato()));
-			
-			String professione = professioneDao.selectById(r.getIdProfessione()).getNome();
-			request.setAttribute("task"+counter,professione);
-			
-			request.setAttribute("data"+counter, r.getData().toString());
-			
-			request.setAttribute("orario"+counter, r.getOrarioInizio().toString()+" - "+r.getOrarioFine().toString());
-			
-			Veicolo veicolo = veicoloDao.ricercaPerId(r.getIdVeicolo());
-			if(veicolo==null) {
-				request.setAttribute("veicolo"+counter, "nessuno");
-			}
-			else {
-				request.setAttribute("veicolo"+counter, veicolo.getCategoria());
-			}
-			
-			request.setAttribute("indirizzo"+counter, r.getIndirizzo());
-
-			request.setAttribute("costoeffettivo"+counter, r.getCostoEffettivo());
-			
-			counter++;
-		}
 	}
 }
