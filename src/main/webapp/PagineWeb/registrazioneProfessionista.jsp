@@ -136,7 +136,7 @@
 
 		<div class="collegamenti-links">
 			<p>
-				Hai già un account? <a href="loginUtente.jsp">Accedi qui</a>
+				Hai già un account? <a href="login.html">Accedi qui</a>
 			</p>
 			<p>
 				Sei un Utente? <a href="registrazioneUtente.jsp">Registrati come
