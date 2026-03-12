@@ -5,7 +5,20 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+
+import org.elis.dao.definition.DisponibilitaDao;
+import org.elis.dao.definition.OrarioBaseDao;
+import org.elis.dao.mysql.MysqlDisponibilitaDao;
+import org.elis.dao.mysql.MysqlOrarioBaseDao;
+import org.elis.progetto.model.OrarioBase;
+import org.elis.progetto.model.Ruolo;
+import org.elis.progetto.model.Utente;
+import org.elis.utilities.DataSourceConfig;
 
 /**
  * Servlet implementation class GestioneOrariDateSpecifiche
@@ -26,16 +39,62 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+		HttpSession session = request.getSession();
+    	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+    	if (utenteLoggato == null) {
+    	    response.sendRedirect(request.getContextPath() + "/login.jsp"); 
+    	    return;
+    	}
+    	if (utenteLoggato.getRuolo()!=Ruolo.PROFESSIONISTA) {
+    	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
+    	    return;
+    	}
+    OrarioBaseDao orarioDao = new MysqlOrarioBaseDao(DataSourceConfig.getDataSource());
+    DisponibilitaDao dispoDao = new MysqlDisponibilitaDao(DataSourceConfig.getDataSource());
+    try {
+		request.setAttribute("orariStandard", orarioDao.getOrariByUtente(utenteLoggato.getId()));
+		request.setAttribute("orariSettimana", dispoDao.getDisponibilitaPerUtente(utenteLoggato.getId()));
+		request.getRequestDispatcher("/PagineWeb/GestioneDisponibilitaBase.jsp").forward(request, response);
+	}
+	catch(Exception e){
+		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=loading");    	}
+}
+    
+    	
+    	
+    	
+	
+
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		HttpSession session = request.getSession();
+    	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+        DisponibilitaDao dispoDao = new MysqlDisponibilitaDao(DataSourceConfig.getDataSource());
+
+    	
+     
+    	    	String booleanSeLavoraoNoString = request.getParameter("lavora_"+i);
+    	    	String inizio = request.getParameter("oraInizio_" + i);
+    	    	String fine = request.getParameter("oraFine_" + i);
+    	    	String giornoStr = request.getParameter("giorno_" + i);
+    	 
+    	    	if(giornoStr != null) {
+    	    		int idGiorno = Integer.parseInt(giornoStr);
+    	    		DayOfWeek giornata = DayOfWeek.of(idGiorno);
+    	    		
+    		    	if(booleanSeLavoraoNoString != null) {
+    		    		LocalTime orarioInizio = LocalTime.parse(inizio);
+    		    	    LocalTime orarioFine = LocalTime.parse(fine);
+    		            orarioProfessionista.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
+    		    	} else {
+    	                orarioProfessionista.eliminaOrario(utenteLoggato.getId(), idGiorno);
+    				}
+    	    	}
+    		}
+    	
+    	
+    	
 	}
 
 }

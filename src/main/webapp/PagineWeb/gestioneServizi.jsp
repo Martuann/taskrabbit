@@ -60,7 +60,6 @@
 			</p>
 		</div>
 
-		<%-- SEZIONE COMPETENZE --%>
 		<div class="sezione">
 			<h2>Le Mie Competenze</h2>
 			<table>
@@ -133,7 +132,6 @@
 			</div>
 		</div>
 
-		<%-- SEZIONE VEICOLI --%>
 		<div class="sezione">
 			<h2>Mezzi di Trasporto</h2>
 			<table>

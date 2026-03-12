@@ -1,8 +1,10 @@
 @charset "UTF-8";
+.container {
+    margin: 0 auto;
+    padding: 20px;
+}
 
 form {
-    max-width: 800px;
-    margin: 20px auto;
     background: #fff;
     padding: 25px;
     border-radius: 8px;
@@ -15,88 +17,10 @@ form {
     border-radius: 4px;
     text-align: center;
     font-weight: bold;
-    max-width: 800px;
 }
 
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.riga-giorno {
-    display: flex;
-    align-items: center;
-    padding: 15px 10px;
-    border-bottom: 1px solid #eee;
-    min-height: 75px;
-}
-
-.riga-giorno strong {
-    width: 140px;
-    font-size: 1.1rem;
-    color: #333;
-    text-transform: capitalize;
-}
-
-.toggle-lavoro {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-
-.testo-stato {
-    margin-left: 10px;
-    min-width: 130px;
-    font-weight: 500;
-}
-
-.testo-stato.disponibile {
-    display: none;
-    color: #28a745;
-}
-
-.testo-stato.non-disponibile {
-    display: inline;
-    color: #dc3545;
-}
-
-.toggle-lavoro:checked ~ .testo-stato.disponibile {
-    display: inline;
-}
-
-.toggle-lavoro:checked ~ .testo-stato.non-disponibile {
-    display: none;
-}
-
-.controlli-orario {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    gap: 15px;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.toggle-lavoro:checked ~ .controlli-orario {
-    visibility: visible;
-    opacity: 1;
-}
-
-.label-orario {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #666;
-    font-size: 0.95rem;
-}
+.alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
 input[type="time"] {
     padding: 8px 10px;
@@ -104,7 +28,6 @@ input[type="time"] {
     border-radius: 6px;
     font-family: inherit;
     background-color: #f9f9f9;
-    cursor: pointer;
     outline: none;
 }
 
@@ -117,7 +40,6 @@ input[type="time"]:focus {
 .btn-salva {
     display: block;
     width: 100%;
-    margin-top: 30px;
     padding: 15px;
     background-color: #28a745;
     color: white;
@@ -129,6 +51,132 @@ input[type="time"]:focus {
     transition: background-color 0.3s;
 }
 
-.btn-salva:hover {
-    background-color: #218838;
+.btn-salva:hover { background-color: #218838; }
+
+.standard-layout {
+    max-width: 800px;
 }
+
+.standard-layout .riga-giorno {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+    border-bottom: 1px solid #eee;
+    min-height: 75px;
+}
+
+.standard-layout .riga-giorno strong {
+    width: 140px;
+    font-size: 1.1rem;
+    text-transform: capitalize;
+}
+
+.standard-layout .testo-stato {
+    margin-left: 10px;
+    min-width: 130px;
+    font-weight: 500;
+}
+
+.standard-layout .testo-stato.disponibile { display: none; color: #28a745; }
+.standard-layout .testo-stato.non-disponibile { display: inline; color: #dc3545; }
+
+.standard-layout .toggle-lavoro:checked ~ .testo-stato.disponibile { display: inline; }
+.standard-layout .toggle-lavoro:checked ~ .testo-stato.non-disponibile { display: none; }
+
+.standard-layout .controlli-orario {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    gap: 15px;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.standard-layout .toggle-lavoro:checked ~ .controlli-orario {
+    visibility: visible;
+    opacity: 1;
+}
+
+.agenda-layout {
+    max-width: 1200px;
+}
+
+.agenda-layout .navigazione-settimana {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dddddd;
+}
+
+.agenda-layout .calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.agenda-layout .quadrato-giorno {
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
+}
+
+.agenda-layout .quadrato-giorno.oggi {
+    border: 2px solid #28a745;
+    background-color: #f8fff9;
+}
+
+.agenda-layout .quadrato-giorno.storico {
+    background-color: #fafafa;
+    border: 1px dashed #dddddd;
+}
+
+.agenda-layout .testo-stato.disponibile { display: none; color: #28a745; font-weight: bold; }
+.agenda-layout .testo-stato.non-disponibile { display: block; color: #dc3545; font-weight: bold; }
+
+.agenda-layout .toggle-lavoro:checked ~ .testi-dispo .disponibile { display: block; }
+.agenda-layout .toggle-lavoro:checked ~ .testi-dispo .non-disponibile { display: none; }
+
+.agenda-layout .controlli-orario {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.agenda-layout .toggle-lavoro:checked ~ .controlli-orario {
+    visibility: visible;
+    opacity: 1;
+}
+
+.agenda-layout .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-size: 0.8rem;
+}
+
+.badge-storico {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.badge-dispo { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+.badge-null { background-color: #f0f0f0; color: #a0a0a0; border: 1px solid #dddddd; }

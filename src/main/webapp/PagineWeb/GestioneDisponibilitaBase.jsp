@@ -22,8 +22,7 @@
 			<a href="<%=context%>/HomeServlet">Home</a> > <a href="<%=context%>/GestioneServiziServlet">Gestione servizi</a> > <strong>Orario Standard</strong>
 		</nav>
 	</header>
-
-	<div class="container">
+<div class="container standard-layout">
 		<% if("true".equals(request.getParameter("success"))) { %>
 			<div class="alert-success">Orario standard aggiornato con successo!</div>
 		<% } %>

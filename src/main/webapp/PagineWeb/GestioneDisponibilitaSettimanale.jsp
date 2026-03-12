@@ -1,93 +1,140 @@
 <%@page import="java.time.temporal.TemporalAdjusters"%>
 <%@page import="java.time.DayOfWeek"%>
 <%@page import="java.time.LocalDate"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@page import="java.time.format.TextStyle"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.List"%>
+<%@page import="org.elis.progetto.model.Disponibilita"%>
+<%@page import="org.elis.progetto.model.OrarioBase"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Taskly - Gestione Disponibilità</title>
+<title>Taskly - Agenda Settimanale</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleGestioneEServizi.css">
-	</head>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/GestioneDisponibilita.css">
+</head>
 <body>
-<header>
-<%String context= request.getContextPath(); %>
-		<a href="<%=context%>/HomeServlet"><img
-			src="<%=context%>/img/taskly_logo.png" class="logo-img"></a>
+	<header>
+		<% String context = request.getContextPath(); %>
+		<a href="<%=context%>/HomeServlet"><img src="<%=context%>/img/taskly_logo.png" class="logo-img"></a>
 		<nav>
 			<a href="<%=context%>/HomeServlet">Home</a> > <a href="<%=context%>/GestioneServiziServlet">Gestione servizi</a> > <strong>Agenda</strong>
 		</nav>
 	</header>
-	<% 
-	int offSet = 0; 
 
-	String offSetTestuale = request.getParameter("offSet");
+	<div class="container agenda-layout">
+		<% 
+			int offSet = 0; 
+			String offSetParam = request.getParameter("offSet");
+			if (offSetParam != null) {
+				offSet = Integer.parseInt(offSetParam);
+			}
+			
+			LocalDate oggi = LocalDate.now();
+			LocalDate lunedi = oggi.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).plusWeeks(offSet);
+			List<Disponibilita> orariSettimana = (List<Disponibilita>) request.getAttribute("orarioSettimana");
+			List<OrarioBase> orariStandard = (List<OrarioBase>) request.getAttribute("orarioStandard");
+		%>
 
-	if (offSetTestuale != null) {
-	    offSet = Integer.parseInt(offSetTestuale);
-	    
-	  
-	    
-	}
-	  LocalDate giornoOdierno = LocalDate.now();
-			LocalDate LunediDellaSettimana=	giornoOdierno
-			        .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-			        .plusWeeks(offSet);
-	%>
-<div class="container">
 		<div class="navigazione-settimana">
-			<a href="?offSet=<%=offSet-1%>" class="btn-nav">⬅️ Settimana Precedente</a>
-			<span class="testo-settimana">Settimana del <%= LunediDellaSettimana.getDayOfMonth() %></span>
-			<a href="?offSet=<%=offSet+1%>" class="btn-nav">Settimana Successiva ➡️</a>
+			<% if (offSet > 0) { %>
+				<a href="?offSet=<%=offSet-1%>" class="btn-nav">Settimana Precedente</a>
+			<% } else { %>
+				<span class="btn-nav disabilitato">Settimana Precedente</span>
+			<% } %>
+			
+			<span class="testo-settimana">
+				Settimana del <%= lunedi.getDayOfMonth() %> <%= lunedi.getMonth().getDisplayName(TextStyle.FULL, Locale.ITALIAN) %> <%= lunedi.getYear() %>
+			</span>
+			
+			<a href="?offSet=<%=offSet+1%>" class="btn-nav">Settimana Successiva</a>
 		</div>
 
-		<form action="<%=request.getContextPath()%>/SalvaDisponibilitaServlet" method="POST">
-			
-			<div class="lista-giorni">
-			<% 
-			String[] nomiGiorni = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"};
-			
-			for(int i = 0; i < 7; i++) {
-				LocalDate giornoCorrente = LunediDellaSettimana.plusDays(i);
-			%>
-				<div class="riga-giorno">
+		<form action="<%=request.getContextPath()%>/GestioneOrariDateSpecifiche" method="POST">
+			<div class="calendario-grid">
+				<% 
+				for(int i = 0; i < 7; i++) {
+					LocalDate dataCorrente = lunedi.plusDays(i);
+					DayOfWeek giornoSettimana = dataCorrente.getDayOfWeek();
+					boolean checkOggi = dataCorrente.equals(oggi);
+					boolean isPassato = dataCorrente.isBefore(oggi);
 					
-					<div class="info-giorno">
-						<strong><%= nomiGiorni[i] %></strong><br>
-						<span class="data-giorno"><%= giornoCorrente.getDayOfMonth() %>/<%= giornoCorrente.getMonthValue() %>/<%= giornoCorrente.getYear() %></span>
-						<input type="hidden" name="data_<%=i%>" value="<%=giornoCorrente%>">
-					</div>
+					Disponibilita dispTrovata = null;
+					if (orariSettimana != null) {
+						for (Disponibilita d : orariSettimana) {
+							if (d.getData() != null && d.getData().equals(dataCorrente)) {
+								dispTrovata = d;
+								break;
+							}
+						}
+					}
 
-					<div class="input-orari">
-						<label class="label-checkbox">
-							<input type="checkbox" name="lavora_<%=i%>" value="true" checked> Disponibile
-						</label>
-						
-						<label class="label-orario">Dalle: 
-							<input type="time" name="oraInizio_<%=i%>" value="09:00" required>
-						</label>
-						
-						<label class="label-orario">Alle: 
-							<input type="time" name="oraFine_<%=i%>" value="18:00" required>
-						</label>
+					OrarioBase standardGiorno = null;
+					if (dispTrovata == null && orariStandard != null) {
+						for (OrarioBase ob : orariStandard) {
+							if (ob.getGiornoSettimana() == giornoSettimana) {
+								standardGiorno = ob;
+								break;
+							}
+						}
+					}
+
+					boolean lavora = (dispTrovata != null || (dispTrovata == null && standardGiorno != null));
+					String inizio = "09:00"; 
+					String fine = "18:00";
+
+					if (dispTrovata != null) {
+						inizio = dispTrovata.getInizio().toString();
+						fine = dispTrovata.getFine().toString();
+					} else if (standardGiorno != null) {
+						inizio = standardGiorno.getOraInizio().toString();
+						fine = standardGiorno.getOraFine().toString();
+					}
+				%>
+					<div class="quadrato-giorno <%= checkOggi ? "oggi" : "" %> <%= isPassato ? "storico" : "" %>">
+						<div class="header-giorno">
+							<span class="nome-giorno"><%= dataCorrente.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ITALIAN) %></span>
+							<span class="data-num"><%= dataCorrente.getDayOfMonth() %></span>
+							<input type="hidden" name="data_<%=i%>" value="<%=dataCorrente%>">
+						</div>
+
+						<div class="corpo-giorno">
+							<% if (isPassato) { %>
+								<% if (dispTrovata != null) { %>
+									<div class="badge-storico badge-dispo">Disponibile</div>
+									<div class="orari-passati"><%= dispTrovata.getInizio() %> - <%= dispTrovata.getFine() %></div>
+								<% } else { %>
+									<div class="badge-storico badge-null">Dato non registrato</div>
+									<div class="testo-info-passato">Nessuna modifica salvata</div>
+								<% } %>
+							<% } else { %>
+								<input type="checkbox" class="toggle-lavoro" name="lavora_<%=i%>" value="true" <%= lavora ? "checked" : "" %>>
+								<div class="testi-dispo">
+									<span class="testo-stato disponibile">Disponibile</span>
+									<span class="testo-stato non-disponibile">Chiuso</span>
+								</div>
+								<div class="controlli-orario">
+									<div class="input-group">
+										<span>Dalle</span>
+										<input type="time" name="oraInizio_<%=i%>" value="<%= inizio %>">
+									</div>
+									<div class="input-group">
+										<span>Alle</span>
+										<input type="time" name="oraFine_<%=i%>" value="<%= fine %>">
+									</div>
+								</div>
+							<% } %>
+						</div>
 					</div>
-				</div>
-			<% } %>
+				<% } %>
 			</div>
 			
 			<div class="contenitore-bottone">
-				<button type="submit" class="btn-submit btn-salva">Salva Orari Settimana</button>
+				<button type="submit" class="btn-salva">Salva Agenda Settimanale</button>
 			</div>
 		</form>
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
 </body>
 </html>
