@@ -46,7 +46,6 @@
 			
 			<div class="lista-giorni">
 			<% 
-			// Array per stampare i nomi dei giorni in italiano
 			String[] nomiGiorni = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"};
 			
 			for(int i = 0; i < 7; i++) {
