@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Admin - Nuova Professione</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/Registrazioni.css">
+    <%@ include file="/WEB-INF/pagineAdmin/header.jsp"%>
 </head>
 <body>
     <div class="registrazione-container">

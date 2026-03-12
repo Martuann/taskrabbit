@@ -1,27 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>login</title>
-<link rel="stylesheet" href="../css/login.css">
+    <meta charset="UTF-8">
+    <title>Accedi - Taskly</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<form action="/taskrabbit/login" method="post">
+    <div class="login-wrapper">
+        <div class="top-logo">Taskly</div>
 
-<div class="login-container">
-<h2 class="accedi">Accedi</h2>
+        <div class="login-card">
+            <h2>Accedi al tuo account</h2>
+            <p class="subtitle">Bentornato! Inserisci i tuoi dati per continuare.</p>
+            
+            <form action="/taskrabbit/login" method="post">
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                
+                <button type="submit" class="btn-primary">Accedi</button>
+            </form>
 
-<div class="email">
-<input type="email" name="email" placeholder="email" required>
-</div>
-<div class="password">
-<input type="password" name="password" placeholder="password" required>
-</div>
-<div class="registrazione-homepage">
-<a href="registrazioneProfessionista.jsp">Vai alla registrazione</a><br>
-    <a href="Homepage.html">Torna alla homepage</a>
+            <div class="login-footer">
+                <p>Non hai un account? <a href="registrazioneUtente.jsp">Registrati qui</a></p>
+                <a href="Homepage.html" class="back-home">Torna alla homepage</a>
+            </div>
+        </div>
     </div>
-    </div>
+
 </body>
 </html>

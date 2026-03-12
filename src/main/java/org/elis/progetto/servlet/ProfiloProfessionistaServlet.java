@@ -6,8 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.List;
 import java.util.ArrayList;
 import javax.sql.DataSource;
@@ -54,12 +52,7 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 		Long idProfessionista = Long.parseLong(request.getParameter("id1"));
 		Long idProfessione = Long.parseLong(request.getParameter("id2"));
 		DataSource ds = DataSourceConfig.getDataSource();
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch(ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskrabbit", "root", "root")){
+		try{
 			UtenteDao utenteDao = new MysqlUtenteDao(ds);
 			ProfessioneDao professioneDao = new MysqlProfessioneDao(ds);
 			ImmagineDao immagineDao = new MysqlImmagineDao(ds);
@@ -79,7 +72,7 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			for(UtenteVeicolo uv : utenteVeicoloDao.selectByUtente(idProfessionista)) {
 				veicoli.add(veicoloDao.ricercaPerId(uv.getIdVeicolo()).getCategoria());
 			}
-			request.setAttribute("nomecognome", professionista.getNome()+" "+professionista.getCognome());
+			request.setAttribute("nomeprofilo", professionista.getNome()+" "+professionista.getCognome());
 			request.setAttribute("veicoli", veicoli);
 			request.setAttribute("tariffa", utenteProfessioneDao
 				   .selectByIdUtenteIdProfessione(idProfessionista, idProfessione).getTariffaH());
@@ -98,14 +91,19 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			request.setAttribute("recensioni", recensioni);
 			request.setAttribute("recensori", recensori);
 			for(int i=0; i<recensioni.size(); i++) {
-				request.setAttribute("propic"+i, ((Immagine) immagineDao.selectByIdUtente(recensori.get(i).getId())).getPercorso());
-				request.setAttribute("nomecognome"+i, recensori.get(i).getNome());
+				for(Immagine img : immagineDao.selectByIdUtente(recensori.get(i).getId())) {
+					if(img.getIsFotoProfilo()) {
+						request.setAttribute("propic"+i, img.getPercorso());
+						break;
+					}
+				}
+				request.setAttribute("nomeutente"+i, recensori.get(i).getNome()+" "+recensori.get(i).getCognome());
 				request.setAttribute("rating"+i, recensioni.get(i).getVoto());
 				request.setAttribute("task"+i, professione.getNome());
 				request.setAttribute("data"+i, recensioni.get(i).getData().toString());
 				request.setAttribute("descrizione"+i, recensioni.get(i).getDescrizione());
 			}
-			request.getRequestDispatcher("/PagineWeb/profilo_professionista.jsp?id1="+idProfessionista+"&id2="+idProfessione)
+			request.getRequestDispatcher("/PagineWeb/profilo_professionista.jsp")
 				   .forward(request, response);
 		}
 		catch(Exception e) {

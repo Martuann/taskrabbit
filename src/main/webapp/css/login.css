@@ -1,48 +1,107 @@
-@charset "UTF-8";
-
-*{
-	margin:0;
-	padding:0;
-	box-sizing:border-box;
-	
-}
-body{
-	
-	 background-image: url("../PagineWeb/immagini/sfondo.png");
-background-repeat: no-repeat;  /* Impedisce la duplicazione */
-    background-size: cover;        /* Ridimensiona l'immagine per coprire tutto lo spazio */
-    background-position: center;   /* Centra l'immagine */
-    background-attachment: fixed;  /* Opzionale: mantiene lo sfondo fermo mentre scorri */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
 }
 
-.accedi{
-	
-	text-align:center;
-	font-size:20px;
-	
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    background: url('../PagineWeb/immagini/sfondo.png') no-repeat center center;
+    background-size: cover;
+    position: relative;
 }
 
-.email{
-	text-align:center;
-	font-size:20px;
+.top-logo {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    font-size: 28px;
+    font-weight: 800;
+    color: #0035cc; 
 }
 
-.password{
-	
-	text-align:center;
-	font-size:20px;
+.login-card {
+    background: rgba(255, 255, 255, 0.8); 
+    backdrop-filter: blur(15px);           
+    -webkit-backdrop-filter: blur(15px);
+    padding: 50px 40px;
+    border-radius: 30px;                   
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
 }
-.registrazione-homepage{
-	text-align:center;
+
+.login-card h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
 }
-.login-container{
-	backdrop-filter:blur(10px);
-	width: 100%;
-	padding:40px;
-	border-radious:50px;
-	
-                            
-    display: inline-block;                      
-    
-	
+
+.subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    background: white;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #0047FF;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: #4169E1; 
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background: #0035cc;
+}
+
+
+.login-footer {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #444;
+}
+
+.login-footer a {
+    color: #4169E1;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-home {
+    display: block;
+    margin-top: 15px;
+    opacity: 0.7;
 }

@@ -1,39 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>Homepage</title>
- <link rel="stylesheet" href="../css/Homepage.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskly - Servizi per la casa</title>
+    <link rel="stylesheet" href="../css/Homepage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<h1>Benvenuto su Taskly</h1>
-<div>
-<h3>Trova persone competenti in grado di aiutarti per i tuoi lavori di casa </h3>
-</div>
-<hr>
-<div>
-<h2 class="offerta">Cosa offriamo?</h2>
-</div>
-<div>
-<p class="primo">Riparazioni </p>
-<img src="immagini/Riparazioni.jpg"alt="Riparazioni" width=400 style="display: block; margin: 0 auto;">
-<p class="secondo">Pittura </p>
-<img src="immagini/Imbiancatura.jpg" alt="Imbiancatura" width=400 style="display:block;margin:0 auto;">
-<p class="terzo"> Pulizia </p>
-<img src="immagini/Pulizia.jpg" alt="Pulizia" width=400 style="display:block;margin:0 auto;">
-<p class="quarto">Aiuto informatico </p>
-<img src="immagini/Aiuto informatico.jpg" alt="Aiuto informatico" width=400 style="display:block;margin:0 auto;">
-<p class="altro">E tanto altro..</p>
-</div>
 
-<a href="login.html">
-<button>Accedi</button>
-</a>
-<br> <br>
-<a href="registrazioneUtente.jsp">
-<button>Registrati</button>
-</a>
-<br> <br> <br> <br> <br> <br> <br> <br>
-<p>2026 Taskly</p>
+    <nav class="navbar">
+        <div class="logo">Taskly</div>
+        <div class="auth-buttons">
+            <a href="#">Home</a>
+            <a href="#">Servizi</a>
+            <a href="login.html" class="btn-login">Accedi</a>
+            <a href="registrazioneUtente.jsp" class="btn-register">Registrati</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Benvenuto su Taskly</h1>
+            <p>I tuoi progetti di casa resi semplici. Trova esperti per ogni necessità.</p>
+            <div class="search-container">
+                <input type="text" placeholder="Di cosa hai bisogno? (es. Pittura, Riparazioni)">
+                <button>Cerca</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="services-section">
+        <h2>Esplora i nostri servizi</h2>
+        <div class="services-grid">
+            
+            <div class="service-card">
+                <img src="immagini/Riparazioni.jpg" alt="Riparazioni">
+                <div class="card-text">
+                    <h3>Riparazioni</h3>
+                    <p>Montaggio mobili e riparazioni elettriche.</p>
+                    <a href="#" class="view-more">Vedi Tasker</a>
+                </div>
+            </div>
+
+            <div class="service-card pittura-card">
+                <img src="immagini/Imbiancatura.jpg" alt="Pittura">
+                <div class="card-text">
+                    <h3>Pittura</h3>
+                    <p>Rinfresca le pareti della tua casa.</p>
+                    <a href="#" class="view-more">Vedi Tasker</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <img src="immagini/Pulizia.jpg" alt="Pulizia">
+                <div class="card-text">
+                    <h3>Pulizia</h3>
+                    <p>Servizi di pulizia profonda per ogni ambiente.</p>
+                    <a href="#" class="view-more">Vedi Tasker</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <img src="immagini/Aiuto informatico.jpg" alt="Informatica">
+                <div class="card-text">
+                    <h3>Aiuto Informatico</h3>
+                    <p>Riparazione PC e installazione software.</p>
+                    <a href="#" class="view-more">Vedi Tasker</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Taskly | Privacy | Termini</p>
+    </footer>
+
 </body>
 </html>
