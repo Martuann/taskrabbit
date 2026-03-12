@@ -53,8 +53,7 @@ public class GestioneOrariDefault extends HttpServlet {
     		request.getRequestDispatcher("/PagineWeb/GestioneDisponibilitaBase.jsp").forward(request, response);
     	}
     	catch(Exception e){
-            response.sendError(500, "Errore nel caricamento dati: " + e.getMessage());
-    	}
+    		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=loading");    	}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -62,33 +61,29 @@ public class GestioneOrariDefault extends HttpServlet {
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
     	OrarioBaseDao orarioProfessionista = new MysqlOrarioBaseDao(DataSourceConfig.getDataSource());
 
-    	for(int i=0; i<DayOfWeek.values().length; i++) {
-	    	String booleanSeLavoraoNoString = request.getParameter("lavora_"+i);
-	    	String inizio = request.getParameter("oraInizio_" + i);
-	    	String fine = request.getParameter("oraFine_" + i);
-	    	String giornoStr = request.getParameter("giorno_" + i);
-	
-	    	if(giornoStr != null) {
-	    		int idGiorno = Integer.parseInt(giornoStr);
-	    		DayOfWeek giornata = DayOfWeek.of(idGiorno);
-	    		
-		    	if(booleanSeLavoraoNoString != null) {
-		    		try {
-		    			LocalTime orarioInizio = LocalTime.parse(inizio);
-		    	        LocalTime orarioFine = LocalTime.parse(fine);
-		                orarioProfessionista.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
-		    		} catch(Exception e) {
-		    			e.printStackTrace();
-		    		}
-		    	} else {
-	                try {
-						orarioProfessionista.eliminaOrario(utenteLoggato.getId(), idGiorno);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-	    	}
+    	try {
+    		for(int i=0; i<DayOfWeek.values().length; i++) {
+    	    	String booleanSeLavoraoNoString = request.getParameter("lavora_"+i);
+    	    	String inizio = request.getParameter("oraInizio_" + i);
+    	    	String fine = request.getParameter("oraFine_" + i);
+    	    	String giornoStr = request.getParameter("giorno_" + i);
+    	
+    	    	if(giornoStr != null) {
+    	    		int idGiorno = Integer.parseInt(giornoStr);
+    	    		DayOfWeek giornata = DayOfWeek.of(idGiorno);
+    	    		
+    		    	if(booleanSeLavoraoNoString != null) {
+    		    		LocalTime orarioInizio = LocalTime.parse(inizio);
+    		    	    LocalTime orarioFine = LocalTime.parse(fine);
+    		            orarioProfessionista.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
+    		    	} else {
+    	                orarioProfessionista.eliminaOrario(utenteLoggato.getId(), idGiorno);
+    				}
+    	    	}
+    		}
+    		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?success=true");
+    	} catch (Exception e) {
+    		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=save");
     	}
-    	response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault");
 	}
 }
