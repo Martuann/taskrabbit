@@ -7,35 +7,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registrazione Utente - Taskly</title>
+
 <link rel="stylesheet"
 	href="<%= request.getContextPath() %>/css/Registrazioni.css?v=1.1">
+	<%@ include file="/WEB-INF/pagineAdmin/header.jsp"%>
 </head>
 <body>
-	<img src="<%= request.getContextPath() %>/PagineWeb/immagini/logo.png"
-		alt="Taskly Logo" class="logo-top-left">
 
 	<div class="registrazione-container">
 		<h1>Crea il tuo account Utente</h1>
 		<p>Unisciti alla nostra community per accedere ai servizi.</p>
 
-<% 
+		<%
 		    List<String> listaErrori = (List<String>) request.getAttribute("listaErrori");
-		    if (listaErrori != null && !listaErrori.isEmpty()) { 
+		    if (listaErrori != null && !listaErrori.isEmpty()) {
 		%>
-		    <div class="boxErrori">
-		        <strong class="titoloErrore">Attenzione, controlla questi campi:</strong>
-		        <ul class="ListaErrori">
-		            <% for (String err : listaErrori) { %>
-		                <li><%= err %></li>
-		            <% } %>
-		        </ul>
-		    </div>
-		<% 
-		    } 
+		<div class="boxErrori">
+			<strong class="titoloErrore">Attenzione, controlla questi
+				campi:</strong>
+			<ul class="ListaErrori">
+				<% for (String err : listaErrori) { %>
+				<li><%= err %></li>
+				<% } %>
+			</ul>
+		</div>
+		<%
+		    }
 		%>
 
 
-		<form action="<%= request.getContextPath() %>/RegistrazioneUtenteServlet" method="POST">
+		<form
+			action="<%= request.getContextPath() %>/RegistrazioneUtenteServlet"
+			method="POST">
 			<input type="hidden" name="tipoUtente" value="CLIENTE">
 
 			<div class="input-dati">
@@ -94,12 +97,16 @@
 		<hr>
 
 		<div class="collegamenti-links">
-		<p>
-    Hai già un account? <a href="<%= request.getContextPath() %>/loginUtente.jsp">Accedi qui</a>
-	</p>
-	<p>
-    Sei un professionista? <a href="<%= request.getContextPath() %>/PagineWeb/registrazioneProfessionista.jsp">Registrati come Professionista</a>
-	</p>
+			<p>
+				Hai già un account? <a
+					href="<%= request.getContextPath() %>/loginUtente.jsp">Accedi
+					qui</a>
+			</p>
+			<p>
+				Sei un professionista? <a
+					href="<%= request.getContextPath() %>/PagineWeb/registrazioneProfessionista.jsp">Registrati
+					come Professionista</a>
+			</p>
 		</div>
 	</div>
 </body>
