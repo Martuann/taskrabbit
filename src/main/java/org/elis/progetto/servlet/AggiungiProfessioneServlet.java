@@ -29,6 +29,17 @@ public class AggiungiProfessioneServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/PagineWeb/Homepage.html");
 			return;
 		}*/
+		
+		
+	/*	HttpSession session = request.getSession();
+		Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+		
+		if (utenteLoggato == null || utenteLoggato.getRuolo() != Ruolo.ADMIN) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN); // Blocco tentativi non autorizzati
+			return;
+		}
+*/
+		
 		request.getRequestDispatcher("/WEB-INF/pagineAdmin/aggiungiProfessione.jsp").forward(request, response);
 	}
 
