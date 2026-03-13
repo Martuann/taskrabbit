@@ -9,7 +9,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import javax.sql.DataSource;
+
+import org.elis.dao.definition.DaoFactory;
+import org.elis.dao.definition.DisponibilitaDao;
 import org.elis.dao.definition.ImmagineDao;
+import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.UtenteDao;
@@ -30,13 +34,34 @@ import org.elis.progetto.model.Utente;
 import org.elis.progetto.model.UtenteVeicolo;
 import org.elis.utilities.DataSourceConfig;
 
+
 /**
  * Servlet implementation class ProfiloProfessionistaServlet
  */
 @WebServlet("/ProfiloProfessionistaServlet")
 public class ProfiloProfessionistaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private UtenteDao utenteDao;
+	private ProfessioneDao professioneDao;
+	private 	ImmagineDao immagineDao;
+	private RecensioneDao recensioneDao;
+	private UtenteVeicoloDao utenteVeicoloDao;
+	private VeicoloDao veicoloDao;
+	private UtenteProfessioneDao utenteProfessioneDao;
+
+	
+	
+	@Override
+	public void init() throws ServletException {
+	utenteDao=DaoFactory.getInstance().getUtenteDao();
+	professioneDao=DaoFactory.getInstance().getProfessioneDao();
+	immagineDao=DaoFactory.getInstance().getImmagineDao();
+	recensioneDao=DaoFactory.getInstance().getRecensioneDao();
+	utenteVeicoloDao=DaoFactory.getInstance().getUtenteVeicoloDao();
+	veicoloDao=DaoFactory.getInstance().getVeicoloDao();
+	utenteProfessioneDao=DaoFactory.getInstance().getUtenteProfessioneDao();
+
+	} 
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -51,15 +76,8 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idProfessionista = Long.parseLong(request.getParameter("id1"));
 		Long idProfessione = Long.parseLong(request.getParameter("id2"));
-		DataSource ds = DataSourceConfig.getDataSource();
 		try{
-			UtenteDao utenteDao = new MysqlUtenteDao(ds);
-			ProfessioneDao professioneDao = new MysqlProfessioneDao(ds);
-			ImmagineDao immagineDao = new MysqlImmagineDao(ds);
-			RecensioneDao recensioneDao = new mysqlRecensioneDao(ds);
-			UtenteVeicoloDao utenteVeicoloDao = new MysqlUtenteVeicoloDao(ds);
-			VeicoloDao veicoloDao = new MySqlVeicoloDao(ds);
-			UtenteProfessioneDao utenteProfessioneDao = new MysqlUtenteProfessioneDao(ds);
+			
 			Utente professionista = utenteDao.ricercaPerId(idProfessionista);
 			Professione professione = professioneDao.selectById(idProfessione);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);

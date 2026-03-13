@@ -7,7 +7,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import org.elis.dao.definition.DaoFactory;
+import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteDao;
+import org.elis.dao.definition.UtenteProfessioneDao;
+import org.elis.dao.definition.UtenteVeicoloDao;
+import org.elis.dao.definition.VeicoloDao;
 import org.elis.dao.mysql.MysqlUtenteDao;
 
 import java.io.IOException;
@@ -21,7 +26,14 @@ import org.elis.utilities.DataSourceConfig;
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private  UtenteDao utenteDao;
+
+	@Override
+	public void init() throws ServletException {
+		utenteDao=DaoFactory.getInstance().getUtenteDao();
+		
+		
+	} 
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -47,11 +59,11 @@ public class LoginServlet extends HttpServlet {
 	    String password = request.getParameter("password");
 
 	   
-	    UtenteDao dao = new MysqlUtenteDao(DataSourceConfig.getDataSource());
+	    UtenteDao utenteDao = new MysqlUtenteDao(DataSourceConfig.getDataSource());
 
 	    try {
 	       
-	        Utente utente = dao.login(email, password);
+	        Utente utente = utenteDao.login(email, password);
 
 	        if (utente != null) {
 	          
