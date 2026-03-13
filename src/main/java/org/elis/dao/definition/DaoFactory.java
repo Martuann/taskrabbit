@@ -11,7 +11,9 @@ private static final DaoFactory INSTANCE;
 
 static{
 	String FACTORY_IMPLEMENTATION= System.getenv("FACTORY_IMPLEMENTATION");
-	
+	if (FACTORY_IMPLEMENTATION == null) {
+        FACTORY_IMPLEMENTATION = "JDBC";
+    }
 	INSTANCE=switch(FACTORY_IMPLEMENTATION) {
 	case "JDBC"-> new JdbcDaoFactory();
 	default -> throw new IllegalStateException("Errore durante il caricamento della factory");
