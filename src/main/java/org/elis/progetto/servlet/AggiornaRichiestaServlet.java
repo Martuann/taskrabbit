@@ -6,12 +6,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 import org.elis.dao.definition.RichiestaDao;
-import org.elis.dao.mysql.MysqlRichiestaDao;
+import org.elis.dao.mysql.JdbcDaoFactory;
 import org.elis.progetto.model.Richiesta;
 import org.elis.progetto.model.StatoRichiesta;
-import org.elis.utilities.DataSourceConfig;
 
 /**
  * Servlet implementation class AggiornaRichiesta
@@ -32,7 +30,7 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RichiestaDao richiestaDao = new MysqlRichiestaDao(DataSourceConfig.getDataSource());
+		RichiestaDao richiestaDao = JdbcDaoFactory.getInstance().getRichiestaDao();
 		StatoRichiesta stato = StatoRichiesta.valueOf(request.getParameter("type"));
 		Long idRichiesta = Long.parseLong(request.getParameter("id1"));
 		Richiesta richiesta = richiestaDao.selectById(idRichiesta);
