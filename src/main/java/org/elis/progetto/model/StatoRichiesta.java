@@ -4,6 +4,6 @@ public enum StatoRichiesta {
 	in_attesa, 
 	in_corso, 
 	completato,
-	rifutato;
+	rifiutato;
 }
 
