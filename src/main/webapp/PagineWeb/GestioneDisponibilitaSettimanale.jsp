@@ -136,5 +136,41 @@
 			</div>
 		</form>
 	</div>
+<script>
+    const valoriOriginali = new Map();
+
+    const inputs = document.querySelectorAll('.agenda-layout input[type="checkbox"], .agenda-layout input[type="time"]');
+
+    inputs.forEach((input, index) => {
+        const valoreIniziale = input.type === 'checkbox' ? input.checked : input.value;
+        valoriOriginali.set(input, valoreIniziale);
+    });
+
+    function isFormVeramenteModificato() {
+        for (let [input, valoreIniziale] of valoriOriginali) {
+            const valoreAttuale = input.type === 'checkbox' ? input.checked : input.value;
+            if (valoreAttuale !== valoreIniziale) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function confermaSpostamento(event) {
+        if (isFormVeramenteModificato()) {
+            const conferma = confirm("Hai modifiche non salvate che andranno perse. Vuoi continuare lo stesso?");
+            if (!conferma) {
+                event.preventDefault();
+            }
+        }
+    }
+
+    document.querySelectorAll('.btn-nav').forEach(bottone => {
+        bottone.addEventListener('click', confermaSpostamento);
+    });
+
+    document.querySelector('form').addEventListener('submit', () => {
+    });
+</script>
 </body>
 </html>
