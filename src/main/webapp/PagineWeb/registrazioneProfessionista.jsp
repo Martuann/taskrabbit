@@ -13,11 +13,15 @@
 	rel="stylesheet" />
 
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/Registrazioni.css?v=1.1">
+	href="<%=request.getContextPath()%>/css/Registrazioni.css?">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/footer.css?">
 <%@ include file="/WEB-INF/pagineAdmin/header.jsp"%>
 
 </head>
-<body>
+<body class="site-wrapper">
+
+	<main class="content-wrapper">
 
 	<div class="registrazione-container">
 		<h1>Crea il tuo account Professionista</h1>
@@ -78,11 +82,11 @@
 					multiple="multiple" style="width: 100%;">
 
 					<%
-						List<Professione> listaProfessioni = (List<Professione>) request.getAttribute("listaProfessioni");
+					List<Professione> listaProfessioni = (List<Professione>) request.getAttribute("listaProfessioni");
 
-						if (listaProfessioni != null && listaProfessioni.size() > 0) {
-							for (int i = 0; i < listaProfessioni.size(); i++) {
-						%>
+					if (listaProfessioni != null && listaProfessioni.size() > 0) {
+						for (int i = 0; i < listaProfessioni.size(); i++) {
+					%>
 					<option value="<%=listaProfessioni.get(i).getId()%>">
 						<%=listaProfessioni.get(i).getNome()%></option>
 
@@ -90,9 +94,9 @@
 
 
 					<%
-						}
-						}
-						%>
+					}
+					}
+					%>
 				</select>
 
 
@@ -157,5 +161,7 @@
 			});
 		});
 	</script>
+	</main>
+	<%@ include file="/WEB-INF/pagineAdmin/footer.jsp"%>
 </body>
 </html>
