@@ -24,6 +24,11 @@ public static DaoFactory getInstance() {
 	
 }
 
+
+
+
+
+
 public abstract UtenteDao getUtenteDao();
 public abstract CittaDao getCittaDao();
 public abstract DisponibilitaDao getDisponibilitaDao();

@@ -11,6 +11,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.elis.dao.definition.DaoFactory;
+import org.elis.dao.definition.DisponibilitaDao;
+import org.elis.dao.definition.OrarioBaseDao;
+import org.elis.dao.definition.ProfessioneDao;
+import org.elis.dao.definition.UtenteProfessioneDao;
+import org.elis.dao.definition.UtenteVeicoloDao;
+import org.elis.dao.definition.VeicoloDao;
 import org.elis.dao.mysql.MySqlVeicoloDao;
 import org.elis.dao.mysql.MysqlProfessioneDao;
 import org.elis.dao.mysql.MysqlUtenteProfessioneDao;
@@ -25,7 +32,19 @@ import org.elis.utilities.DataSourceConfig;
 
 @WebServlet("/GestioneServiziServlet")
 public class GestioneServiziServlet extends HttpServlet {
+	private ProfessioneDao professioneDao;
+	private   VeicoloDao veicoloDao;
+	private   UtenteProfessioneDao utenteProfessioneDao;
+	private   UtenteVeicoloDao utenteVeicoloDao;
 
+	@Override
+	public void init() throws ServletException {
+		professioneDao=DaoFactory.getInstance().getProfessioneDao();
+		veicoloDao=DaoFactory.getInstance().getVeicoloDao();
+		utenteProfessioneDao=DaoFactory.getInstance().getUtenteProfessioneDao();
+		utenteVeicoloDao=DaoFactory.getInstance().getUtenteVeicoloDao();
+		
+	} 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
@@ -57,10 +76,7 @@ public class GestioneServiziServlet extends HttpServlet {
     	}
     	
         try {
-            MysqlProfessioneDao professioneDao = new MysqlProfessioneDao(DataSourceConfig.getDataSource());
-            MySqlVeicoloDao veicoloDao = new MySqlVeicoloDao(DataSourceConfig.getDataSource());
-            MysqlUtenteProfessioneDao utenteProfessioneDao = new MysqlUtenteProfessioneDao(DataSourceConfig.getDataSource());
-            MysqlUtenteVeicoloDao utenteVeicoloDao = new MysqlUtenteVeicoloDao(DataSourceConfig.getDataSource());
+          
 
             List<Professione> catalogoTutteLeProfessioni = professioneDao.selectAll();
             List<Veicolo> catalogoTuttiIVeicoli = veicoloDao.getAllVeicoli();
@@ -105,8 +121,7 @@ public class GestioneServiziServlet extends HttpServlet {
         String urlRedirect = request.getContextPath() + "/GestioneServiziServlet";
 
         try {
-            MysqlUtenteProfessioneDao utenteProfessioneDao = new MysqlUtenteProfessioneDao(DataSourceConfig.getDataSource());
-            MysqlUtenteVeicoloDao utenteVeicoloDao = new MysqlUtenteVeicoloDao(DataSourceConfig.getDataSource());
+           
 
             if ("aggiungi_professione".equals(operazioneRichiesta)) {
                 Long idProfessione = Long.parseLong(request.getParameter("idProfessioneScelta"));

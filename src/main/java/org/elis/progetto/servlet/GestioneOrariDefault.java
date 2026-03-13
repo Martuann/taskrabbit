@@ -12,7 +12,9 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.OrarioBaseDao;
+import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.mysql.MysqlOrarioBaseDao;
 import org.elis.progetto.model.OrarioBase;
 import org.elis.progetto.model.Ruolo;
@@ -22,7 +24,12 @@ import org.elis.utilities.DataSourceConfig;
 @WebServlet("/GestioneOrariDefault")
 public class GestioneOrariDefault extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private OrarioBaseDao orarioProfessionistaDao;
+
+	@Override
+	public void init() throws ServletException {
+		 orarioProfessionistaDao=DaoFactory.getInstance().getOrarioBaseDao();
+	}
     public GestioneOrariDefault() {
         super();
     }
@@ -46,10 +53,9 @@ public class GestioneOrariDefault extends HttpServlet {
     	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
     	    return;
     	}
-    	OrarioBaseDao orarioProfessionista = new MysqlOrarioBaseDao(DataSourceConfig.getDataSource());
 
     	try {
-    		request.setAttribute("orarioDefault", orarioProfessionista.getOrariByUtente(utenteLoggato.getId()));
+    		request.setAttribute("orarioDefault", orarioProfessionistaDao.getOrariByUtente(utenteLoggato.getId()));
     		request.getRequestDispatcher("/PagineWeb/GestioneDisponibilitaBase.jsp").forward(request, response);
     	}
     	catch(Exception e){
@@ -59,7 +65,6 @@ public class GestioneOrariDefault extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-    	OrarioBaseDao orarioProfessionista = new MysqlOrarioBaseDao(DataSourceConfig.getDataSource());
 
     	try {
     		for(int i=0; i<DayOfWeek.values().length; i++) {
@@ -75,9 +80,9 @@ public class GestioneOrariDefault extends HttpServlet {
     		    	if(booleanSeLavoraoNoString != null) {
     		    		LocalTime orarioInizio = LocalTime.parse(inizio);
     		    	    LocalTime orarioFine = LocalTime.parse(fine);
-    		            orarioProfessionista.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
+    		    	    orarioProfessionistaDao.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
     		    	} else {
-    	                orarioProfessionista.eliminaOrario(utenteLoggato.getId(), idGiorno);
+    		    		orarioProfessionistaDao.eliminaOrario(utenteLoggato.getId(), idGiorno);
     				}
     	    	}
     		}

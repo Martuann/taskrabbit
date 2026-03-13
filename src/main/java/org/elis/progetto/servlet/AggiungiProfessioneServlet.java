@@ -27,7 +27,7 @@ public class AggiungiProfessioneServlet extends HttpServlet {
 		professioneDao = DaoFactory.getInstance().getProfessioneDao();
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 		Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
 		if (utenteLoggato == null) {
@@ -37,7 +37,7 @@ public class AggiungiProfessioneServlet extends HttpServlet {
 		if (utenteLoggato.getRuolo()!=Ruolo.ADMIN) {
 			response.sendRedirect(request.getContextPath() + "/PagineWeb/Homepage.html");
 			return;
-		}*/
+		}
 
 
 		request.getRequestDispatcher("/WEB-INF/pagineAdmin/aggiungiProfessione.jsp").forward(request, response);

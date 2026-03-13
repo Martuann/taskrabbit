@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.elis.dao.definition.CittaDao;
+import org.elis.dao.definition.DaoFactory;
+import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.mysql.MysqlCittaDao;
 import org.elis.dao.mysql.MysqlUtenteDao;
@@ -25,7 +27,14 @@ import org.elis.utilities.DataSourceConfig;
 @WebServlet("/RegistrazioneUtenteServlet")
 public class RegistrazioneUtenteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    private UtenteDao utenteDao;
+   private CittaDao cittaDao;
+	@Override
+	public void init() throws ServletException {
+	
+		utenteDao = DaoFactory.getInstance().getUtenteDao();
+		cittaDao=DaoFactory.getInstance().getCittaDao();
+	}
     public RegistrazioneUtenteServlet() {
 	super();
     }
@@ -35,8 +44,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 	    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	UtenteDao utentiInterni = new MysqlUtenteDao(DataSourceConfig.getDataSource());
-    	CittaDao cittaInterna = new MysqlCittaDao(DataSourceConfig.getDataSource());
+   
 
 
     	String nome = request.getParameter("nome");
@@ -59,7 +67,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
             errori.add("Per favore, inserisci un indirizzo email valido.");
         }
         try {
-            if (utentiInterni.presenzaUtente(email)) {
+            if (utenteDao.presenzaUtente(email)) {
                 errori.add("Questa email è già registrata. Usa un'altra email o fai il login.");
             }
         } catch (Exception e) {
@@ -115,10 +123,10 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 
     	    Utente nuovoUtente = new Utente(
     		    nome, cognome, email, numero, password, ddn,
-    		    codiceFiscale, Ruolo.UTENTE_BASE,cittaInterna.getOrCreateCitta(citta)  );
+    		    codiceFiscale, Ruolo.UTENTE_BASE,cittaDao.getOrCreateCitta(citta)  );
 
 
-    	   utentiInterni.aggiungiUtente(nuovoUtente);
+    	    utenteDao.aggiungiUtente(nuovoUtente);
 
     	   response.sendRedirect(request.getContextPath() + "/loginUtente.jsp");
 

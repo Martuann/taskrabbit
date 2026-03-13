@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
+import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.DisponibilitaDao;
 import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.dao.mysql.MysqlDisponibilitaDao;
@@ -26,8 +27,13 @@ import org.elis.utilities.DataSourceConfig;
 @WebServlet("/GestioneOrariDateSpecifiche")
 public class GestioneOrariDateSpecifiche extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
+	private OrarioBaseDao orarioDao;
+	private DisponibilitaDao dispoDao;
+	@Override
+	public void init() throws ServletException {
+		orarioDao=DaoFactory.getInstance().getOrarioBaseDao();
+	    dispoDao=DaoFactory.getInstance().getDisponibilitaDao();
+	}    /**
      * @see HttpServlet#HttpServlet()
      */
     public GestioneOrariDateSpecifiche() {
@@ -50,8 +56,7 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
     	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
     	    return;
     	}
-    OrarioBaseDao orarioDao = new MysqlOrarioBaseDao(DataSourceConfig.getDataSource());
-    DisponibilitaDao dispoDao = new MysqlDisponibilitaDao(DataSourceConfig.getDataSource());
+ 
     try {
 		request.setAttribute("orariStandard", orarioDao.getOrariByUtente(utenteLoggato.getId()));
 		request.setAttribute("orariSettimana", dispoDao.getDisponibilitaPerUtente(utenteLoggato.getId()));
@@ -73,7 +78,7 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
         DisponibilitaDao dispoDao = new MysqlDisponibilitaDao(DataSourceConfig.getDataSource());
 
     	
-     
+     int i;
     	    	String booleanSeLavoraoNoString = request.getParameter("lavora_"+i);
     	    	String inizio = request.getParameter("oraInizio_" + i);
     	    	String fine = request.getParameter("oraFine_" + i);
@@ -86,9 +91,9 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
     		    	if(booleanSeLavoraoNoString != null) {
     		    		LocalTime orarioInizio = LocalTime.parse(inizio);
     		    	    LocalTime orarioFine = LocalTime.parse(fine);
-    		            orarioProfessionista.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
+    		    	    orarioDao.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
     		    	} else {
-    	                orarioProfessionista.eliminaOrario(utenteLoggato.getId(), idGiorno);
+    		    		orarioDao.eliminaOrario(utenteLoggato.getId(), idGiorno);
     				}
     	    	}
     		}
