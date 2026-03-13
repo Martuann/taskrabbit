@@ -9,13 +9,16 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.DisponibilitaDao;
 import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.dao.mysql.MysqlDisponibilitaDao;
 import org.elis.dao.mysql.MysqlOrarioBaseDao;
+import org.elis.progetto.model.Disponibilita;
 import org.elis.progetto.model.OrarioBase;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
@@ -44,7 +47,15 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	Utente utenteTestDiProva = new Utente();
+        utenteTestDiProva.setId(1L);
+        utenteTestDiProva.setNome("Mario");
+        utenteTestDiProva.setCognome("Rossi");
+        utenteTestDiProva.setRuolo(Ruolo.PROFESSIONISTA);
+        request.getSession().setAttribute("utenteLoggato", utenteTestDiProva);
+
+		
 		HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
@@ -52,54 +63,73 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
     	    response.sendRedirect(request.getContextPath() + "/login.jsp"); 
     	    return;
     	}
-    	if (utenteLoggato.getRuolo()!=Ruolo.PROFESSIONISTA) {
+    	if (utenteLoggato.getRuolo() != Ruolo.PROFESSIONISTA) {
     	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
     	    return;
     	}
  
-    try {
-		request.setAttribute("orariStandard", orarioDao.getOrariByUtente(utenteLoggato.getId()));
-		request.setAttribute("orariSettimana", dispoDao.getDisponibilitaPerUtente(utenteLoggato.getId()));
-		request.getRequestDispatcher("/PagineWeb/GestioneDisponibilitaBase.jsp").forward(request, response);
-	}
-	catch(Exception e){
-		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=loading");    	}
-}
-    
-    	
-    	
-    	
-	
+        try {
+        	request.setAttribute("orarioStandard", orarioDao.getOrariByUtente(utenteLoggato.getId()));
+        	request.setAttribute("orarioSettimana", dispoDao.getDisponibilitaPerUtente(utenteLoggato.getId()));
+            
+            request.getRequestDispatcher("/PagineWeb/GestioneDisponibilitaSettimanale.jsp").forward(request, response);
+        } catch(Exception e){
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=loading");
+        }
+    }
 
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-        DisponibilitaDao dispoDao = new MysqlDisponibilitaDao(DataSourceConfig.getDataSource());
 
-    	
-     int i;
-    	    	String booleanSeLavoraoNoString = request.getParameter("lavora_"+i);
-    	    	String inizio = request.getParameter("oraInizio_" + i);
-    	    	String fine = request.getParameter("oraFine_" + i);
-    	    	String giornoStr = request.getParameter("giorno_" + i);
-    	 
-    	    	if(giornoStr != null) {
-    	    		int idGiorno = Integer.parseInt(giornoStr);
-    	    		DayOfWeek giornata = DayOfWeek.of(idGiorno);
-    	    		
-    		    	if(booleanSeLavoraoNoString != null) {
-    		    		LocalTime orarioInizio = LocalTime.parse(inizio);
-    		    	    LocalTime orarioFine = LocalTime.parse(fine);
-    		    	    orarioDao.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
-    		    	} else {
-    		    		orarioDao.eliminaOrario(utenteLoggato.getId(), idGiorno);
-    				}
-    	    	}
-    		}
-    	
-    	
-    	
-	}
+    	if (utenteLoggato == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        if (utenteLoggato.getRuolo() != Ruolo.PROFESSIONISTA) {
+    	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
+    	    return;
+    	}
 
-}
+        String offSetParam = request.getParameter("offSetAttuale");
+        int offSet = (offSetParam != null) ? Integer.parseInt(offSetParam) : 0;
+	
+        try {
+            for(int i=0; i < 7; i++) {
+                String booleanSeLavoraoNoString = request.getParameter("lavora_"+i);
+                String inizio = request.getParameter("oraInizio_" + i);
+                String fine = request.getParameter("oraFine_" + i);
+                String dataStr = request.getParameter("data_" + i); // Coerente con name="data_<%=i%>" nella JSP
+         
+                if(dataStr != null) {
+                    LocalDate dataCorrente = LocalDate.parse(dataStr);
+                    
+                    if(booleanSeLavoraoNoString != null) {
+                        LocalTime orarioInizio = LocalTime.parse(inizio);
+                        LocalTime orarioFine = LocalTime.parse(fine);
+                        
+                        Disponibilita disp = new Disponibilita(utenteLoggato.getId(), dataCorrente, orarioInizio, orarioFine);
+                        OrarioBase checkOrarioSeUgualeADisp = orarioDao.getOrariByUtenteEGiorno(utenteLoggato.getId(), dataCorrente.getDayOfWeek());
+    
+                        if(checkOrarioSeUgualeADisp == null) {
+                            dispoDao.salvaOAggiorna(disp);
+                        } else {
+                            if(!checkOrarioSeUgualeADisp.getOraInizio().equals(disp.getInizio()) || !checkOrarioSeUgualeADisp.getOraFine().equals(disp.getFine())) {
+                                dispoDao.salvaOAggiorna(disp);
+                            } else {
+                                dispoDao.rimuoviDisponibilitaByIdUtenteData(utenteLoggato.getId(), dataCorrente);
+                            }
+                        }
+                    } else {
+                        dispoDao.rimuoviDisponibilitaByIdUtenteData(utenteLoggato.getId(), dataCorrente);
+                    }
+                }
+            }
+            response.sendRedirect("GestioneOrariDateSpecifiche?offSet=" + offSet + "&success=true");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("GestioneOrariDateSpecifiche?offSet=" + offSet + "&error=save");
+        }
+	}}

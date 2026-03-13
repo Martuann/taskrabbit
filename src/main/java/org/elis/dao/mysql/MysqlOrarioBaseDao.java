@@ -72,6 +72,63 @@ public class MysqlOrarioBaseDao implements OrarioBaseDao{
 	            ps.executeUpdate();
 	        }
 	    }
-	}
+	    
+	    @Override
+	    public OrarioBase getOrariByUtenteEGiorno(long idUtente, DayOfWeek giornodellasettimana) throws Exception {
+	        String query = "SELECT * FROM orario_base WHERE id_utente = ? AND giorno_settimana = ?";
+
+	        try (Connection connection = dataSource.getConnection(); 
+	             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+	            
+	        	preparedStatement.setLong(1, idUtente);
+	        	preparedStatement.setInt(2, giornodellasettimana.getValue());
+	        	  try ( ResultSet resultSet = preparedStatement.executeQuery()){
+
+	     
+	                if (resultSet.next()) {
+	                    OrarioBase orarioBase = new OrarioBase();
+	                    orarioBase.setId(resultSet.getLong("id"));
+	                    orarioBase.setOraInizio(resultSet.getTime("ora_inizio").toLocalTime());
+	                    orarioBase.setOraFine(resultSet.getTime("ora_fine").toLocalTime());
+	                    orarioBase.setIdUtente(idUtente);
+	                    orarioBase.setGiornoSettimana(giornodellasettimana);
+	                    return orarioBase;
+	                }
+	        
+	        }
+	        	  return null;
+	    }
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    }
+	    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 

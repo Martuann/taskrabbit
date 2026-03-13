@@ -38,6 +38,23 @@
 			List<OrarioBase> orariStandard = (List<OrarioBase>) request.getAttribute("orarioStandard");
 		%>
 
+		<% if(request.getParameter("error") != null) { %>
+		    <div class="alert-error" style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 10px;">
+		        <% 
+		            String errorType = request.getParameter("error");
+		            if("loading".equals(errorType)) out.print("Errore nel caricamento dati.");
+		            else if("save".equals(errorType)) out.print("Errore durante il salvataggio.");
+		            else out.print("Si è verificato un errore.");
+		        %>
+		    </div>
+		<% } %>
+
+		<% if("true".equals(request.getParameter("success"))) { %>
+		    <div class="alert-success" style="color: green; font-weight: bold; border: 1px solid green; padding: 10px; margin-bottom: 10px;">
+		        Salvataggio completato con successo!
+		    </div>
+		<% } %>
+
 		<div class="navigazione-settimana">
 			<% if (offSet > 0) { %>
 				<a href="?offSet=<%=offSet-1%>" class="btn-nav">Settimana Precedente</a>
@@ -53,6 +70,7 @@
 		</div>
 
 		<form action="<%=request.getContextPath()%>/GestioneOrariDateSpecifiche" method="POST">
+		    <input type="hidden" name="offSetAttuale" value="<%= offSet %>">
 			<div class="calendario-grid">
 				<% 
 				for(int i = 0; i < 7; i++) {
@@ -138,10 +156,9 @@
 	</div>
 <script>
     const valoriOriginali = new Map();
-
     const inputs = document.querySelectorAll('.agenda-layout input[type="checkbox"], .agenda-layout input[type="time"]');
 
-    inputs.forEach((input, index) => {
+    inputs.forEach((input) => {
         const valoreIniziale = input.type === 'checkbox' ? input.checked : input.value;
         valoriOriginali.set(input, valoreIniziale);
     });
@@ -167,9 +184,6 @@
 
     document.querySelectorAll('.btn-nav').forEach(bottone => {
         bottone.addEventListener('click', confermaSpostamento);
-    });
-
-    document.querySelector('form').addEventListener('submit', () => {
     });
 </script>
 </body>

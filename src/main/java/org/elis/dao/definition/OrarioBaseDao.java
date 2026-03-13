@@ -1,5 +1,6 @@
 package org.elis.dao.definition;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 import org.elis.progetto.model.OrarioBase;
@@ -12,6 +13,8 @@ public interface OrarioBaseDao {
 	    List<OrarioBase> getOrariByUtente(long idUtente) throws Exception;
 	    
 	    void eliminaOrario(long idUtente, int giornoSettimana) throws Exception;
+
+		OrarioBase getOrariByUtenteEGiorno(long idUtente, DayOfWeek giornodellasettimana) throws Exception;
 	
 	
 	

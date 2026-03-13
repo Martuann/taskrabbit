@@ -116,5 +116,69 @@ String query = "INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente
 	    return new Disponibilita(id, idUtente, data, inizio, fine);
 	}
 	
+	@Override
+	public void salvaOAggiorna(Disponibilita d) throws Exception {
+	    String queryCerca = "SELECT id FROM disponibilita WHERE id_utente = ? AND data = ?";
+	    
+	    try (Connection c = dataSource.getConnection()) {
+	        long idEsistente = -1;
+	        
+	        try (PreparedStatement psCerca = c.prepareStatement(queryCerca)) {
+	            psCerca.setLong(1, d.getIdUtente());
+	            psCerca.setDate(2, java.sql.Date.valueOf(d.getData()));
+	            try (ResultSet rs = psCerca.executeQuery()) {
+	                if (rs.next()) {
+	                    idEsistente = rs.getLong("id");
+	                }
+	            }
+	        }
 
+	        if (idEsistente != -1) {
+	            String queryUpdate = "UPDATE disponibilita SET ora_inizio = ?, ora_fine = ? WHERE id = ?";
+	            try (PreparedStatement psUpdate = c.prepareStatement(queryUpdate)) {
+	                psUpdate.setTime(1, java.sql.Time.valueOf(d.getInizio()));
+	                psUpdate.setTime(2, java.sql.Time.valueOf(d.getFine()));
+	                psUpdate.setLong(3, idEsistente);
+	                psUpdate.executeUpdate();
+	            }
+	        } else {
+	            String queryInsert = "INSERT INTO disponibilita (id_utente, data, ora_inizio, ora_fine) VALUES (?, ?, ?, ?)";
+	            try (PreparedStatement psInsert = c.prepareStatement(queryInsert)) {
+	                psInsert.setLong(1, d.getIdUtente());
+	                psInsert.setDate(2, java.sql.Date.valueOf(d.getData()));
+	                psInsert.setTime(3, java.sql.Time.valueOf(d.getInizio()));
+	                psInsert.setTime(4, java.sql.Time.valueOf(d.getFine()));
+	                psInsert.executeUpdate();
+	            }
+	        }
+	    }
+	}
+	
+	
+	
+	
+	
+	@Override
+	public void rimuoviDisponibilitaByIdUtenteData(long idUtente, LocalDate data) throws Exception {
+	    String query = "DELETE FROM disponibilita WHERE id_utente = ? AND data = ?";
+	    
+	    try (Connection connection = dataSource.getConnection();
+	         PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+	        
+	        preparedStatement.setLong(1, idUtente);
+	        preparedStatement.setDate(2, Date.valueOf(data));
+	        preparedStatement.executeUpdate();
+	    }
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

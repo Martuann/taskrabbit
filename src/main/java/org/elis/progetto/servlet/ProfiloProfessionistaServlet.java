@@ -8,31 +8,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
-import javax.sql.DataSource;
 
 import org.elis.dao.definition.DaoFactory;
-import org.elis.dao.definition.DisponibilitaDao;
 import org.elis.dao.definition.ImmagineDao;
-import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteVeicoloDao;
 import org.elis.dao.definition.VeicoloDao;
 import org.elis.dao.definition.UtenteProfessioneDao;
-import org.elis.dao.mysql.MySqlVeicoloDao;
-import org.elis.dao.mysql.MysqlImmagineDao;
-import org.elis.dao.mysql.MysqlProfessioneDao;
-import org.elis.dao.mysql.MysqlUtenteDao;
-import org.elis.dao.mysql.MysqlUtenteProfessioneDao;
-import org.elis.dao.mysql.MysqlUtenteVeicoloDao;
-import org.elis.dao.mysql.mysqlRecensioneDao;
+
 import org.elis.progetto.model.Immagine;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Recensione;
 import org.elis.progetto.model.Utente;
 import org.elis.progetto.model.UtenteVeicolo;
-import org.elis.utilities.DataSourceConfig;
+
 
 
 /**
@@ -43,7 +34,7 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UtenteDao utenteDao;
 	private ProfessioneDao professioneDao;
-	private 	ImmagineDao immagineDao;
+	private ImmagineDao immagineDao;
 	private RecensioneDao recensioneDao;
 	private UtenteVeicoloDao utenteVeicoloDao;
 	private VeicoloDao veicoloDao;
