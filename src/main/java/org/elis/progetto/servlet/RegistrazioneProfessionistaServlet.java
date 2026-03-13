@@ -14,8 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.elis.dao.definition.CittaDao;
+import org.elis.dao.definition.DaoFactory;
+import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteProfessioneDao;
+import org.elis.dao.definition.UtenteVeicoloDao;
+import org.elis.dao.definition.VeicoloDao;
 import org.elis.dao.mysql.MysqlCittaDao;
 import org.elis.dao.mysql.MysqlProfessioneDao;
 import org.elis.dao.mysql.MysqlUtenteDao;
@@ -35,14 +39,26 @@ import org.elis.utilities.DataSourceConfig;
 public class RegistrazioneProfessionistaServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-
+    private ProfessioneDao professioneDao;
+	private   UtenteDao utenteDao;
+	private   CittaDao cittaDao;
+	private   UtenteProfessioneDao utenteProfessioneDao;
+  
+	@Override
+	public void init() throws ServletException {
+		professioneDao=DaoFactory.getInstance().getProfessioneDao();
+		utenteDao=DaoFactory.getInstance().getUtenteDao();
+		utenteProfessioneDao=DaoFactory.getInstance().getUtenteProfessioneDao();
+		cittaDao=DaoFactory.getInstance().getCittaDao();
+	} 
+    
     public RegistrazioneProfessionistaServlet() {
 	super();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-	List<Professione> tutteLeProfessioni = new MysqlProfessioneDao(DataSourceConfig.getDataSource()).selectAll();
+	List<Professione> tutteLeProfessioni =professioneDao.selectAll();
 	
 	request.setAttribute("listaProfessioni", tutteLeProfessioni);
 	request.getRequestDispatcher("/PagineWeb/registrazioneProfessionista.jsp").forward(request, response);	
@@ -53,9 +69,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	UtenteDao utentiInterni = new MysqlUtenteDao(DataSourceConfig.getDataSource());
-	CittaDao cittaInterna = new MysqlCittaDao(DataSourceConfig.getDataSource());
-    UtenteProfessioneDao utenteProfessioneInterno = new MysqlUtenteProfessioneDao(DataSourceConfig.getDataSource());
+
 
 	String nome = request.getParameter("nome");
 	String cognome = request.getParameter("cognome");
@@ -78,7 +92,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
         errori.add("Per favore, inserisci un indirizzo email valido.");
     }
     try {
-        if (utentiInterni.presenzaUtente(email)) {
+        if (utenteDao.presenzaUtente(email)) {
             errori.add("Questa email è già registrata. Usa un'altra email o fai il login.");
         }
     } catch (Exception e) {
@@ -117,7 +131,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     if (!errori.isEmpty()) {
         
    
-        List<Professione> tutteLeProfessioni = new MysqlProfessioneDao(DataSourceConfig.getDataSource()).selectAll();
+        List<Professione> tutteLeProfessioni =professioneDao.selectAll();
         request.setAttribute("listaProfessioni", tutteLeProfessioni);
         
       
@@ -134,18 +148,18 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	
 	try {
 	    Citta citta =new Citta(nomeCitta, provincia);
-	    cittaInterna.getOrCreateCitta(citta);
+	    cittaDao.getOrCreateCitta(citta);
 	    
 
 
 	    Utente nuovoProf = new Utente(
 		    nome, cognome, email, numero, password, ddn,
-		    codiceFiscale, Ruolo.PROFESSIONISTA,cittaInterna.getOrCreateCitta(citta)  );
+		    codiceFiscale, Ruolo.PROFESSIONISTA,cittaDao.getOrCreateCitta(citta)  );
 
-	   Long idUtente= utentiInterni.aggiungiUtente(nuovoProf);
+	   Long idUtente= utenteDao.aggiungiUtente(nuovoProf);
 	   for(int i=0;i<listaIdProfessioni.length;i++) {
 	   
-		   utenteProfessioneInterno.insert( new UtenteProfessione(idUtente,Long.parseLong(listaIdProfessioni[i]), null));
+		   utenteProfessioneDao.insert( new UtenteProfessione(idUtente,Long.parseLong(listaIdProfessioni[i]), null));
 	   }
 	   
 	   response.sendRedirect(request.getContextPath() + "/loginUtente.jsp?success=prof");
