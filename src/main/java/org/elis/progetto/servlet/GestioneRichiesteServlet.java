@@ -57,7 +57,13 @@ public class GestioneRichiesteServlet extends HttpServlet {
 					richieste.add(counter++,r);
 				}
 			}
+			
+			if(hasRichiesteInAttesa(richieste)) {
+				request.setAttribute("emptyMessage1", "none");
+			} 
+			
 			request.setAttribute("richieste", richieste);
+			
 			counter=0;
 			for(Richiesta r : richieste) {
 				Utente richiedente = utenteDao.ricercaPerId(r.getIdUtenteRichiedente());
@@ -65,16 +71,20 @@ public class GestioneRichiesteServlet extends HttpServlet {
 				
 				switch(r.getStato()) {
 				case in_attesa:
-					request.setAttribute("statoRichiesta"+counter, "in attesa di conferma");
+					request.setAttribute("statoRichiesta"+counter, "In attesa di conferma");
 					request.setAttribute("coloreStato"+counter, "#E4A11B");
 					break;
 				case in_corso:
-					request.setAttribute("statoRichiesta"+counter, "in corso");
+					request.setAttribute("statoRichiesta"+counter, "In corso");
 					request.setAttribute("coloreStato"+counter, "#E4A11B");
 					break;
 				case completato:
-					request.setAttribute("statoRichiesta"+counter, "completato");
+					request.setAttribute("statoRichiesta"+counter, "Completato");
 					request.setAttribute("coloreStato"+counter, "#14A44D");
+					break;
+				case rifiutato:
+					request.setAttribute("statoRichiesta"+counter, "Rifiutato");
+					request.setAttribute("coloreStato"+counter, "#DC4C64");
 				}
 				
 				String professione = professioneDao.selectById(r.getIdProfessione()).getNome();
@@ -115,5 +125,14 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+	
+	private boolean hasRichiesteInAttesa(List<Richiesta> richieste) {
+		for(Richiesta r : richieste) {
+			if(r.getStato()==StatoRichiesta.in_attesa) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
