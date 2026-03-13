@@ -14,6 +14,9 @@
 <body>
 	<div id="richieste_ricevute">
 	<h1>Richieste Ricevute:</h1>
+	<div id="empty-message1" style="display:<%= request.getAttribute("emptyMessage1") %>">
+		<p>Nessuna richiesta ricevuta.</p>
+	</div>
 	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); 
 	for(int i=0;i<richieste.size();i++) { 
 		if(richieste.get(i).getStato()==StatoRichiesta.in_attesa) { %>
