@@ -9,7 +9,6 @@
 <meta charset="UTF-8">
 <title>Pagina Gestione Richieste</title>
 <link rel="stylesheet" href="css/gestioneRichieste.css">
-<%@ include file="/WEB-INF/pagineAdmin/header.jsp"%>
 </head>
 <body>
 	<div id="richieste_ricevute">
