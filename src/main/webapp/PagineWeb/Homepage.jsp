@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taskly - Servizi per la casa</title>
     <link rel="stylesheet" href="../css/Homepage.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -19,13 +19,15 @@
         </div>
     </nav>
 
-    <header class="hero">
+  <header class="hero">
         <div class="hero-content">
             <h1>Benvenuto su Taskly</h1>
-            <p>I tuoi progetti di casa resi semplici. Trova esperti per ogni necessit√†.</p>
+            <p>I tuoi progetti di casa resi semplici. Trova esperti per ogni necessit‡.</p>
             <div class="search-container">
-                <input type="text" placeholder="Di cosa hai bisogno? (es. Pittura, Riparazioni)">
-                <button>Cerca</button>
+                <form action="${pageContext.request.contextPath}/RicercaProfessionistiServlet" method="GET" style="display: flex; width: 100%;">
+                    <input type="text" name="professione" placeholder="Di cosa hai bisogno? (es. Pittura, Riparazioni)" required>
+                    <button type="submit">Cerca</button>
+                </form>
             </div>
         </div>
     </header>
