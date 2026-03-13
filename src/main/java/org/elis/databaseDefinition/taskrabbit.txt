@@ -1,0 +1,140 @@
+create database taskrabbit;
+
+use taskrabbit;
+
+create table citta(
+id bigint unsigned primary key auto_increment,	
+nome varchar(50) not null,
+provincia CHAR(2) NOT NULL,
+CONSTRAINT uq_citta_provincia UNIQUE (nome, provincia)
+);
+
+
+create table utente(
+id bigint unsigned primary key auto_increment,
+nome varchar(30)not null,
+cognome varchar(30)not null,
+email varchar(50)not null unique,
+telefono varchar(20)not null unique,
+password varchar(100)not null,
+ddn date not null,
+cf varchar(16) not null unique,
+ruolo TINYINT NOT NULL COMMENT '0:admin, 1:professionista, 2:base', 
+CONSTRAINT chk_ruolo CHECK (ruolo BETWEEN 0 AND 2),
+id_citta bigint unsigned not null, 
+foreign key (id_citta) references citta(id) 
+
+);
+
+create table disponibilita(
+id bigint unsigned primary key auto_increment,
+data date not null,
+ora_inizio time not null,
+ora_fine time not null,
+id_utente bigint unsigned not null,
+CONSTRAINT chk_orario CHECK (ora_fine > ora_inizio),
+FOREIGN KEY (id_utente) REFERENCES utente(id)  
+);
+
+create table veicolo(
+id bigint unsigned primary key auto_increment,
+categoria varchar(30) not null unique
+);
+
+create table utente_veicolo(
+id bigint unsigned primary key auto_increment,
+id_utente bigint unsigned not null,
+id_veicolo bigint unsigned not null,
+aggiuntaServizio decimal(10,2)not null default 0.0,
+check(aggiuntaServizio>=0) ,
+FOREIGN KEY (id_utente) REFERENCES utente(id) , 
+FOREIGN KEY (id_veicolo) REFERENCES veicolo(id) 
+
+);
+
+create table immagine (
+id bigint unsigned primary key auto_increment,
+nome varchar(30)not null,
+percorso varchar(255)not null,
+isfotoprofilo boolean not null default false,
+id_utente bigint unsigned not null,
+FOREIGN KEY (id_utente) REFERENCES utente(id)  
+
+
+);
+
+create table professione(
+id bigint unsigned primary key auto_increment,
+nome varchar(30)unique not null
+);
+
+create table utente_professione(
+id bigint unsigned primary key auto_increment,
+tariffaH decimal(10,2) not null,
+id_utente bigint unsigned not null,
+id_professione bigint unsigned not null,
+FOREIGN KEY (id_utente) REFERENCES utente(id), 
+FOREIGN KEY (id_professione) REFERENCES professione(id)
+
+
+
+);
+create table richiesta(
+	id bigint unsigned primary key auto_increment,
+descrizione text not null,
+data date not null,
+orario_inizio time not null,
+orario_fine time not null,
+costoeffettivo decimal(10,2)not null,
+indirizzo varchar(100) not null,
+stato TINYINT NOT NULL DEFAULT 0 COMMENT '0:in_attesa, 1:in_corso, 2:completata',
+id_utenteRichiedente bigint unsigned not null,
+CONSTRAINT chk_stato CHECK (stato BETWEEN 0 AND 2),
+id_utenteRichiesto bigint unsigned not null,
+
+id_professione bigint unsigned not null,
+id_veicolo bigint unsigned,
+FOREIGN key (id_utenteRichiedente) REFERENCES utente(id),
+FOREIGN key (id_utenteRichiesto) REFERENCES utente(id),
+FOREIGN key (id_professione) REFERENCES professione(id),
+FOREIGN key (id_veicolo) REFERENCES veicolo(id)  
+);
+
+create table recensione(
+id bigint unsigned primary key auto_increment,
+voto tinyint not null,
+CHECK (voto BETWEEN 1 AND 5),
+descrizione text,
+data date not null,
+id_utenteScrittore bigint unsigned not null,
+id_utenteRicevente bigint unsigned not null,
+FOREIGN key (id_utenteScrittore) REFERENCES utente(id),
+FOREIGN key (id_utenteRicevente) REFERENCES utente(id)
+
+);
+
+create table orario_base (
+    id bigint unsigned primary key auto_increment,
+    giorno_settimana TINYINT not null COMMENT '1=Lunedì, 2=Martedì... 7=Domenica',
+    ora_inizio time not null,
+    ora_fine time not null,
+    id_utente bigint unsigned not null,
+    
+    CONSTRAINT chk_giorno CHECK (giorno_settimana BETWEEN 1 AND 7),
+    CONSTRAINT chk_orario_base CHECK (ora_fine > ora_inizio),
+    FOREIGN KEY (id_utente) REFERENCES utente(id),
+    
+    CONSTRAINT uq_giorno_utente UNIQUE (id_utente, giorno_settimana) 
+);
+
+
+/* aggiunta reference a veicolo in richiesta
+aggiunta attributo telefono a utente
+aggiunto attributo aggiuntaServizio alla relazione utente_veicolo
+aggiunto attributo costoeffettivo alla richiesta
+aggiunto attributo provincia a citta e creato il vincolo nome citta provincia
+
+*/
+
+
+
