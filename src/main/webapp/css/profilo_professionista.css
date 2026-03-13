@@ -1,17 +1,13 @@
 @charset "UTF-8";
-
 *{
 	font-family: Arial, sans-serif;
 }
-
 body{
 	background:#e1e1e1;
-	padding: 30px;
+	padding:30px;
+	padding-top:100px;
 }
-
-
-
-header{
+.profile-header{
 	background:#ffffff;
 	display:flex;
 	align-items:center;
@@ -29,10 +25,7 @@ header{
 	display:flex;
 	flex-direction:column;
 }
-
-
-
-section{
+.profile-section{
 	background:#ffffff;
 	gap:25px;
 	padding:25px;
@@ -51,10 +44,7 @@ section h2{
 	width:100%;
 	height:180px;
 }
-
-
-
-footer{
+.profile-footer{
 	background:#ffffff;
 	gap:25px;
 	padding:25px;

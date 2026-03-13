@@ -9,9 +9,10 @@
 <meta charset="UTF-8">
 <title>Pagina Profilo Professionista</title>
 <link rel="stylesheet" href="css/profilo_professionista.css">
+<%@ include file="/WEB-INF/pagineAdmin/header.jsp"%>
 </head>
 <body>
-	<header>
+	<header class="profile-header">
 		<img id='propicprofilo' src='<%= request.getAttribute("propicprofilo") %>'>
 		<div id="infoprofilo">
 			<h1 id="nomeprofilo"><%= request.getAttribute("nomeprofilo") %></h1>
@@ -19,7 +20,7 @@
 			<p id="tariffa">Tariffa: <%= request.getAttribute("tariffa") %> €/h</p>
 		</div>
 	</header>
-	<section>
+	<section class="profile-section">
 		<h2>Foto di lavoro: </h2>
 		<div id="imgs">
 			<img id="img1" class="imglavoro" src="<%= request.getAttribute("img1") %>">
@@ -28,7 +29,7 @@
 			<img id="img4" class="imglavoro" src="<%= request.getAttribute("img4") %>">
 		</div>
 	</section>
-	<footer>
+	<footer class="profile-footer">
 		<h2>Recensioni:</h2>
 		<% 
 		List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni"); 
