@@ -12,14 +12,10 @@ import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.VeicoloDao;
-import org.elis.dao.mysql.MySqlVeicoloDao;
-import org.elis.dao.mysql.MysqlProfessioneDao;
-import org.elis.dao.mysql.MysqlRichiestaDao;
-import org.elis.dao.mysql.MysqlUtenteDao;
+import org.elis.dao.mysql.JdbcDaoFactory;
 import org.elis.progetto.model.Richiesta;
 import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
-import org.elis.utilities.DataSourceConfig;
 
 /**
  * Servlet implementation class GestioneRichiesteServlet
@@ -42,10 +38,10 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idProfessionista = Long.parseLong(request.getParameter("id"));
 		try {
-			RichiestaDao richiestaDao = new MysqlRichiestaDao(DataSourceConfig.getDataSource());
-			UtenteDao utenteDao = new MysqlUtenteDao(DataSourceConfig.getDataSource());
-			VeicoloDao veicoloDao = new MySqlVeicoloDao(DataSourceConfig.getDataSource());
-			ProfessioneDao professioneDao = new MysqlProfessioneDao(DataSourceConfig.getDataSource());
+			RichiestaDao richiestaDao = JdbcDaoFactory.getInstance().getRichiestaDao();
+			UtenteDao utenteDao = JdbcDaoFactory.getInstance().getUtenteDao();
+			VeicoloDao veicoloDao = JdbcDaoFactory.getInstance().getVeicoloDao();
+			ProfessioneDao professioneDao = JdbcDaoFactory.getInstance().getProfessioneDao();
 			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
 			List<Richiesta> richieste = new ArrayList<>();
 			int counter=0;
