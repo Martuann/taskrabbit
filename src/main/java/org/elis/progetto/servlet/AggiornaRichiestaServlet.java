@@ -17,20 +17,20 @@ import org.elis.progetto.model.StatoRichiesta;
 @WebServlet("/AggiornaRichiesta")
 public class AggiornaRichiestaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private RichiestaDao richiestaDao;
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public AggiornaRichiestaServlet() {
         super();
-        // TODO Auto-generated constructor stub
+        JdbcDaoFactory.getInstance().getRichiestaDao();
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RichiestaDao richiestaDao = JdbcDaoFactory.getInstance().getRichiestaDao();
 		StatoRichiesta stato = StatoRichiesta.valueOf(request.getParameter("type"));
 		Long idRichiesta = Long.parseLong(request.getParameter("id1"));
 		Richiesta richiesta = richiestaDao.selectById(idRichiesta);

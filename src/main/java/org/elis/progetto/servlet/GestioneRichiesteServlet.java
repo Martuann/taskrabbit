@@ -23,13 +23,20 @@ import org.elis.progetto.model.Utente;
 @WebServlet("/GestioneRichiesteServlet")
 public class GestioneRichiesteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private RichiestaDao richiestaDao;
+	private UtenteDao utenteDao;
+	private VeicoloDao veicoloDao;
+	private ProfessioneDao professioneDao;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public GestioneRichiesteServlet() {
         super();
-        // TODO Auto-generated constructor stub
+        richiestaDao = JdbcDaoFactory.getInstance().getRichiestaDao();
+    	utenteDao = JdbcDaoFactory.getInstance().getUtenteDao();
+    	veicoloDao = JdbcDaoFactory.getInstance().getVeicoloDao();
+    	professioneDao = JdbcDaoFactory.getInstance().getProfessioneDao();
     }
 
 	/**
@@ -38,10 +45,7 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idProfessionista = Long.parseLong(request.getParameter("id"));
 		try {
-			RichiestaDao richiestaDao = JdbcDaoFactory.getInstance().getRichiestaDao();
-			UtenteDao utenteDao = JdbcDaoFactory.getInstance().getUtenteDao();
-			VeicoloDao veicoloDao = JdbcDaoFactory.getInstance().getVeicoloDao();
-			ProfessioneDao professioneDao = JdbcDaoFactory.getInstance().getProfessioneDao();
+			
 			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
 			List<Richiesta> richieste = new ArrayList<>();
 			int counter=0;
