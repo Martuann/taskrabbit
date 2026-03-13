@@ -32,6 +32,7 @@
 				<p>Indirizzo: <%= request.getAttribute("indirizzo"+i) %></p>
 				<p>Retribuzione: €<%= request.getAttribute("costoeffettivo"+i) %></p>
 				<a href="AggiornaRichiesta?type=in_corso&id1=<%= request.getAttribute("idRichiesta"+i) %>&id2=<%= request.getParameter("id") %>">Accetta richiesta</a>
+				<a href="AggiornaRichiesta?id1=<%= request.getAttribute("idRichiesta"+i) %>&id2=<%= request.getParameter("id") %>">Rifiuta richiesta</a>
 			</div>
 		<% } %>
 	<% } %>
