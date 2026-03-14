@@ -8,16 +8,8 @@
 
 </head>
 <body>
+<%@ include file="/WEB-INF/headerFooter/header.jsp"%>
 
-    <nav class="navbar">
-        <div class="logo">Taskly</div>
-        <div class="auth-buttons">
-            <a href="#">Home</a>
-            <a href="#">Servizi</a>
-            <a href="login.html" class="btn-login">Accedi</a>
-            <a href="registrazioneUtente.jsp" class="btn-register">Registrati</a>
-        </div>
-    </nav>
 
   <header class="hero">
         <div class="hero-content">
@@ -75,9 +67,8 @@
         </div>
     </section>
 
-    <footer>
-        <p>© 2026 Taskly | Privacy | Termini</p>
-    </footer>
+   
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 
 </body>
 </html>

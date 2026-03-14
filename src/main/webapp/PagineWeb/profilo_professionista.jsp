@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <title>Pagina Profilo Professionista</title>
 <link rel="stylesheet" href="css/profilo_professionista.css">
-<%@ include file="/WEB-INF/pagineAdmin/header.jsp"%>
+<%@ include file="/WEB-INF/headerFooter/header.jsp"%>
 </head>
 <body>
 	<header class="profile-header">

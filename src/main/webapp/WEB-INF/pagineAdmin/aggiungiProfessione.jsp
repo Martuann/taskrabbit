@@ -8,9 +8,9 @@
 <title>Admin - Nuova Professione</title>
 <link rel="stylesheet"
 	href="<%= request.getContextPath() %>/css/Registrazioni.css">
-<%@ include file="/WEB-INF/pagineAdmin/header.jsp"%>
 </head>
 <body class="site-wrapper">
+<%@ include file="/WEB-INF/headerFooter/header.jsp"%>
 
 	<main class="content-wrapper">
 		<div class="registrazione-container">
@@ -37,6 +37,6 @@
 			</form>
 		</div>
 	</main>
-	<%@ include file="/WEB-INF/pagineAdmin/footer.jsp"%>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>

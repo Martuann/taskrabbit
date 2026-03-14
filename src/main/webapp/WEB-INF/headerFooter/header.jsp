@@ -34,7 +34,7 @@
 			<% } else { %>
 			<div class="links-container">
 				<div class="links-group">
-					<a href="<%= request.getContextPath() %>/PagineWeb/login.html"
+					<a href="<%= request.getContextPath() %>/Login"
 						class="login bold">Accedi</a> <span class="slash">/</span> <a
 						href="<%= request.getContextPath() %>/PagineWeb/registrazioneUtente.jsp"
 						class="registrati bold">Registrati</a>

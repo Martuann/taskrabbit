@@ -3,7 +3,7 @@
   <display-name>taskrabbit</display-name>
   <welcome-file-list>
 
-    <welcome-file>PagineWeb/index.jsp</welcome-file>
+    <welcome-file>PagineWeb/Homepage.jsp</welcome-file>
   
   </welcome-file-list>
 </web-app>

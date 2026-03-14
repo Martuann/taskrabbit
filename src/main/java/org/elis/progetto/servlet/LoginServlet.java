@@ -23,7 +23,7 @@ import org.elis.utilities.DataSourceConfig;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet("/LoginServlet")
+@WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private  UtenteDao utenteDao;
@@ -47,9 +47,10 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+	
+		    request.getRequestDispatcher("/PagineWeb/login.jsp").forward(request, response);
+		}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -59,7 +60,6 @@ public class LoginServlet extends HttpServlet {
 	    String password = request.getParameter("password");
 
 	   
-	    UtenteDao utenteDao = new MysqlUtenteDao(DataSourceConfig.getDataSource());
 
 	    try {
 	       
