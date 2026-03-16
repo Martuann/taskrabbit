@@ -12,5 +12,7 @@ public interface VeicoloDao {
     
     List<Veicolo> getAllVeicoli() throws Exception;
 
+	List<Veicolo> getVeicolibyUtente(Long id_utente) throws Exception;
+
  
 }

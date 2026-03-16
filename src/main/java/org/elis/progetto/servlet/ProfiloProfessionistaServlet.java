@@ -22,7 +22,9 @@ import org.elis.progetto.model.Immagine;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Recensione;
 import org.elis.progetto.model.Utente;
+import org.elis.progetto.model.UtenteProfessione;
 import org.elis.progetto.model.UtenteVeicolo;
+import org.elis.progetto.model.Veicolo;
 
 
 
@@ -66,25 +68,19 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idProfessionista = Long.parseLong(request.getParameter("id1"));
-		Long idProfessione = Long.parseLong(request.getParameter("id2"));
+		idProfessionista = 2L;
 		try{
 			
 			Utente professionista = utenteDao.ricercaPerId(idProfessionista);
-			Professione professione = professioneDao.selectById(idProfessione);
+	     	List<Professione> professioniUtente = professioneDao.selectbyUtente(idProfessionista);
+			List<UtenteProfessione>utenteProf= utenteProfessioneDao.selectByUtente(idProfessionista);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);
 			List<Recensione> recensioni = recensioneDao.selectByIdUtenteRicevente(idProfessionista);
-			List<Utente> recensori = new ArrayList<>();
-			for(Recensione r : recensioni) {
-				recensori.add(utenteDao.ricercaPerId(r.getId_utenteScrittore()));
-			}
-			List<String> veicoli = new ArrayList<>();
-			for(UtenteVeicolo uv : utenteVeicoloDao.selectByUtente(idProfessionista)) {
-				veicoli.add(veicoloDao.ricercaPerId(uv.getIdVeicolo()).getCategoria());
-			}
-			request.setAttribute("nomeprofilo", professionista.getNome()+" "+professionista.getCognome());
+			List<Utente> recensori = utenteDao.getUtentiRecensori(idProfessionista);
+			List<Veicolo> veicoli = veicoloDao.getVeicolibyUtente(idProfessionista);
+			request.setAttribute("professionista", professionista);
 			request.setAttribute("veicoli", veicoli);
-			request.setAttribute("tariffa", utenteProfessioneDao
-				   .selectByIdUtenteIdProfessione(idProfessionista, idProfessione).getTariffaH());
+			request.setAttribute("tariffe",utenteProf);
 			int counter = 0;
 			for(Immagine i : immagini) {
 				counter++;
@@ -96,7 +92,7 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 					request.setAttribute("img"+counter, i.getPercorso());
 				}
 			}
-			request.setAttribute("task", professione.getNome());
+			request.setAttribute("task", professioniUtente);
 			request.setAttribute("recensioni", recensioni);
 			request.setAttribute("recensori", recensori);
 			for(int i=0; i<recensioni.size(); i++) {
@@ -108,7 +104,6 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 				}
 				request.setAttribute("nomeutente"+i, recensori.get(i).getNome()+" "+recensori.get(i).getCognome());
 				request.setAttribute("rating"+i, recensioni.get(i).getVoto());
-				request.setAttribute("task"+i, professione.getNome());
 				request.setAttribute("data"+i, recensioni.get(i).getData().toString());
 				request.setAttribute("descrizione"+i, recensioni.get(i).getDescrizione());
 			}

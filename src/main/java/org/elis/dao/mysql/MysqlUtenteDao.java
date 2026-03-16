@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -216,7 +217,6 @@ public class MysqlUtenteDao implements UtenteDao {
 	        
 	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
 	            while (resultSet.next()) {
-	                // Riutilizziamo il mapping esistente per ogni riga trovata
 	                Utente professionista = MysqlToUtente(resultSet);
 	                listaRisultato.add(professionista);
 	            }
@@ -259,6 +259,49 @@ public class MysqlUtenteDao implements UtenteDao {
 	    
 	    return utente;
 	}
+	
+	
+	
+	
+	
+	
+	@Override
+	public List<Utente> getUtentiRecensori(Long id_utenteRicevente) throws Exception {
+	    List<Utente> listaRecensori = new ArrayList<Utente>();
+	    
+	    String query = "SELECT u.* FROM utente u " +
+	                   "JOIN recensione r ON u.id = r.id_utenteScrittore " +
+	                   "WHERE r.id_utenteRicevente = ?";
+	    
+	    try (Connection connection = dataSource.getConnection();
+	         PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+	        
+	        preparedStatement.setLong(1, id_utenteRicevente);
+	        
+	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	            while (resultSet.next()) {
+	                Utente recensore = MysqlToUtente(resultSet);
+	                listaRecensori.add(recensore);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new Exception("Errore durante il recupero dei recensori dal database", e);
+	    }
+	    
+	    return listaRecensori;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 
 @Override
 public List<Utente> ricercaLikeProfessione(String professione) throws Exception {
