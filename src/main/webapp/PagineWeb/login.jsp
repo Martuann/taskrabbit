@@ -16,7 +16,7 @@
         <div class="login-card">
             <h2>Accedi al tuo account</h2>
             <p class="subtitle">Bentornato! Inserisci i tuoi dati per continuare.</p>
-            
+
             <form action="<%=request.getContextPath()%>/Login" method="post">
                 <div class="input-group">
                     <input type="email" name="email" placeholder="Email" required>
@@ -24,12 +24,12 @@
                 <div class="input-group">
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
-                
+
                 <button type="submit" class="btn-primary">Accedi</button>
             </form>
 
             <div class="login-footer">
-                <p>Non hai un account? <a href="registrazioneUtente.jsp">Registrati qui</a></p>
+                <p>Non hai un account? <a href="/RegistrazioneProfessionistaServlet">Registrati qui</a></p>
                 <a href="Homepage.html" class="back-home">Torna alla homepage</a>
             </div>
         </div>
