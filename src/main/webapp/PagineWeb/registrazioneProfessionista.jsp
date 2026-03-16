@@ -140,12 +140,14 @@
 
 		<div class="collegamenti-links">
 			<p>
-				Hai già un account? <a href="/Login">Accedi qui</a>
-			</p>
+					Hai già un account? <a href="<%=request.getContextPath()%>/Login">Accedi
+						qui</a>
+				</p>
 			<p>
-				Sei un Utente? <a href="/RegistrazioneProfessionistaServlet">Registrati come
-					Utente</a>
-			</p>
+					Sei un Utente? <a
+						href="<%=request.getContextPath()%>/RegistrazioneUtenteServlet">Registrati
+						come Utente</a>
+				</p>
 		</div>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

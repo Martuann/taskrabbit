@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+<%@ include file="/WEB-INF/headerFooter/header.jsp"%>
 
     <div class="login-wrapper">
         <div class="top-logo">Taskly</div>
@@ -29,8 +30,8 @@
             </form>
 
             <div class="login-footer">
-                <p>Non hai un account? <a href="/RegistrazioneProfessionistaServlet">Registrati qui</a></p>
-                <a href="Homepage.html" class="back-home">Torna alla homepage</a>
+                <p>Non hai un account? <a href="<%= request.getContextPath() %>/RegistrazioneUtenteServlet">Registrati qui</a></p>
+                <a href="<%= request.getContextPath() %>/PagineWeb/Homepage.jsp" class="back-home">Torna alla homepage</a>
             </div>
         </div>
     </div>
