@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -266,30 +268,37 @@ public class MysqlUtenteDao implements UtenteDao {
 	
 	
 	@Override
-	public List<Utente> getUtentiRecensori(Long id_utenteRicevente) throws Exception {
-	    List<Utente> listaRecensori = new ArrayList<Utente>();
+	public Map<Utente, String> getRecensoriConFoto(Long id_utenteRicevente) throws Exception {
+	    Map<Utente, String> mappaRecensori = new LinkedHashMap<>();
 	    
-	    String query = "SELECT u.* FROM utente u " +
-	                   "JOIN recensione r ON u.id = r.id_utenteScrittore " +
-	                   "WHERE r.id_utenteRicevente = ?";
-	    
+	    String sql = "SELECT u.*, i.percorso AS foto_percorso " +
+	                 "FROM utente u " +
+	                 "JOIN recensione r ON u.id = r.id_utenteScrittore " +
+	                 "LEFT JOIN immagine i ON u.id = i.id_utente AND i.isfotoprofilo = 1 " +
+	                 "WHERE r.id_utenteRicevente = ?";
+
 	    try (Connection connection = dataSource.getConnection();
-	         PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
 	        
-	        preparedStatement.setLong(1, id_utenteRicevente);
+	        ps.setLong(1, id_utenteRicevente);
 	        
-	        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-	            while (resultSet.next()) {
-	                Utente recensore = MysqlToUtente(resultSet);
-	                listaRecensori.add(recensore);
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	                Utente u = MysqlToUtente(rs);
+	                
+	                String percorso = rs.getString("foto_percorso");
+	                if (percorso == null || percorso.isEmpty()) {
+	                    percorso = "img/default-avatar.png";
+	                }
+	                
+	                mappaRecensori.put(u, percorso);
 	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        throw new Exception("Errore durante il recupero dei recensori dal database", e);
+	        throw new Exception("Errore nel recupero della mappa recensori", e);
 	    }
-	    
-	    return listaRecensori;
+	    return mappaRecensori;
 	}
 	
 	

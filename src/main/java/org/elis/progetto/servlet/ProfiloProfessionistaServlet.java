@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 
 import org.elis.dao.definition.DaoFactory;
@@ -68,7 +69,6 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idProfessionista = Long.parseLong(request.getParameter("id1"));
-		idProfessionista = 2L;
 		try{
 			
 			Utente professionista = utenteDao.ricercaPerId(idProfessionista);
@@ -76,37 +76,19 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			List<UtenteProfessione>utenteProf= utenteProfessioneDao.selectByUtente(idProfessionista);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);
 			List<Recensione> recensioni = recensioneDao.selectByIdUtenteRicevente(idProfessionista);
-			List<Utente> recensori = utenteDao.getUtentiRecensori(idProfessionista);
+			Map<Utente,String> recensori = utenteDao.getRecensoriConFoto(idProfessionista);
 			List<Veicolo> veicoli = veicoloDao.getVeicolibyUtente(idProfessionista);
 			request.setAttribute("professionista", professionista);
+			request.setAttribute("profeUtente", professioniUtente);
+			request.setAttribute("utenteProf", utenteProf);
+			request.setAttribute("immagini", immagini);
+
 			request.setAttribute("veicoli", veicoli);
-			request.setAttribute("tariffe",utenteProf);
-			int counter = 0;
-			for(Immagine i : immagini) {
-				counter++;
-				if(i.getIsFotoProfilo()) {
-					request.setAttribute("propicprofilo", i.getPercorso());
-					break;
-				}
-				else {
-					request.setAttribute("img"+counter, i.getPercorso());
-				}
-			}
-			request.setAttribute("task", professioniUtente);
+			
 			request.setAttribute("recensioni", recensioni);
 			request.setAttribute("recensori", recensori);
-			for(int i=0; i<recensioni.size(); i++) {
-				for(Immagine img : immagineDao.selectByIdUtente(recensori.get(i).getId())) {
-					if(img.getIsFotoProfilo()) {
-						request.setAttribute("propic"+i, img.getPercorso());
-						break;
-					}
-				}
-				request.setAttribute("nomeutente"+i, recensori.get(i).getNome()+" "+recensori.get(i).getCognome());
-				request.setAttribute("rating"+i, recensioni.get(i).getVoto());
-				request.setAttribute("data"+i, recensioni.get(i).getData().toString());
-				request.setAttribute("descrizione"+i, recensioni.get(i).getDescrizione());
-			}
+			
+		
 			request.getRequestDispatcher("/PagineWeb/profilo_professionista.jsp")
 				   .forward(request, response);
 		}
