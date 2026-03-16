@@ -103,15 +103,14 @@
 
 			<hr>
 
-			<div class="collegamenti-links">
+			<div class="collegamenti-links" style="text-align: center;">
 				<p>
 					Hai già un account? <a
-						href="<%=request.getContextPath()%>/loginUtente.jsp">Accedi
-						qui</a>
+						href="<%=request.getContextPath()%>/Login">Accedi qui</a>
 				</p>
 				<p>
 					Sei un professionista? <a
-						href="<%=request.getContextPath()%>/PagineWeb/registrazioneProfessionista.jsp">Registrati
+						href="<%=request.getContextPath()%>/RegistrazioneProfessionistaServlet">Registrati
 						come Professionista</a>
 				</p>
 			</div>
