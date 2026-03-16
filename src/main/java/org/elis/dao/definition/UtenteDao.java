@@ -2,6 +2,7 @@ package org.elis.dao.definition;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Ruolo;
@@ -39,7 +40,7 @@ public interface UtenteDao {
 
 
 
-	List<Utente> getUtentiRecensori(Long id_utenteRicevente) throws Exception;
+    Map<Utente, String> getRecensoriConFoto(Long id_utenteRicevente) throws Exception;
 	List<Utente> ricercaLikeProfessione(String professione) throws Exception;
 
 
