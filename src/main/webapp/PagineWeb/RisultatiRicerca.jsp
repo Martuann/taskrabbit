@@ -23,7 +23,10 @@
                     <div class="card-text">
                         <h3><%=u.getNome() +" "+ u.getCognome()%></h3>
                         <p>Email: <%=u.getEmail()%></p>
-                        <a href="#" class="view-more">Contatta</a>
+      
+                        <a href="<%=request.getContextPath()%>/ProfiloProfessionistaServlet?id1=<%=u.getId() %>" class="view-more">Contatta</a>
+                        
+                        
                     </div>
                 </div>
         <%} %>
