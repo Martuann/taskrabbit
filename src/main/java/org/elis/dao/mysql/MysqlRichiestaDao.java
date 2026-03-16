@@ -206,4 +206,39 @@ public class MysqlRichiestaDao implements RichiestaDao {
 		
 		return richieste;
 	}
+
+	@Override
+	public List<Richiesta> selectByIdUtenteRichiedente(Long idUtenteRichiedente) {
+		String sql = "SELECT * FROM richiesta WHERE id_utenteRichiedente="+idUtenteRichiedente;
+		List<Richiesta> richieste = new ArrayList<>();
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement select = connection.prepareStatement(sql);
+			 ResultSet rs = select.executeQuery()) {
+			
+			while(rs.next()) {
+				Richiesta richiesta = new Richiesta(
+					rs.getLong("id"),
+					rs.getString("descrizione"),
+					rs.getDate("data").toLocalDate(),
+					rs.getTime("orario_inizio").toLocalTime(),
+					rs.getTime("orario_fine").toLocalTime(),
+					rs.getBigDecimal("costoeffettivo"),
+					rs.getString("indirizzo"),
+					StatoRichiesta.values()[rs.getInt("stato")],
+					rs.getLong("id_utenteRichiedente"),
+					rs.getLong("id_utenteRichiesto"),
+					rs.getLong("id_professione"),
+					rs.getLong("id_veicolo"));
+				if(rs.wasNull()) {
+					richiesta.setIdVeicolo(null);
+				}
+				richieste.add(richiesta);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return richieste;
+	}
 }

@@ -27,7 +27,7 @@
     <section class="services-section">
         <h2>Esplora i nostri servizi</h2>
         <div class="services-grid">
-            
+
             <div class="service-card">
                 <img src="<%=request.getContextPath()%>/immagini/Riparazioni.jpg" alt="Riparazioni">
                 <div class="card-text">
@@ -66,8 +66,6 @@
 
         </div>
     </section>
-
-   
 	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 
 </body>

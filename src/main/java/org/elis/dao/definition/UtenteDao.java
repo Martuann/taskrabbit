@@ -38,7 +38,9 @@ public interface UtenteDao {
     List<Utente> ricercaTramiteProfessione(String professione) throws Exception;
 
 
+
 	List<Utente> getUtentiRecensori(Long id_utenteRicevente) throws Exception;
+	List<Utente> ricercaLikeProfessione(String professione) throws Exception;
 
 
 

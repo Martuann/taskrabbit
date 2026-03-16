@@ -29,6 +29,12 @@ public class MysqlUtenteDao implements UtenteDao {
 	public Long aggiungiUtente(Utente utente) throws Exception {
 		String query = "INSERT INTO utente (nome, cognome, email, telefono, password, ddn, cf, ruolo, id_citta) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
+		MysqlUtenteDao utenteDao = new MysqlUtenteDao(dataSource);
+
+	
+
+
+		
         try (Connection connection = dataSource.getConnection();
              PreparedStatement insertStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             
@@ -295,4 +301,36 @@ public class MysqlUtenteDao implements UtenteDao {
 	
 	
 	
+
+
+@Override
+public List<Utente> ricercaLikeProfessione(String professione) throws Exception {
+	List<Utente> listaRisultato = new ArrayList<>();
+    
+    String query = "SELECT u.* FROM utente u " +
+                   "JOIN utente_professione up ON u.id = up.id_utente " +
+                   "JOIN professione p ON p.id = up.id_professione " +
+                   "WHERE p.nome LIKE  ?";
+    
+    try (Connection connection = dataSource.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        
+        preparedStatement.setString(1, professione);
+        
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+               
+                Utente professionista = MysqlToUtente(resultSet);
+                listaRisultato.add(professionista);
+            }
+        }
+    } catch (Exception e) {
+        throw new Exception("Errore nella ricerca per professione: " + professione, e);
+    }
+    
+    return listaRisultato;	}
+
+
+
+
 }
