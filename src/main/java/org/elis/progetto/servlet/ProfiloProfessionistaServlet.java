@@ -27,11 +27,6 @@ import org.elis.progetto.model.UtenteProfessione;
 import org.elis.progetto.model.UtenteVeicolo;
 import org.elis.progetto.model.Veicolo;
 
-
-
-/**
- * Servlet implementation class ProfiloProfessionistaServlet
- */
 @WebServlet("/ProfiloProfessionistaServlet")
 public class ProfiloProfessionistaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -43,65 +38,63 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 	private VeicoloDao veicoloDao;
 	private UtenteProfessioneDao utenteProfessioneDao;
 
-	
-	
 	@Override
 	public void init() throws ServletException {
-	utenteDao=DaoFactory.getInstance().getUtenteDao();
-	professioneDao=DaoFactory.getInstance().getProfessioneDao();
-	immagineDao=DaoFactory.getInstance().getImmagineDao();
-	recensioneDao=DaoFactory.getInstance().getRecensioneDao();
-	utenteVeicoloDao=DaoFactory.getInstance().getUtenteVeicoloDao();
-	veicoloDao=DaoFactory.getInstance().getVeicoloDao();
-	utenteProfessioneDao=DaoFactory.getInstance().getUtenteProfessioneDao();
+		utenteDao = DaoFactory.getInstance().getUtenteDao();
+		professioneDao = DaoFactory.getInstance().getProfessioneDao();
+		immagineDao = DaoFactory.getInstance().getImmagineDao();
+		recensioneDao = DaoFactory.getInstance().getRecensioneDao();
+		utenteVeicoloDao = DaoFactory.getInstance().getUtenteVeicoloDao();
+		veicoloDao = DaoFactory.getInstance().getVeicoloDao();
+		utenteProfessioneDao = DaoFactory.getInstance().getUtenteProfessioneDao();
+	}
 
-	} 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ProfiloProfessionistaServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	public ProfiloProfessionistaServlet() {
+		super();
+	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Long idProfessionista = Long.parseLong(request.getParameter("id1"));
-		try{
-			
+		String idParam = request.getParameter("id1");
+		long idProfessionista = (idParam != null) ? Long.parseLong(idParam) : 2L;
+
+		try {
 			Utente professionista = utenteDao.ricercaPerId(idProfessionista);
-	     	List<Professione> professioniUtente = professioneDao.selectbyUtente(idProfessionista);
-			List<UtenteProfessione>utenteProf= utenteProfessioneDao.selectByUtente(idProfessionista);
+			List<Professione> professioniUtente = professioneDao.selectbyUtente(idProfessionista);
+			List<UtenteProfessione> utenteProf = utenteProfessioneDao.selectByUtente(idProfessionista);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);
 			List<Recensione> recensioni = recensioneDao.selectByIdUtenteRicevente(idProfessionista);
-			Map<Utente,String> recensori = utenteDao.getRecensoriConFoto(idProfessionista);
+			Map<Utente, String> recensori = utenteDao.getRecensoriConFoto(idProfessionista);
 			List<Veicolo> veicoli = veicoloDao.getVeicolibyUtente(idProfessionista);
+
+			String proPic = "img/default-avatar.png";
+			List<Immagine> galleria = new ArrayList<>();
+			if (immagini != null) {
+				for (Immagine img : immagini) {
+					if (img.getIsFotoProfilo()) {
+						proPic = img.getPercorso();
+					} else {
+						galleria.add(img);
+					}
+				}
+			}
+
 			request.setAttribute("professionista", professionista);
 			request.setAttribute("profeUtente", professioniUtente);
 			request.setAttribute("utenteProf", utenteProf);
-			request.setAttribute("immagini", immagini);
-
 			request.setAttribute("veicoli", veicoli);
-			
 			request.setAttribute("recensioni", recensioni);
-			request.setAttribute("recensori", recensori);
-			
-		
-			request.getRequestDispatcher("/PagineWeb/profilo_professionista.jsp")
-				   .forward(request, response);
-		}
-		catch(Exception e) {
+			request.setAttribute("mappaRecensori", recensori);
+			request.setAttribute("listaRecensori", new ArrayList<>(recensori.keySet()));
+			request.setAttribute("galleria", galleria);
+			request.setAttribute("proPicProfilo", proPic);
+
+			request.getRequestDispatcher("/PagineWeb/profilo_professionista.jsp").forward(request, response);
+		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 }

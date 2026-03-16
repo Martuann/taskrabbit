@@ -6,7 +6,6 @@
 <html>
 <head>
     <meta charset="UTF-8">
- 
     <title>Profilo di <%= ((Utente)request.getAttribute("professionista")).getNome() %></title>
     <link rel="stylesheet" href="css/profilo_professionista.css">
 </head>
@@ -19,8 +18,8 @@
             Utente professionista = (Utente) request.getAttribute("professionista");
             List<Veicolo> veicoli = (List<Veicolo>) request.getAttribute("veicoli");
             List<Professione> professioni = (List<Professione>) request.getAttribute("profeUtente");
+            List<UtenteProfessione> utenteProf = (List<UtenteProfessione>) request.getAttribute("utenteProf");
             List<Immagine> galleria = (List<Immagine>) request.getAttribute("galleria");
-            String tariffa = (String) request.getAttribute("tariffa");
             String proPic = (String) request.getAttribute("proPicProfilo");
         %>
 
@@ -30,7 +29,7 @@
                 <div id="infoprofilo">
                     <h1 id="nomeprofilo"><%= professionista.getNome() + " " + professionista.getCognome() %></h1>
                     
-                    <p id="p-veicoli"><strong>Veicoli:</strong> 
+                    <p id="p-veicoli"><strong>Veicoli disponibili:</strong> 
                         <% if(veicoli != null && !veicoli.isEmpty()) { 
                             for(int i=0; i < veicoli.size(); i++) { %>
                                 <%= veicoli.get(i).getCategoria() %><%= (i < veicoli.size()-1) ? ", " : "" %>
@@ -38,15 +37,29 @@
                            } else { %> Nessuno <% } %>
                     </p>
                     
-                    <p id="p-tariffa"><strong>Tariffa base:</strong> <%= tariffa %> €/h</p>
-                    
-                    <p id="p-professioni"><strong>Specializzazioni:</strong> 
-                        <% if(professioni != null) { 
-                            for(int i=0; i < professioni.size(); i++) { %>
-                                <%= professioni.get(i).getNome() %><%= (i < professioni.size()-1) ? ", " : "" %>
-                        <%  } 
-                           } %>
-                    </p>
+                    <div id="p-professioni">
+                        <strong>Servizi e Tariffe orarie:</strong>
+                        <ul style="list-style: none; padding-left: 0;">
+                        <% 
+                            if(utenteProf != null && !utenteProf.isEmpty()) { 
+                                for(UtenteProfessione up : utenteProf) { 
+                                    String nomeAttivita = "Servizio";
+                                    for(Professione p : professioni) {
+                                        if(p.getId() == up.getIdProfessione()) {
+                                            nomeAttivita = p.getNome();
+                                            break;
+                                        }
+                                    }
+                        %>
+                            <li><%= nomeAttivita %>: <strong><%= up.getTariffaH() %> €/h</strong></li>
+                        <% 
+                                } 
+                            } else { 
+                        %>
+                            <li>Tariffe non disponibili</li>
+                        <% } %>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
