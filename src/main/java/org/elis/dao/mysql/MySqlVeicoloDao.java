@@ -3,6 +3,7 @@ package org.elis.dao.mysql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,30 @@ public class MySqlVeicoloDao implements VeicoloDao{
 	
 	
 	
-	
+    public List<Veicolo> getVeicolibyUtente(Long id_utente) throws Exception {
+        List<Veicolo> listaveicoliUtente = new ArrayList<>(); 
+        
+        String query = "SELECT v.* FROM veicolo v " +
+                       "JOIN utente_veicolo uv ON v.id = uv.id_veicolo " +
+                       "WHERE uv.id_utente = ?";
+        
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                
+            preparedStatement.setLong(1, id_utente);
+            
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    listaveicoliUtente.add(MysqlToVeicolo(resultSet));
+                }
+            }
+            return listaveicoliUtente;
+                
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw new Exception("Errore nel recupero dei veicoli per l'utente " + id_utente, e);
+        }
+    }
 	
 	
 	

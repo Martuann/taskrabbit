@@ -113,7 +113,59 @@ public class MysqlProfessioneDao implements ProfessioneDao {
     }
     
     
+    
+    
+    
+    
+    
+    
+    
+    create table utente(
+id bigint unsigned primary key auto_increment,
+nome varchar(30)not null,
+cognome varchar(30)not null,
+email varchar(50)not null unique,
+telefono varchar(20)not null unique,
+password varchar(100)not null,
+ddn date not null,
+cf varchar(16) not null unique,
+ruolo TINYINT NOT NULL COMMENT '0:admin, 1:professionista, 2:base', 
+CONSTRAINT chk_ruolo CHECK (ruolo BETWEEN 0 AND 2),
+id_citta bigint unsigned not null, 
+foreign key (id_citta) references citta(id) 
+
+);
+    
+    
+    
+    
+    
+    
+    
+    
     */
     
-    
+    @Override
+    public List<Professione> selectbyUtente(Long id_utente) throws Exception {
+        String sql = "SELECT p.* FROM professione p JOIN utente_professione up ON p.id = up.id_professione WHERE up.id_utente=?";
+        List<Professione> professioni = new ArrayList<>();
+        
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            
+            ps.setLong(1, id_utente);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    professioni.add(new Professione(
+                        rs.getLong("id"),
+                        rs.getString("nome")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return professioni;
+    }
 }

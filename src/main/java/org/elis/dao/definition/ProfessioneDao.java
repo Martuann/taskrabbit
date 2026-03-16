@@ -9,4 +9,5 @@ public interface ProfessioneDao {
 	List<Professione> selectAll();
 	void update(Professione p) throws Exception;
 	void delete(Long id);
+	List<Professione> selectbyUtente(Long id_utente) throws Exception;
 }
