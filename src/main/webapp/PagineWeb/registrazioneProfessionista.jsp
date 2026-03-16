@@ -16,7 +16,7 @@
 	href="<%=request.getContextPath()%>/css/Registrazioni.css?">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/footer.css?">
-<%@ include file="/WEB-INF/pagineAdmin/header.jsp"%>
+<%@ include file="/WEB-INF/headerFooter/header.jsp"%>
 
 </head>
 <body class="site-wrapper">
@@ -162,6 +162,6 @@
 		});
 	</script>
 	</main>
-	<%@ include file="/WEB-INF/pagineAdmin/footer.jsp"%>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>
