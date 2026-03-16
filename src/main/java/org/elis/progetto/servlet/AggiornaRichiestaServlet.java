@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.RichiestaDao;
-import org.elis.dao.mysql.JdbcDaoFactory;
 import org.elis.progetto.model.Richiesta;
 import org.elis.progetto.model.StatoRichiesta;
 
@@ -24,7 +24,7 @@ public class AggiornaRichiestaServlet extends HttpServlet {
      */
     public AggiornaRichiestaServlet() {
         super();
-        JdbcDaoFactory.getInstance().getRichiestaDao();
+        richiestaDao = DaoFactory.getInstance().getRichiestaDao();
     }
 
 	/**
