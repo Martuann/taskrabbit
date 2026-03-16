@@ -36,8 +36,18 @@
 			<%
 			if (u != null) {
 			%>
-			<span class="welcome-msg">Bentornato, <strong><%=u.getNome()%></strong></span>
-			<a href="<%=request.getContextPath()%>/Logout" class="logout-link">Disconnetti</a>
+			<div class="area-riservata-container">
+				<button class="area-riservata-btn" id="areaRiservataBtn">
+					Bentornato, <strong><%=u.getNome()%></strong> ▼
+				</button>
+
+				<div class="area-riservata-menu" id="areaRiservataMenu">
+					<a href="<%=request.getContextPath()%>/Profilo">Mio Profilo</a> <a
+						href="<%=request.getContextPath()%>/Impostazioni">Impostazioni</a>
+					<div class="divider"></div>
+					<a href="<%=request.getContextPath()%>/Logout" class="logout">Esci</a>
+				</div>
+			</div>
 			<%
 			} else {
 			%>
@@ -57,6 +67,25 @@
 			%>
 		</div>
 	</div>
-
 </header>
 
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const btn = document.getElementById('areaRiservataBtn');
+		const menu = document.getElementById('areaRiservataMenu');
+
+		if (btn && menu) {
+			btn.addEventListener('click', function(e) {
+				e.stopPropagation();
+				menu.classList.toggle('show');
+			});
+
+			// Chiude il menu se clicchi fuori
+			document.addEventListener('click', function(e) {
+				if (!btn.contains(e.target)) {
+					menu.classList.remove('show');
+				}
+			});
+		}
+	});
+</script>
