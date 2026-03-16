@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Lascia una recensione</title>
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/scriviRecensione.css">
 </head>
 <body>
 	<h1>Lascia una recensione:</h1>
