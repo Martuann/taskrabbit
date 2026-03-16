@@ -128,6 +128,85 @@ create table orario_base (
 );
 
 
+
+
+
+USE taskrabbit;
+
+-- 1. Popolamento Città
+INSERT INTO citta (nome, provincia) VALUES 
+('Milano', 'MI'),
+('Roma', 'RM'),
+('Torino', 'TO'),
+('Napoli', 'NA');
+
+-- 2. Popolamento Professioni
+INSERT INTO professione (nome) VALUES 
+('Idraulico'),
+('Elettricista'),
+('Montaggio Mobili'),
+('Pulizie'),
+('Trasloco');
+
+-- 3. Popolamento Veicoli
+INSERT INTO veicolo (categoria) VALUES 
+('Nessuno'),
+('Auto'),
+('Station Wagon'),
+('Furgone Piccolo'),
+('Furgone Grande');
+
+-- 4. Popolamento Utenti (Admin, Professionisti e Clienti)
+-- Password fittizie (in un caso reale sarebbero hash)
+INSERT INTO utente (nome, cognome, email, telefono, password, ddn, cf, ruolo, id_citta) VALUES 
+('Mario', 'Rossi', 'mario.admin@task.it', '3331112222', 'admin_pass', '1980-05-20', 'RSSMRA80E20F205Z', 0, 1),
+('Luca', 'Verdi', 'luca.pro@gmail.com', '3471234567', 'password123', '1985-10-12', 'VRDLCU85R12H501U', 1, 1),
+('Giulia', 'Bianchi', 'giulia.tasker@libero.it', '3499876543', 'secret2024', '1992-03-25', 'BNCHGL92C25L219X', 1, 2),
+('Marco', 'Neri', 'marco.utente@tin.it', '3201122334', 'user_pass', '1995-07-08', 'NREMRA95L08H501B', 2, 1),
+('Elena', 'Gialli', 'elena.g@outlook.com', '3284455667', 'elena_pwd', '1988-12-01', 'GLLLN88T01F205K', 2, 3);
+
+-- 5. Relazione Utente-Professione (Tariffe orarie per i professionisti)
+INSERT INTO utente_professione (tariffaH, id_utente, id_professione) VALUES 
+(35.50, 2, 1), -- Luca è Idraulico a 35.50€/h
+(25.00, 2, 2), -- Luca fa anche l'Elettricista a 25.00€/h
+(20.00, 3, 3), -- Giulia monta mobili a 20.00€/h
+(15.00, 3, 4); -- Giulia fa pulizie a 15.00€/h
+
+-- 6. Relazione Utente-Veicolo (I mezzi a disposizione dei professionisti)
+INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServizio) VALUES 
+(2, 4, 15.00), -- Luca ha un Furgone Piccolo (+15€ al servizio)
+(3, 2, 5.00);  -- Giulia ha un'Auto (+5€ al servizio)
+
+-- 7. Immagini Profilo
+INSERT INTO immagine (nome, percorso, isfotoprofilo, id_utente) VALUES 
+('avatar_admin.jpg', '/uploads/users/1/img1.jpg', true, 1),
+('luca_pro.png', '/uploads/users/2/profilo.png', true, 2),
+('giulia_work.jpg', '/uploads/users/3/work.jpg', true, 3);
+
+-- 8. Disponibilità (Slot specifici)
+INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente) VALUES 
+('2024-06-01', '09:00:00', '12:00:00', 2),
+('2024-06-01', '14:00:00', '18:00:00', 2),
+('2024-06-02', '08:30:00', '13:00:00', 3);
+
+-- 9. Orario Base (Routine settimanale)
+INSERT INTO orario_base (giorno_settimana, ora_inizio, ora_fine, id_utente) VALUES 
+(1, '08:00:00', '17:00:00', 2), -- Luca lavora ogni Lunedì
+(2, '08:00:00', '17:00:00', 2), -- Luca lavora ogni Martedì
+(3, '09:00:00', '15:00:00', 3); -- Giulia lavora ogni Mercoledì
+
+-- 10. Richieste di Servizio
+-- Marco (id 4) richiede a Luca (id 2) un lavoro di idraulica (id 1)
+INSERT INTO richiesta (descrizione, data, orario_inizio, orario_fine, costoeffettivo, indirizzo, stato, id_utenteRichiedente, id_utenteRichiesto, id_professione, id_veicolo) VALUES 
+('Riparazione perdita lavandino cucina', '2024-06-05', '10:00:00', '12:00:00', 86.00, 'Via Roma 10, Milano', 2, 4, 2, 1, 4),
+('Montaggio armadio camera da letto', '2024-06-06', '15:00:00', '18:00:00', 65.00, 'Corso Vittorio 5, Torino', 0, 5, 3, 3, 2);
+
+-- 11. Recensioni
+-- Marco recensisce Luca dopo il lavoro completato
+INSERT INTO recensione (voto, descrizione, data, id_utenteScrittore, id_utenteRicevente) VALUES 
+(5, 'Ottimo lavoro, puntuale e molto professionale. Consigliato!', '2024-06-05', 4, 2);
+
+
 /* aggiunta reference a veicolo in richiesta
 aggiunta attributo telefono a utente
 aggiunto attributo aggiuntaServizio alla relazione utente_veicolo
