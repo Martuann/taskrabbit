@@ -6,19 +6,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import org.elis.dao.definition.DaoFactory;
-import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.definition.UtenteProfessioneDao;
-import org.elis.dao.definition.UtenteVeicoloDao;
-import org.elis.dao.definition.VeicoloDao;
-import org.elis.dao.mysql.MysqlUtenteDao;
-
 import java.io.IOException;
-
 import org.elis.progetto.model.Utente;
-import org.elis.utilities.DataSourceConfig;
 
 /**
  * Servlet implementation class LoginServlet
@@ -71,7 +62,7 @@ public class LoginServlet extends HttpServlet {
 	            session.setAttribute("utenteLoggato", utente);
 
 
-	            response.sendRedirect(request.getContextPath() + "/PagineWeb/Homepage.jsp");
+	            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
 	        } else {
 
 	            response.sendRedirect(request.getContextPath() + "/login.jsp?errore=1");

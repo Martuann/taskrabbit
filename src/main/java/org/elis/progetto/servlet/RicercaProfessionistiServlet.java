@@ -13,8 +13,6 @@ import org.elis.utilities.DataSourceConfig;
 import org.elis.dao.mysql.MysqlUtenteDao;
 import org.elis.dao.definition.UtenteDao;
 
-import org.elis.dao.mysql.MysqlUtenteDao;
-
 /**
  * Servlet implementation class RicercaProfessionistiServlet
  */
@@ -38,7 +36,7 @@ public class RicercaProfessionistiServlet extends HttpServlet {
         
   
         if (professioneCercata == null || professioneCercata.isEmpty()) {
-            response.sendRedirect("PagineWeb/Homepage.jsp");
+            response.sendRedirect("/HomepageServlet");
             return;
         }
 

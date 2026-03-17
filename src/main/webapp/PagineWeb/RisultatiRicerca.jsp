@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar">
         <div class="logo">Taskly - Risultati</div>
-        <a href="Homepage.jsp" style="color:white; margin-left:20px;">Torna alla Home</a>
+        <a href="/HomepageServlet" style="color:white; margin-left:20px;">Torna alla Home</a>
     </nav>
 	<%List<Utente> professionisti = (List<Utente>)request.getAttribute("professionisti"); %>
     <div class="services-section">
