@@ -31,9 +31,9 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		utenteDao=DaoFactory.getInstance().getUtenteDao();
-		
-		
-	} 
+
+
+	}
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -47,10 +47,10 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-	
+
 		    request.getRequestDispatcher("/PagineWeb/login.jsp").forward(request, response);
 		}
-	
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -59,27 +59,27 @@ public class LoginServlet extends HttpServlet {
 		String email = request.getParameter("email");
 	    String password = request.getParameter("password");
 
-	   
+
 
 	    try {
-	       
+
 	        Utente utente = utenteDao.login(email, password);
 
 	        if (utente != null) {
-	          
+
 	            HttpSession session = request.getSession();
 	            session.setAttribute("utenteLoggato", utente);
-	            
-	          
-	            response.sendRedirect(request.getContextPath() + "/index.jsp");
+
+
+	            response.sendRedirect(request.getContextPath() + "/PagineWeb/Homepage.jsp");
 	        } else {
-	            
+
 	            response.sendRedirect(request.getContextPath() + "/login.jsp?errore=1");
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        response.sendError(500, "Errore interno del server durante il login");
-	        
+
 	        doGet(request,response);
 	    }
 	}
