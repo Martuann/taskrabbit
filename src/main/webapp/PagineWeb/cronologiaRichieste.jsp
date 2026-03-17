@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.progetto.model.Richiesta" %>
+<%@ page import="org.elis.progetto.model.StatoRichiesta" %>
 <%@ page import="org.elis.progetto.model.Utente" %>
 <!DOCTYPE html>
 <html>
@@ -12,9 +13,8 @@
 </head>
 <body>
 	<h1>Cronologia Richieste:</h1>
-	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); 
-	String displayValue = (richieste.isEmpty()) ? "block":"none"; %>
-	<div id="empty-message1" style="display:<%= displayValue %>">
+	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); %>
+	<div id="empty-message1" style="display:<%= (richieste.isEmpty()) ? "block":"none" %>">
 		<p>Nessuna richiesta ricevuta.</p>
 	</div>
 	<div class="container-richieste">
@@ -34,6 +34,7 @@
 			<p>Veicolo richiesto: <%= request.getAttribute("veicolo"+counter) %></p>
 			<p>Indirizzo: <%= request.getAttribute("indirizzo"+counter) %></p>
 			<a href="ScriviRecensioneServlet?id1=<%= request.getParameter("id") %>&id2=<%= request.getAttribute("idProfessionista"+counter) %>" style="display:<%= request.getAttribute("recensioneFlag"+counter) %>">Scrivi una Recensione</a>
+			<a href="AggiornaRichiesta?type=completato&id1=<%= r.getId() %>&redirect=CronologiaRichiesteServlet&id2=<%= request.getParameter("id") %>" style="display:<%= (r.getStato()==StatoRichiesta.in_attesa) ? "inline-block":"none" %>">Segna richiesta come completata</a>
 		</div>
 	<% counter++;
 	} %>
