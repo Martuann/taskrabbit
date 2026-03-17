@@ -12,12 +12,13 @@
 <link rel="stylesheet" href="css/cronologiaRichieste.css">
 </head>
 <body>
+	<div id="main-container">
 	<h1>Cronologia Richieste:</h1>
 	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); %>
+	<div class="container-richieste">
 	<div id="empty-message1" style="display:<%= (richieste.isEmpty()) ? "block":"none" %>">
 		<p>Nessuna richiesta ricevuta.</p>
 	</div>
-	<div class="container-richieste">
 	<% int counter=0;
 	for(Richiesta r : richieste) { %>
 		<div class="richiesta">
@@ -39,5 +40,7 @@
 	<% counter++;
 	} %>
 	</div>
+	</div>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>
