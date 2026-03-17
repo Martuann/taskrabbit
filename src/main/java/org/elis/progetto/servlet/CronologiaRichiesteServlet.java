@@ -48,10 +48,10 @@ public class CronologiaRichiesteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idUtente = Long.parseLong(request.getParameter("id"));
 		try {
+			Utente utenteLoggato = utenteDao.ricercaPerId(idUtente);
+			request.setAttribute("utenteLoggato", utenteLoggato);
+			
 			List<Richiesta> richieste = richiestaDao.selectByIdUtenteRichiedente(idUtente);
-			if(!richieste.isEmpty()) {
-				request.setAttribute("emptyMessage1", "none");
-			} 
 			request.setAttribute("richieste", richieste);
 			
 			int counter=0;
