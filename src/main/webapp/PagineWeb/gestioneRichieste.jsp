@@ -3,22 +3,23 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.progetto.model.Richiesta" %>
 <%@ page import="org.elis.progetto.model.StatoRichiesta" %>
+<%@ page import="org.elis.progetto.model.Utente" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Pagina Gestione Richieste</title>
+<title>Richieste di <%= ((Utente)request.getAttribute("utenteLoggato")).getNome() %></title>
 <link rel="stylesheet" href="css/gestioneRichieste.css">
 </head>
 <body>
 	<h1>Richieste Ricevute:</h1>
+	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste");
+	String displayValue1 = "block";
+	String displayValue2 = "block"; %>
 	<div class="container-richieste">
-	<div id="empty-message1" style="display:<%= request.getAttribute("emptyMessage1") %>">
-		<p>Nessuna richiesta ricevuta.</p>
-	</div>
-	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); 
-	for(int i=0;i<richieste.size();i++) { 
-		if(richieste.get(i).getStato()==StatoRichiesta.in_attesa) { %>
+	<% for(int i=0;i<richieste.size();i++) { 
+		if(richieste.get(i).getStato()==StatoRichiesta.in_attesa) { 
+			displayValue1 = "none"; %>
 			<div class="richiesta">
 				<div class="titolo">
 					<img src="#">
@@ -36,14 +37,17 @@
 				<a href="AggiornaRichiesta?type=in_corso&id1=<%= request.getAttribute("idRichiesta"+i) %>&id2=<%= request.getParameter("id") %>">Accetta richiesta</a>
 				<a href="AggiornaRichiesta?type=rifiutato&id1=<%= request.getAttribute("idRichiesta"+i) %>&id2=<%= request.getParameter("id") %>">Rifiuta richiesta</a>
 			</div>
-		<% } %>
-	<% } %>
+	<% }
+	} %>
+	<div style="display:<%= displayValue1 %>">
+		<p>Nessuna richiesta ricevuta.</p>
+	</div>
 	</div>
 	<h1>Cronologia Richieste:</h1>
 	<div class="container-richieste">
-	<% List<Richiesta> richiesteAccettate = (List<Richiesta>) request.getAttribute("richiesteAccettate"); 
-	for(int i=0;i<richieste.size();i++) { 
-		if(richieste.get(i).getStato()!=StatoRichiesta.in_attesa) { %>
+	<% for(int i=0;i<richieste.size();i++) { 
+		if(richieste.get(i).getStato()!=StatoRichiesta.in_attesa) {
+			displayValue2 = "none"; %>
 			<div class="richiesta">
 				<div class="titolo">
 					<img src="#">
@@ -59,8 +63,11 @@
 				<p>Indirizzo: <%= request.getAttribute("indirizzo"+i) %></p>
 				<p>Retribuzione: €<%= request.getAttribute("costoeffettivo"+i) %></p>
 			</div>
-		<% } %>
-	<% } %>
+	<% }
+	} %>
+	<div style="display:<%= displayValue2 %>">
+		<p>Nessuna richiesta completata.</p>
+	</div>
 	</div>
 </body>
 </html>
