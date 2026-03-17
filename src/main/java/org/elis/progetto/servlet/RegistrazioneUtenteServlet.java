@@ -11,18 +11,13 @@ import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.elis.dao.definition.CittaDao;
 import org.elis.dao.definition.DaoFactory;
-import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.mysql.MysqlCittaDao;
-import org.elis.dao.mysql.MysqlUtenteDao;
 import org.elis.exception.RegisterException;
 import org.elis.progetto.model.Citta;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
-import org.elis.utilities.DataSourceConfig;
 
 @WebServlet("/RegistrazioneUtenteServlet")
 public class RegistrazioneUtenteServlet extends HttpServlet {

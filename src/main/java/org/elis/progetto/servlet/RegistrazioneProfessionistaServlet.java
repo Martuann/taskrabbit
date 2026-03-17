@@ -6,31 +6,22 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.elis.dao.definition.CittaDao;
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteProfessioneDao;
-import org.elis.dao.definition.UtenteVeicoloDao;
-import org.elis.dao.definition.VeicoloDao;
-import org.elis.dao.mysql.MysqlCittaDao;
-import org.elis.dao.mysql.MysqlProfessioneDao;
-import org.elis.dao.mysql.MysqlUtenteDao;
-import org.elis.dao.mysql.MysqlUtenteProfessioneDao;
 import org.elis.exception.RegisterException;
 import org.elis.progetto.model.Citta;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 import org.elis.progetto.model.UtenteProfessione;
-import org.elis.utilities.DataSourceConfig;
 
 
 

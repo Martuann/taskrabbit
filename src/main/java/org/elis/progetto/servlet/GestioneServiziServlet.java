@@ -6,32 +6,27 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-
 import org.elis.dao.definition.DaoFactory;
-import org.elis.dao.definition.DisponibilitaDao;
-import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteProfessioneDao;
 import org.elis.dao.definition.UtenteVeicoloDao;
 import org.elis.dao.definition.VeicoloDao;
-import org.elis.dao.mysql.MySqlVeicoloDao;
-import org.elis.dao.mysql.MysqlProfessioneDao;
-import org.elis.dao.mysql.MysqlUtenteProfessioneDao;
-import org.elis.dao.mysql.MysqlUtenteVeicoloDao;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 import org.elis.progetto.model.UtenteProfessione;
 import org.elis.progetto.model.UtenteVeicolo;
 import org.elis.progetto.model.Veicolo;
-import org.elis.utilities.DataSourceConfig;
 
 @WebServlet("/GestioneServiziServlet")
 public class GestioneServiziServlet extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ProfessioneDao professioneDao;
 	private   VeicoloDao veicoloDao;
 	private   UtenteProfessioneDao utenteProfessioneDao;
