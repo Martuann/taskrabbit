@@ -1,0 +1,109 @@
+@charset "UTF-8";
+
+.registrazione-container {
+	background-color: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(15px);
+	width: 90%;
+	max-width: 550px;
+	padding: 40px;
+	border-radius: 20px;
+	margin: 50px auto;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.input-dati {
+	margin-bottom: 15px;
+	display: flex;
+	flex-direction: column;
+}
+
+.input-dati label {
+	font-size: 13px;
+	font-weight: 600;
+	margin-bottom: 5px;
+	color: #444;
+}
+
+input {
+	padding: 10px;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+}
+
+.btn-submit {
+	width: 100%;
+	padding: 12px;
+	background-color: #3357d6;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+.account-closure-section {
+	margin-top: 40px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	background-color: #fff;
+}
+
+.closure-content {
+	padding: 20px;
+}
+
+.closure-text h3 {
+	font-size: 16px;
+	color: #1a1a1a;
+	margin-bottom: 5px;
+}
+
+.closure-text p {
+	font-size: 13px;
+	color: #666;
+	text-align: left;
+}
+
+.closure-footer {
+	background-color: #fafafa;
+	padding: 10px 20px;
+	border-top: 1px solid #e0e0e0;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.btn-action-terminate {
+	background-color: #fff;
+	color: #d32f2f;
+	border: 1px solid #d32f2f;
+	padding: 6px 15px;
+	border-radius: 6px;
+	font-size: 13px;
+	cursor: pointer;
+}
+
+.btn-action-terminate:hover {
+	background-color: #fef2f2;
+}
+
+.toast-message {
+	position: fixed;
+	top: -100px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #2e7d32;
+	color: white;
+	padding: 12px 25px;
+	border-radius: 30px;
+	transition: top 0.4s ease;
+	z-index: 10000;
+}
+
+.toast-error {
+	background-color: #d32f2f !important;
+}
+
+.toast-animation {
+	top: 20px;
+}
