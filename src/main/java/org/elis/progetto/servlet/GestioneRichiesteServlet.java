@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.VeicoloDao;
-import org.elis.dao.mysql.JdbcDaoFactory;
 import org.elis.progetto.model.Richiesta;
 import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
@@ -33,10 +33,10 @@ public class GestioneRichiesteServlet extends HttpServlet {
      */
     public GestioneRichiesteServlet() {
         super();
-        richiestaDao = JdbcDaoFactory.getInstance().getRichiestaDao();
-    	utenteDao = JdbcDaoFactory.getInstance().getUtenteDao();
-    	veicoloDao = JdbcDaoFactory.getInstance().getVeicoloDao();
-    	professioneDao = JdbcDaoFactory.getInstance().getProfessioneDao();
+        richiestaDao = DaoFactory.getInstance().getRichiestaDao();
+    	utenteDao = DaoFactory.getInstance().getUtenteDao();
+    	veicoloDao = DaoFactory.getInstance().getVeicoloDao();
+    	professioneDao = DaoFactory.getInstance().getProfessioneDao();
     }
 
 	/**
@@ -45,6 +45,8 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long idProfessionista = Long.parseLong(request.getParameter("id"));
 		try {
+			Utente utenteLoggato = utenteDao.ricercaPerId(idProfessionista);
+			request.setAttribute("utenteLoggato", utenteLoggato);
 			
 			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
 			List<Richiesta> richieste = new ArrayList<>();
@@ -57,10 +59,6 @@ public class GestioneRichiesteServlet extends HttpServlet {
 					richieste.add(counter++,r);
 				}
 			}
-			
-			if(hasRichiesteInAttesa(richieste)) {
-				request.setAttribute("emptyMessage1", "none");
-			} 
 			
 			request.setAttribute("richieste", richieste);
 			
