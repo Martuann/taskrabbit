@@ -107,10 +107,19 @@
             </div>
             <%      } 
                 } else { %> <p>Non ci sono ancora recensioni per questo professionista.</p> <% } %>
+                
+            <section class="contact-section">
+            <h2>Vuoi contattare questo professionista?</h2>
+            
+          
+            <a href="PagineWeb/RichiestaUtente.jsp" class="contatta-class">Contatta</a>
+            
+            
         </section>
     </main>
 
     <%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
+    
 
 </body>
 </html>

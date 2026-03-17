@@ -1,0 +1,143 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('../PagineWeb/immagini/sfondo.png') no-repeat center center fixed;
+    background-size: cover;
+    padding: 20px;
+}
+
+
+.top-logo {
+    position: absolute;
+    top: 25px;
+    left: 40px;
+}
+.top-logo img { height: 45px; }
+
+
+.request-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 500px;
+}
+
+h2 { color: #222; font-size: 26px; text-align: center; margin-bottom: 8px; }
+.subtitle { color: #555; font-size: 14px; text-align: center; margin-bottom: 30px; }
+
+.input-group { margin-bottom: 18px; }
+.input-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px; }
+
+input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    background: white;
+    outline: none;
+}
+
+
+.vehicle-options { display: flex; gap: 10px; }
+.vehicle-radio {
+    flex: 1;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+.price-info-box {
+    background: rgba(65, 105, 225, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(65, 105, 225, 0.2);
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.price-row input { width: 70px; text-align: center; }
+
+.price-display {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    color: #4169E1;
+}
+
+.price-note {
+    font-size: 11px;
+    color: #777;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+
+.btn-submit {
+    width: 100%;
+    padding: 16px;
+    background: #4169E1; 
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit:hover {
+    background: #0035cc;
+    transform: translateY(-2px);
+}
+
+.data-class {
+  display:inline-block;
+  background-color: #f0f2f5;
+  color: #555;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+  margin-bottom: 15px;
+}
+
+.data-class:hover {
+  background-color: #e4e6e9;
+  color: #000;
+}
+	
+	
+	
+	
+
+.request-footer { text-align: center; margin-top: 20px; }
+.request-footer a { color: #666; text-decoration: none; font-size: 13px; }
