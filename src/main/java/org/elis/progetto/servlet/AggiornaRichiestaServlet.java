@@ -36,7 +36,10 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 		Richiesta richiesta = richiestaDao.selectById(idRichiesta);
 		richiesta.setStato(stato);
 		richiestaDao.update(richiesta);
-		
+		if(request.getParameter("redirect")!=null) {
+			response.sendRedirect(request.getParameter("redirect")+"?id="+request.getParameter("id2"));
+			return;
+		}
 		response.sendRedirect("GestioneRichiesteServlet?id="+request.getParameter("id2"));
 	}
 
