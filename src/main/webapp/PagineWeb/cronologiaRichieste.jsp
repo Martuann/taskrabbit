@@ -2,20 +2,23 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.progetto.model.Richiesta" %>
+<%@ page import="org.elis.progetto.model.Utente" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Pagina Cronologia Richieste</title>
-<link rel="stylesheet" href="css/gestioneRichieste.css">
+<title>Cronologia di <%= ((Utente)request.getAttribute("utenteLoggato")).getNome() %></title>
+<link rel="stylesheet" href="css/cronologiaRichieste.css">
 </head>
 <body>
 	<h1>Cronologia Richieste:</h1>
-	<div id="empty-message1" style="display:<%= request.getAttribute("emptyMessage1") %>">
+	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); 
+	String displayValue = (richieste.isEmpty()) ? "block":"none"; %>
+	<div id="empty-message1" style="display:<%= displayValue %>">
 		<p>Nessuna richiesta ricevuta.</p>
 	</div>
-	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste");
-	int counter=0;
+	<div class="container-richieste">
+	<% int counter=0;
 	for(Richiesta r : richieste) { %>
 		<div class="richiesta">
 			<div class="titolo">
@@ -34,5 +37,6 @@
 		</div>
 	<% counter++;
 	} %>
+	</div>
 </body>
 </html>
