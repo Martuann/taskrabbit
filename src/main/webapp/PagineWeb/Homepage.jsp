@@ -1,3 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page import="java.util.List"%>
+<%@ page import="org.elis.progetto.model.Professione"%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -8,16 +12,20 @@
 
 </head>
 <body>
-<%@ include file="/WEB-INF/headerFooter/header.jsp"%>
-
-
+<%@ include file="/WEB-INF/headerFooter/header.jsp" %>
+<% List<Professione> professioni = (List<Professione>) request.getAttribute("professioni"); %>
   <header class="hero">
         <div class="hero-content">
             <h1>Benvenuto su Taskly</h1>
-            <p>I tuoi progetti di casa resi semplici. Trova esperti per ogni necessit‡.</p>
+            <p>I tuoi progetti di casa resi semplici. Trova esperti per ogni necessit√†.</p>
             <div class="search-container">
                 <form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET" style="display: flex; width: 100%;">
-                    <input type="text" name="professione" placeholder="Di cosa hai bisogno? (es. Pittura, Riparazioni)" required>
+                    <input type="text" list="listaProfessioni" name="professione" placeholder="Di cosa hai bisogno? (es. Pittura, Riparazioni)" required>
+                    <datalist id="listaProfessioni">
+                    	<% for(Professione p : professioni) { %>
+                    		<option value="<%= p.getNome() %>">
+                    	<% } %>
+                    </datalist>
                     <button type="submit">Cerca</button>
                 </form>
             </div>
