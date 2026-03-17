@@ -6,20 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.List;
-
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.OrarioBaseDao;
-import org.elis.dao.definition.ProfessioneDao;
-import org.elis.dao.mysql.MysqlOrarioBaseDao;
 import org.elis.progetto.model.OrarioBase;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
-import org.elis.utilities.DataSourceConfig;
 
 @WebServlet("/GestioneOrariDefault")
 public class GestioneOrariDefault extends HttpServlet {

@@ -6,19 +6,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import org.elis.dao.definition.DaoFactory;
-import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.definition.UtenteProfessioneDao;
-import org.elis.dao.definition.UtenteVeicoloDao;
-import org.elis.dao.definition.VeicoloDao;
-import org.elis.dao.mysql.MysqlUtenteDao;
-
 import java.io.IOException;
-
 import org.elis.progetto.model.Utente;
-import org.elis.utilities.DataSourceConfig;
 
 /**
  * Servlet implementation class LoginServlet
@@ -31,9 +22,9 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		utenteDao=DaoFactory.getInstance().getUtenteDao();
-		
-		
-	} 
+
+
+	}
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -47,10 +38,10 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-	
+
 		    request.getRequestDispatcher("/PagineWeb/login.jsp").forward(request, response);
 		}
-	
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -59,27 +50,27 @@ public class LoginServlet extends HttpServlet {
 		String email = request.getParameter("email");
 	    String password = request.getParameter("password");
 
-	   
+
 
 	    try {
-	       
+
 	        Utente utente = utenteDao.login(email, password);
 
 	        if (utente != null) {
-	          
+
 	            HttpSession session = request.getSession();
 	            session.setAttribute("utenteLoggato", utente);
-	            
-	          
-	            response.sendRedirect(request.getContextPath() + "/index.jsp");
+
+
+	            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
 	        } else {
-	            
+
 	            response.sendRedirect(request.getContextPath() + "/login.jsp?errore=1");
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        response.sendError(500, "Errore interno del server durante il login");
-	        
+
 	        doGet(request,response);
 	    }
 	}

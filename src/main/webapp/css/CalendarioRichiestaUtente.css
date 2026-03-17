@@ -1,0 +1,141 @@
+@charset "UTF-8";
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                url('../immagini/sfondo.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.top-logo {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+}
+.top-logo img {
+    height: 45px;
+}
+
+
+.request-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.request-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+h2 { margin-bottom: 10px; color: #333; font-size: 24px; }
+.subtitle { font-size: 14px; color: #666; margin-bottom: 25px; }
+
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #444;
+}
+
+input[type="date"], select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    font-size: 15px;
+    background: white;
+    outline: none;
+    cursor: pointer;
+}
+
+
+
+
+.info-box p {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.4;
+}
+
+.flexibility-options {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.option-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.option-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: #4169E1;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit:hover {
+    background: #0035cc;
+    transform: translateY(-2px);
+}
+
+.request-footer {
+    margin-top: 20px;
+	font-size:16px;
+	font-weight:700;
+	
+	   
+}
+
+.request-footer a {
+    color: #666;
+    text-decoration: none;
+    font-size: 13px;
+}

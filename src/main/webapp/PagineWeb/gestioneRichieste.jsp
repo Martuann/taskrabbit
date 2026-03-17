@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/gestioneRichieste.css">
 </head>
 <body>
+	<div id="main-container">
 	<h1>Richieste Ricevute:</h1>
 	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste");
 	String displayValue1 = "block";
@@ -69,5 +70,7 @@
 		<p>Nessuna richiesta completata.</p>
 	</div>
 	</div>
+	</div>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>

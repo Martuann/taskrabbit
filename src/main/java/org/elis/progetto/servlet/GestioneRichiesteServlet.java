@@ -124,13 +124,4 @@ public class GestioneRichiesteServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	
-	private boolean hasRichiesteInAttesa(List<Richiesta> richieste) {
-		for(Richiesta r : richieste) {
-			if(r.getStato()==StatoRichiesta.in_attesa) {
-				return true;
-			}
-		}
-		return false;
-	}
 }

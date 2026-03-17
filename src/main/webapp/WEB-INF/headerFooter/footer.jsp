@@ -17,8 +17,8 @@
         <div class="footer-col">
             <h4>Navigazione</h4>
             <ul>
-                <li><a href="<%= request.getContextPath() %>/PagineWeb/Homepage.html">Chi Siamo</a></li>
-                <li><a href="<%= request.getContextPath() %>/Homepage">Servizi</a></li>
+                <li><a href="<%= request.getContextPath() %>/HomepageServlet">Chi Siamo</a></li>
+                <li><a href="<%= request.getContextPath() %>/HomepageServlet>Servizi"></a></li>
                 <li><a href="<%= request.getContextPath() %>/PagineWeb/registrazioneProfessionista.jsp">Lavora con noi</a></li>
             </ul>
         </div>

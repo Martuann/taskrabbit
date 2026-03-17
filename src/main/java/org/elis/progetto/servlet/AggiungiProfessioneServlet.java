@@ -7,14 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.ProfessioneDao;
-import org.elis.dao.mysql.MysqlProfessioneDao;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
-import org.elis.utilities.DataSourceConfig;
 
 @WebServlet("/AggiungiProfessione")
 public class AggiungiProfessioneServlet extends HttpServlet {
@@ -35,7 +32,7 @@ public class AggiungiProfessioneServlet extends HttpServlet {
 			return;
 		}
 		if (utenteLoggato.getRuolo()!=Ruolo.ADMIN) {
-			response.sendRedirect(request.getContextPath() + "/PagineWeb/Homepage.html");
+			response.sendRedirect(request.getContextPath() + "/HomepageServlet");
 			return;
 		}
 

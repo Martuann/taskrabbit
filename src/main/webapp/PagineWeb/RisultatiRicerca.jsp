@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar">
         <div class="logo">Taskly - Risultati</div>
-        <a href="Homepage.jsp" style="color:white; margin-left:20px;">Torna alla Home</a>
+        <a href="/HomepageServlet" style="color:white; margin-left:20px;">Torna alla Home</a>
     </nav>
 	<%List<Utente> professionisti = (List<Utente>)request.getAttribute("professionisti"); %>
     <div class="services-section">
@@ -24,7 +24,7 @@
                         <h3><%=u.getNome() +" "+ u.getCognome()%></h3>
                         <p>Email: <%=u.getEmail()%></p>
       
-                        <a href="<%=request.getContextPath()%>/ProfiloProfessionistaServlet?id1=<%=u.getId() %>" class="view-more">Contatta</a>
+                        <a href="<%=request.getContextPath()%>/ProfiloProfessionistaServlet?id1=<%=u.getId() %>" class="view-more">Mostra il profilo</a>
                         
                         
                     </div>

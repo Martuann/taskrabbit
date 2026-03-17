@@ -73,5 +73,39 @@ section h2{
     color:#666;
 }
 
+.contatta-class {
+ 
+  display: block;
+  text-decoration: none !important; 
+  
+
+  background-color: #3b5bdb;       
+  padding: 14px 20px;
+  border-radius: 12px;
+  text-align: center;
+  
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  
+
+  border: none;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.contatta-class:visited {
+  color: #ffffff !important;
+}
+
+
+.contatta-class:hover {
+  background-color: #2b47b3;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  transform: translateY(-1px);
+}
+
+
 
 

@@ -6,41 +6,36 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+
 import org.elis.dao.definition.DaoFactory;
-import org.elis.dao.definition.RichiestaDao;
-import org.elis.progetto.model.Richiesta;
-import org.elis.progetto.model.StatoRichiesta;
+import org.elis.dao.definition.ProfessioneDao;
+import org.elis.progetto.model.Professione;
 
 /**
- * Servlet implementation class AggiornaRichiesta
+ * Servlet implementation class HomepageServlet
  */
-@WebServlet("/AggiornaRichiesta")
-public class AggiornaRichiestaServlet extends HttpServlet {
+@WebServlet("/HomepageServlet")
+public class HomepageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private RichiestaDao richiestaDao;
-	
+	ProfessioneDao professioneDao;
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AggiornaRichiestaServlet() {
+    public HomepageServlet() {
         super();
-        richiestaDao = DaoFactory.getInstance().getRichiestaDao();
+        professioneDao = DaoFactory.getInstance().getProfessioneDao();
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		StatoRichiesta stato = StatoRichiesta.valueOf(request.getParameter("type"));
-		Long idRichiesta = Long.parseLong(request.getParameter("id1"));
-		Richiesta richiesta = richiestaDao.selectById(idRichiesta);
-		richiesta.setStato(stato);
-		richiestaDao.update(richiesta);
-		if(request.getParameter("redirect")!=null) {
-			response.sendRedirect(request.getParameter("redirect")+"?id="+request.getParameter("id2"));
-			return;
-		}
-		response.sendRedirect("GestioneRichiesteServlet?id="+request.getParameter("id2"));
+		List<Professione> professioni = professioneDao.selectAll();
+		request.setAttribute("professioni", professioni);
+		
+		request.getRequestDispatcher("/PagineWeb/Homepage.jsp").forward(request, response);
 	}
 
 	/**

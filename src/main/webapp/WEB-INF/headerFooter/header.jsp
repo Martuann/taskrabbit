@@ -9,7 +9,7 @@
 <header class="admin-header">
 	<div class="header-inner">
 		<div class="logo">
-			<a href="<%=request.getContextPath()%>/PagineWeb/Homepage.jsp">
+			<a href="<%=request.getContextPath()%>/HomepageServlet">
 				<img
 				src="<%=request.getContextPath()%>/PagineWeb/immagini/logo.png"
 				alt="Taskly Logo" class="logo-img">
@@ -26,7 +26,7 @@
 			<%
 			} else {
 			%>
-			<a href="<%=request.getContextPath()%>/Homepage">Servizi</a>
+			<a href="<%=request.getContextPath()%>/HomepageServlet">Servizi</a>
 			<%
 			}
 			%>
@@ -43,7 +43,7 @@
 
 				<div class="area-riservata-menu" id="areaRiservataMenu">
 					<a href="<%=request.getContextPath()%>/Profilo">Mio Profilo</a> <a
-						href="<%=request.getContextPath()%>/Impostazioni">Impostazioni</a>
+						href="<%=request.getContextPath()%>/ImpostazioniUtente">Impostazioni</a>
 					<div class="divider"></div>
 					<a href="<%=request.getContextPath()%>/Logout" class="logout">Esci</a>
 				</div>

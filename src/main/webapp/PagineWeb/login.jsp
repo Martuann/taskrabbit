@@ -31,7 +31,7 @@
 
             <div class="login-footer">
                 <p>Non hai un account? <a href="<%= request.getContextPath() %>/RegistrazioneUtenteServlet">Registrati qui</a></p>
-                <a href="<%= request.getContextPath() %>/PagineWeb/Homepage.jsp" class="back-home">Torna alla homepage</a>
+                <a href="<%= request.getContextPath() %>/HomepageServlet" class="back-home">Torna alla homepage</a>
             </div>
         </div>
     </div>
