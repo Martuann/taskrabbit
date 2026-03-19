@@ -18,9 +18,9 @@
 <body>
 	<header>
 		<% String context = request.getContextPath(); %>
-		<a href="<%=context%>/HomeServlet"><img src="<%=context%>/img/taskly_logo.png" class="logo-img"></a>
+		<a href="<%=context%>/HomepageServlet"><img src="<%=context%>/img/taskly_logo.png" class="logo-img"></a>
 		<nav>
-			<a href="<%=context%>/HomeServlet">Home</a> > <a href="<%=context%>/GestioneServiziServlet">Gestione servizi</a> > <strong>Agenda</strong>
+			<a href="<%=context%>/HomepageServlet">Home</a> > <a href="<%=context%>/GestioneServiziServlet">Gestione servizi</a> > <strong>Agenda</strong>
 		</nav>
 	</header>
 

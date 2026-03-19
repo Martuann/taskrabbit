@@ -28,7 +28,7 @@ public class AggiungiProfessioneServlet extends HttpServlet {
 		Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
 		if (utenteLoggato == null) {
-			response.sendRedirect(request.getContextPath() + "/PagineWeb/login.html");
+			response.sendRedirect(request.getContextPath() + "/PagineWeb/login.jsp");
 			return;
 		}
 		if (utenteLoggato.getRuolo()!=Ruolo.ADMIN) {

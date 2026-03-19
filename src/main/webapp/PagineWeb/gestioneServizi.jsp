@@ -31,12 +31,12 @@
 %>
 
 	<header>
-		<a href="<%=context%>/HomeServlet"> <img
+		<a href="<%=context%>/HomepageServlet"> <img
 			src="<%=context%>/img/taskly_logo.png" alt="Taskly Logo"
 			class="logo-img">
 		</a>
 		<nav>
-			<a href="<%=context%>/HomeServlet">Home</a> > <strong>Gestione
+			<a href="<%=context%>/HomepageServlet">Home</a> > <strong>Gestione
 				Servizi</strong>
 		</nav>
 	</header>
