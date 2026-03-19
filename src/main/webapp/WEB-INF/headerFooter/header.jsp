@@ -31,11 +31,15 @@
 			}
 			%>
 		</nav>
-
 		<div class="user-section">
 			<%
 			if (u != null) {
 			%>
+			<div class="task-section">
+				<% String taskAnchor = (u.getRuolo()==Ruolo.UTENTE_BASE) ? request.getContextPath()+"/CronologiaRichiesteServlet" : "#";
+				taskAnchor = (u.getRuolo()==Ruolo.PROFESSIONISTA) ? request.getContextPath()+"/GestioneRichiesteServlet" : taskAnchor; %>
+				<a href="<%= taskAnchor %>">Le mie task</a>
+			</div>
 			<div class="area-riservata-container">
 				<button class="area-riservata-btn" id="areaRiservataBtn">
 					Bentornato, <strong><%=u.getNome()%></strong> ▼
