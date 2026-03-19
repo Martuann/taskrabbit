@@ -46,12 +46,13 @@ public class CronologiaRichiesteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Long idUtente = Long.parseLong(request.getParameter("id"));
+		Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
+		if(utenteLoggato==null) {
+			request.getRequestDispatcher("/HomepageServlet").forward(request, response);
+			return;
+		}
 		try {
-			Utente utenteLoggato = utenteDao.ricercaPerId(idUtente);
-			request.setAttribute("utenteLoggato", utenteLoggato);
-			
-			List<Richiesta> richieste = richiestaDao.selectByIdUtenteRichiedente(idUtente);
+			List<Richiesta> richieste = richiestaDao.selectByIdUtenteRichiedente(utenteLoggato.getId());
 			request.setAttribute("richieste", richieste);
 			
 			int counter=0;
@@ -105,7 +106,7 @@ public class CronologiaRichiesteServlet extends HttpServlet {
 			e.printStackTrace();
 	    }
 		
-		request.getRequestDispatcher("/PagineWeb/cronologiaRichieste.jsp?id="+idUtente).forward(request, response);
+		request.getRequestDispatcher("/PagineWeb/cronologiaRichieste.jsp").forward(request, response);
 	}
 
 	/**

@@ -8,10 +8,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Cronologia di <%= ((Utente)request.getAttribute("utenteLoggato")).getNome() %></title>
+<title>Cronologia di <%= ((Utente) request.getSession().getAttribute("utenteLoggato")).getNome() %></title>
 <link rel="stylesheet" href="css/cronologiaRichieste.css">
 </head>
 <body>
+<%@ include file="/WEB-INF/headerFooter/header.jsp" %>
 	<div id="main-container">
 	<h1>Cronologia Richieste:</h1>
 	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); %>
