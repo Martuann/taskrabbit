@@ -76,7 +76,7 @@
             </form>
 
             <div class="request-footer">
-                <a href="Homepage.jsp">Annulla e torna alla Home</a>
+                <a href="/HomepageServlet">Annulla e torna alla Home</a>
             </div>
         </div>
     </div>
