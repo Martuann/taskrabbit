@@ -43,7 +43,7 @@
 
 				<div class="area-riservata-menu" id="areaRiservataMenu">
 					<a href="<%=request.getContextPath()%>/Profilo">Mio Profilo</a> <a
-						href="<%=request.getContextPath()%>/ImpostazioniUtente">Impostazioni</a>
+						href="<%=request.getContextPath()%>/Impostazioni">Impostazioni</a>
 					<div class="divider"></div>
 					<a href="<%=request.getContextPath()%>/Logout" class="logout">Esci</a>
 				</div>
