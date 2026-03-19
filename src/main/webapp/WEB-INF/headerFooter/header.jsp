@@ -84,7 +84,7 @@
 				menu.classList.toggle('show');
 			});
 
-			// Chiude il menu se clicchi fuori
+
 			document.addEventListener('click', function(e) {
 				if (!btn.contains(e.target)) {
 					menu.classList.remove('show');

@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Impostazioni Account</title>
-    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/impostazioni.css">
+    <link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/impostazioni.css?">
 </head>
 <body>
 
@@ -12,7 +13,7 @@
 
 <div class="registrazione-container">
     <h1>Impostazioni Profilo</h1>
-    
+
     <form action="<%= request.getContextPath() %>/Impostazioni" method="POST">
         <input type="hidden" name="azione" value="cambiaPassword">
         <div class="input-dati">
@@ -25,21 +26,6 @@
         </div>
         <button type="submit" class="btn-submit">Aggiorna Credenziali</button>
     </form>
-
-    <div class="account-closure-section">
-        <div class="closure-content">
-            <div class="closure-text">
-                <h3>Chiusura Account</h3>
-                <p>La disattivazione comporta la rimozione permanente di tutti i dati. L'operazione non è reversibile.</p>
-            </div>
-        </div>
-        <div class="closure-footer">
-            <form action="<%= request.getContextPath() %>/Impostazioni" method="POST" onsubmit="return confirm('Confermi la chiusura definitiva dell\'account?');">
-                <input type="hidden" name="azione" value="eliminaAccount">
-                <button type="submit" class="btn-action-terminate">Chiudi Account</button>
-            </form>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -47,10 +33,10 @@
     const msg = document.getElementById('toast-msg');
 
     if (urlParams.get('success') === 'true') {
-        msg.innerText = "✅ Credenziali aggiornate con successo";
+        msg.innerText = "✅ Modifiche salvate con successo";
         msg.classList.add('toast-animation');
     } else if (urlParams.get('errorPass') === 'true') {
-        msg.innerText = "❌ Password attuale non corretta";
+        msg.innerText = "❌ Password attuale errata";
         msg.classList.add('toast-error', 'toast-animation');
     }
 

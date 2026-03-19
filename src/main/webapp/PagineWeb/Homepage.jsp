@@ -75,6 +75,18 @@
         </div>
     </section>
 	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
+	<script>
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (urlParams.get('accountEliminato') === 'true') {
+
+            alert("Il tuo account è stato rimosso correttamente.);
+
+
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    </script>
 
 </body>
 </html>
