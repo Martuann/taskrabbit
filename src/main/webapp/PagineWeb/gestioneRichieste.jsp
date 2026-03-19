@@ -8,10 +8,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Richieste di <%= ((Utente)request.getAttribute("utenteLoggato")).getNome() %></title>
+<% Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato"); %>
+<title>Richieste di <%= utenteLoggato.getNome() %></title>
 <link rel="stylesheet" href="css/gestioneRichieste.css">
 </head>
 <body>
+<%@ include file="/WEB-INF/headerFooter/header.jsp" %>
 	<div id="main-container">
 	<h1>Richieste Ricevute:</h1>
 	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste");

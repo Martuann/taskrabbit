@@ -43,12 +43,13 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Long idProfessionista = Long.parseLong(request.getParameter("id"));
+		Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
+		if(utenteLoggato==null) {
+			request.getRequestDispatcher("/HomepageServlet").forward(request, response);
+			return;
+		}
 		try {
-			Utente utenteLoggato = utenteDao.ricercaPerId(idProfessionista);
-			request.setAttribute("utenteLoggato", utenteLoggato);
-			
-			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
+			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(utenteLoggato.getId());
 			List<Richiesta> richieste = new ArrayList<>();
 			int counter=0;
 			for(Richiesta r : query) {
