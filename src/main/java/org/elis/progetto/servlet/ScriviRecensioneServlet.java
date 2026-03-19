@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.RecensioneDao;
 import org.elis.progetto.model.Recensione;
+import org.elis.progetto.model.Utente;
 
 /**
  * Servlet implementation class ScriviRecensioneServlet
@@ -29,9 +30,8 @@ public class ScriviRecensioneServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Long id1 = Long.parseLong(request.getParameter("id1"));
-		Long id2 = Long.parseLong(request.getParameter("id2"));
-		request.getRequestDispatcher("/PagineWeb/scriviRecensione.jsp?id1="+id1+"&?id2="+id2).forward(request, response);
+		Long id = Long.parseLong(request.getParameter("id"));
+		request.getRequestDispatcher("/PagineWeb/scriviRecensione.jsp?id="+id).forward(request, response);
 	}
 
 	/**
@@ -40,9 +40,9 @@ public class ScriviRecensioneServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Integer voto = Integer.parseInt(request.getParameter("voto"));
 		String descrizione = request.getParameter("descrizione");
-		Long idRecensore = Long.parseLong(request.getParameter("id1"));
-		Long idRecensito = Long.parseLong(request.getParameter("id2"));
+		Long idRecensore = ((Utente) request.getSession().getAttribute("utenteLoggato")).getId();
+		Long idRecensito = Long.parseLong(request.getParameter("id"));
 		recensioneDao.insert(new Recensione(voto,descrizione,LocalDate.now(),idRecensore,idRecensito));
-		response.sendRedirect("CronologiaRichiesteServlet?id="+idRecensore);
+		response.sendRedirect(request.getContextPath()+"/CronologiaRichiesteServlet");
 	}
 }

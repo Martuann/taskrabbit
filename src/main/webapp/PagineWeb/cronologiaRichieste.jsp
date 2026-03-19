@@ -35,7 +35,7 @@
 			<p>Ore: <%= request.getAttribute("orario"+counter) %></p>
 			<p>Veicolo richiesto: <%= request.getAttribute("veicolo"+counter) %></p>
 			<p>Indirizzo: <%= request.getAttribute("indirizzo"+counter) %></p>
-			<a href="ScriviRecensioneServlet?id1=<%= request.getParameter("id") %>&id2=<%= request.getAttribute("idProfessionista"+counter) %>" style="display:<%= request.getAttribute("recensioneFlag"+counter) %>">Scrivi una Recensione</a>
+			<a href="ScriviRecensioneServlet?id=<%= request.getAttribute("idProfessionista"+counter) %>" style="display:<%= request.getAttribute("recensioneFlag"+counter) %>">Scrivi una Recensione</a>
 			<a href="AggiornaRichiesta?type=completato&id1=<%= r.getId() %>&redirect=CronologiaRichiesteServlet&id2=<%= request.getParameter("id") %>" style="display:<%= (r.getStato()==StatoRichiesta.in_attesa) ? "inline-block":"none" %>">Segna richiesta come completata</a>
 		</div>
 	<% counter++;
