@@ -23,13 +23,7 @@
 			%>
 			<a href="<%=request.getContextPath()%>/Dashboard">Dashboard</a> <a
 				href="#">Utenti</a> <a href="#">Report</a>
-			<%
-			} else {
-			%>
-			<a href="<%=request.getContextPath()%>/HomepageServlet">Servizi</a>
-			<%
-			}
-			%>
+			<% } %>
 		</nav>
 		<div class="user-section">
 			<%
