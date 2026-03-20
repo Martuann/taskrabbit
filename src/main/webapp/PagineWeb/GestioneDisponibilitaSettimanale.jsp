@@ -17,6 +17,14 @@
 </head>
 <body>
 	<%@ include file="/WEB-INF/headerFooter/header.jsp" %>
+	<div class="link-container">
+		<a href="<%= request.getContextPath() %>/GestioneOrariDefault">
+		   Imposta disponibilità settimanale --->
+		</a>
+		<a href="<%= request.getContextPath() %>/GestioneServiziServlet">
+		   &lt;--- Torna alla Gestione Servizi
+		</a>
+	</div>
 
 	<div class="container agenda-layout">
 		<% 

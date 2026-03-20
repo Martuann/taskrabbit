@@ -30,7 +30,11 @@
     String context = request.getContextPath();
     String err = request.getParameter("errore");
 %>
-
+		<div class="link-container">
+			<a href="<%= request.getContextPath() %>/GestioneOrariDefault">
+			   Imposta disponibilità settimanale --->
+			</a>
+		</div>
 	<div class="container">
 		<div class="welcome-box">
 			<h1>Area Professionista</h1>
