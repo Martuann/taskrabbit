@@ -112,7 +112,7 @@
             <h2>Vuoi contattare questo professionista?</h2>
             
           
-            <a href="PagineWeb/RichiestaUtente.jsp" class="contatta-class">Contatta</a>
+            <a href="<%= request.getContextPath() %>/InoltroRichieste?id_Professionista=<%= professionista.getId() %>" class="contatta-class">Contatta</a>
             
             
         </section>

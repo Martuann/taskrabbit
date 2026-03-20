@@ -37,7 +37,7 @@
         <div class="services-grid">
 
             <div class="service-card">
-                <img src="<%=request.getContextPath()%>/immagini/Riparazioni.jpg" alt="Riparazioni">
+                <img src="<%=request.getContextPath()%>/PagineWeb/immagini/Riparazioni.jpg" alt="Riparazioni">
                 <div class="card-text">
                     <h3>Riparazioni</h3>
                     <p>Montaggio mobili e riparazioni elettriche.</p>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="service-card pittura-card">
-                <img src="<%=request.getContextPath()%>/immagini/Imbiancatura.jpg" alt="Pittura">
+                <img src="<%=request.getContextPath()%>/PagineWeb/immagini/Imbiancatura.jpg" alt="Pittura">
                 <div class="card-text">
                     <h3>Pittura</h3>
                     <p>Rinfresca le pareti della tua casa.</p>
@@ -55,7 +55,7 @@
             </div>
 
             <div class="service-card">
-                <img src="<%=request.getContextPath()%>/immagini/Pulizia.jpg" alt="Pulizia">
+                <img src="<%=request.getContextPath()%>/PagineWeb/immagini/Pulizia.jpg" alt="Pulizia">
                 <div class="card-text">
                     <h3>Pulizia</h3>
                     <p>Servizi di pulizia profonda per ogni ambiente.</p>
@@ -64,7 +64,7 @@
             </div>
 
             <div class="service-card">
-                <img src="<%=request.getContextPath()%>/immagini/Aiuto informatico.jpg" alt="Informatica">
+                <img src="<%=request.getContextPath()%>/PagineWeb/immagini/Aiuto informatico.jpg" alt="Informatica">
                 <div class="card-text">
                     <h3>Aiuto Informatico</h3>
                     <p>Riparazione PC e installazione software.</p>
