@@ -9,8 +9,7 @@
 <header class="admin-header">
 	<div class="header-inner">
 		<div class="logo">
-			<a href="<%=request.getContextPath()%>/HomepageServlet">
-				<img
+			<a href="<%=request.getContextPath()%>/HomepageServlet"> <img
 				src="<%=request.getContextPath()%>/PagineWeb/immagini/logo.png"
 				alt="Taskly Logo" class="logo-img">
 			</a>
@@ -21,8 +20,7 @@
 			Utente u = (Utente) session.getAttribute("utenteLoggato");
 			if (u != null && u.getRuolo() == Ruolo.ADMIN) {
 			%>
-			<a href="#">Dashboard</a> <a
-				href="#">Utenti</a> <a href="#">Report</a>
+			<a href="#">Dashboard</a> <a href="#">Utenti</a> <a href="#">Report</a>
 			<% } %>
 		</nav>
 		<div class="user-section">
@@ -30,20 +28,18 @@
 			if (u != null) {
 			%>
 			<div class="links-section">
-				<a style="display:<%= (u.getRuolo()==Ruolo.ADMIN) ? "inline-block" : "none" %>" 
-				   href="<%= request.getContextPath() %>/AggiungiProfessione">
-				   Gestione Professioni
-				</a>
-				<a style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>" 
-				   href="<%= request.getContextPath() %>/GestioneServiziServlet">
-				   Gestione Servizi
-				</a>
+				<a
+					style="display:<%= (u.getRuolo()==Ruolo.ADMIN) ? "inline-block" : "none" %>"
+					href="<%= request.getContextPath() %>/AggiungiProfessione">
+					Gestione Professioni </a> <a
+					style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>"
+					href="<%= request.getContextPath() %>/GestioneServiziServlet">
+					Gestione Servizi </a>
 				<% String taskAnchor = (u.getRuolo()==Ruolo.UTENTE_BASE) ? request.getContextPath()+"/CronologiaRichiesteServlet" : "#";
 				taskAnchor = (u.getRuolo()==Ruolo.PROFESSIONISTA) ? request.getContextPath()+"/GestioneRichiesteServlet" : taskAnchor; %>
-				<a style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>" 
-				   href="<%= taskAnchor %>">
-				   Le mie task
-				</a>
+				<a
+					style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>"
+					href="<%= taskAnchor %>"> Le mie task </a>
 			</div>
 			<div class="area-riservata-container">
 				<button class="area-riservata-btn" id="areaRiservataBtn">
