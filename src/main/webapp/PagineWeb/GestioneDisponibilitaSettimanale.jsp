@@ -148,6 +148,7 @@
 			</div>
 		</form>
 	</div>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 <script>
     const valoriOriginali = new Map();
     const inputs = document.querySelectorAll('.agenda-layout input[type="checkbox"], .agenda-layout input[type="time"]');

@@ -79,5 +79,6 @@
 			<button type="submit" class="btn-salva">Salva Orario</button>
 		</form>
 	</div>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>
