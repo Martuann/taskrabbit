@@ -30,7 +30,7 @@
 			if (u != null) {
 			%>
 			<div class="prof-only-section">
-				<a style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>" 
+				<a style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>"
 				   href="<%= request.getContextPath() %>/GestioneServiziServlet"
 				   class="servizi">
 				   Gestione Servizi
@@ -39,7 +39,7 @@
 			<div class="task-section">
 				<% String taskAnchor = (u.getRuolo()==Ruolo.UTENTE_BASE) ? request.getContextPath()+"/CronologiaRichiesteServlet" : "#";
 				taskAnchor = (u.getRuolo()==Ruolo.PROFESSIONISTA) ? request.getContextPath()+"/GestioneRichiesteServlet" : taskAnchor; %>
-				<a style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>" 
+				<a style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>"
 				   href="<%= taskAnchor %>"
 				   class="tasks">
 				   Le mie task
@@ -51,8 +51,7 @@
 				</button>
 
 				<div class="area-riservata-menu" id="areaRiservataMenu">
-					<a href="<%=request.getContextPath()%>/Profilo">Mio Profilo</a> <a
-						href="<%=request.getContextPath()%>/Impostazioni">Impostazioni</a>
+					<a href="<%=request.getContextPath()%>/Profilo">Mio Profilo</a>
 					<div class="divider"></div>
 					<a href="<%=request.getContextPath()%>/Logout" class="logout">Esci</a>
 				</div>
@@ -91,7 +90,8 @@
 
 
 			document.addEventListener('click', function(e) {
-				if (!btn.contains(e.target)) {
+
+				if (!btn.contains(e.target) && !menu.contains(e.target)) {
 					menu.classList.remove('show');
 				}
 			});
