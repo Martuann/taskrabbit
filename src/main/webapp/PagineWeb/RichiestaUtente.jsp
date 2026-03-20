@@ -76,7 +76,7 @@
             </form>
 
             <div class="request-footer">
-                <a href="/HomepageServlet">Annulla e torna alla Home</a>
+                <a href="<%= request.getContextPath() %>/HomepageServlet">Annulla e torna alla Home</a>
             </div>
         </div>
     </div>
