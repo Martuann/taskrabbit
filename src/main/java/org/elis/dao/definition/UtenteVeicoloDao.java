@@ -8,11 +8,13 @@ import org.elis.progetto.model.UtenteVeicolo;
 public interface UtenteVeicoloDao {
     void associaVeicolo(UtenteVeicolo uv) throws Exception;
     
-    List<UtenteVeicolo> getDettagliVeicoliUtente(long idUtente) throws Exception;
+    List<UtenteVeicolo> getDettagliVeicoliUtente(Long idUtente) throws Exception;
     
-    void aggiornaPrezzoServizio(long idUtente, long idVeicolo, BigDecimal nuovoPrezzo) throws Exception;
+    void aggiornaPrezzoServizio(Long idUtente, Long idVeicolo, BigDecimal nuovoPrezzo) throws Exception;
     
-    void rimuoviAssociazione(long idUtente, long idVeicolo) throws Exception;
+    void rimuoviAssociazione(Long idUtente, Long idVeicolo) throws Exception;
 
-	List<UtenteVeicolo> selectByUtente(long idUtente);
+	List<UtenteVeicolo> selectByUtente(Long idUtente)throws Exception;
+
+	UtenteVeicolo selectByUtenteEVeicolo(Long idUtente, Long idVeicolo) throws Exception;
 }

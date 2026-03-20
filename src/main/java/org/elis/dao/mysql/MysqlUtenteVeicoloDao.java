@@ -10,6 +10,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.elis.dao.definition.UtenteVeicoloDao;
+import org.elis.progetto.model.UtenteProfessione;
 import org.elis.progetto.model.UtenteVeicolo;
 
 public class MysqlUtenteVeicoloDao implements UtenteVeicoloDao {
@@ -36,7 +37,7 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
 	}
 
 	@Override
-	public List<UtenteVeicolo> getDettagliVeicoliUtente(long idUtente) throws Exception {
+	public List<UtenteVeicolo> getDettagliVeicoliUtente(Long idUtente) throws Exception {
 		List<UtenteVeicolo> listaDettagli = new ArrayList<UtenteVeicolo>();
         String query = "SELECT * FROM utente_veicolo WHERE id_utente = ?";
         
@@ -55,7 +56,7 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
 	}
 
 	@Override
-    public void aggiornaPrezzoServizio(long idUtente, long idVeicolo, BigDecimal nuovoPrezzo) throws Exception {
+    public void aggiornaPrezzoServizio(Long idUtente, Long idVeicolo, BigDecimal nuovoPrezzo) throws Exception {
         String query = "UPDATE utente_veicolo SET aggiuntaServizio = ? WHERE id_utente = ? AND id_veicolo = ?";
         
         try (Connection connection = dataSource.getConnection();
@@ -70,7 +71,7 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
     }
 
     @Override
-    public void rimuoviAssociazione(long idUtente, long idVeicolo) throws Exception {
+    public void rimuoviAssociazione(Long idUtente, Long idVeicolo) throws Exception {
         String query = "DELETE FROM utente_veicolo WHERE id_utente = ? AND id_veicolo = ?";
         
         try (Connection connection = dataSource.getConnection();
@@ -92,7 +93,7 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
         return uv;
     }
     @Override
-    public List<UtenteVeicolo> selectByUtente(long idUtente) {
+    public List<UtenteVeicolo> selectByUtente(Long idUtente) {
         String sql = "SELECT * FROM utente_veicolo WHERE id_utente = ?";
         List<UtenteVeicolo> listaVeicoliUtente = new ArrayList<>();
 
@@ -116,7 +117,31 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
         }
         return listaVeicoliUtente;
     }
+    @Override
+    public UtenteVeicolo selectByUtenteEVeicolo(Long idUtente, Long idVeicolo) throws Exception {
+        String sql = "SELECT * FROM utente_veicolo WHERE id_utente = ? AND id_veicolo = ?";
 
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
+            preparedStatement.setLong(1, idUtente);
+            preparedStatement.setLong(2, idVeicolo);
+            
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new UtenteVeicolo(
+                        resultSet.getLong("id"),
+                        resultSet.getLong("id_utente"),
+                        resultSet.getLong("id_veicolo"),
+                        resultSet.getBigDecimal("aggiuntaServizio")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
 
 }

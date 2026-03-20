@@ -17,6 +17,14 @@
 </head>
 <body>
 	<%@ include file="/WEB-INF/headerFooter/header.jsp" %>
+	<div class="link-container">
+		<a href="<%= request.getContextPath() %>/GestioneOrariDefault">
+		   Imposta disponibilità settimanale --->
+		</a>
+		<a href="<%= request.getContextPath() %>/GestioneServiziServlet">
+		   &lt;--- Torna alla Gestione Servizi
+		</a>
+	</div>
 
 	<div class="container agenda-layout">
 		<% 
@@ -148,6 +156,7 @@
 			</div>
 		</form>
 	</div>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 <script>
     const valoriOriginali = new Map();
     const inputs = document.querySelectorAll('.agenda-layout input[type="checkbox"], .agenda-layout input[type="time"]');

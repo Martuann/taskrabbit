@@ -21,33 +21,27 @@
 			Utente u = (Utente) session.getAttribute("utenteLoggato");
 			if (u != null && u.getRuolo() == Ruolo.ADMIN) {
 			%>
-			<a href="<%=request.getContextPath()%>/Dashboard">Dashboard</a> <a
+			<a href="#">Dashboard</a> <a
 				href="#">Utenti</a> <a href="#">Report</a>
-			<%
-			} else {
-			%>
-			<a href="<%=request.getContextPath()%>/HomepageServlet">Servizi</a>
-			<%
-			}
-			%>
+			<% } %>
 		</nav>
 		<div class="user-section">
 			<%
 			if (u != null) {
 			%>
-			<div class="prof-only-section">
+			<div class="links-section">
+				<a style="display:<%= (u.getRuolo()==Ruolo.ADMIN) ? "inline-block" : "none" %>" 
+				   href="<%= request.getContextPath() %>/AggiungiProfessione">
+				   Gestione Professioni
+				</a>
 				<a style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>" 
-				   href="<%= request.getContextPath() %>/GestioneServiziServlet"
-				   class="servizi">
+				   href="<%= request.getContextPath() %>/GestioneServiziServlet">
 				   Gestione Servizi
 				</a>
-			</div>
-			<div class="task-section">
 				<% String taskAnchor = (u.getRuolo()==Ruolo.UTENTE_BASE) ? request.getContextPath()+"/CronologiaRichiesteServlet" : "#";
 				taskAnchor = (u.getRuolo()==Ruolo.PROFESSIONISTA) ? request.getContextPath()+"/GestioneRichiesteServlet" : taskAnchor; %>
 				<a style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>" 
-				   href="<%= taskAnchor %>"
-				   class="tasks">
+				   href="<%= taskAnchor %>">
 				   Le mie task
 				</a>
 			</div>
@@ -57,8 +51,7 @@
 				</button>
 
 				<div class="area-riservata-menu" id="areaRiservataMenu">
-					<a href="<%=request.getContextPath()%>/Profilo">Mio Profilo</a> <a
-						href="<%=request.getContextPath()%>/Impostazioni">Impostazioni</a>
+					<a href="<%=request.getContextPath()%>/Profilo">Mio Profilo</a>
 					<div class="divider"></div>
 					<a href="<%=request.getContextPath()%>/Logout" class="logout">Esci</a>
 				</div>
@@ -97,7 +90,8 @@
 
 
 			document.addEventListener('click', function(e) {
-				if (!btn.contains(e.target)) {
+
+				if (!btn.contains(e.target) && !menu.contains(e.target)) {
 					menu.classList.remove('show');
 				}
 			});

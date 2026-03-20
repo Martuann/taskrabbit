@@ -16,7 +16,16 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/headerFooter/header.jsp" %>
-<div class="container standard-layout">
+	<div class="link-container">
+		<a href="<%= request.getContextPath() %>/GestioneOrariDateSpecifiche">
+		   Imposta disponibilità dal calendario --->
+		</a>
+		<a href="<%= request.getContextPath() %>/GestioneServiziServlet">
+		   &lt;--- Torna alla Gestione Servizi
+		</a>
+	</div>
+	<div class="container standard-layout">
+		
 		<% if("true".equals(request.getParameter("success"))) { %>
 			<div class="alert-success">Orario standard aggiornato con successo!</div>
 		<% } %>
@@ -79,5 +88,6 @@
 			<button type="submit" class="btn-salva">Salva Orario</button>
 		</form>
 	</div>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>

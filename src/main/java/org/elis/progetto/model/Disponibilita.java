@@ -22,6 +22,11 @@ public class Disponibilita {
 
 
 
+	public Disponibilita() {
+	}
+
+
+
 	public Disponibilita(Long id, Long idUtente, LocalDate data, LocalTime inizio, LocalTime fine) {
         this.id = id;
         this.idUtente = idUtente;
