@@ -41,6 +41,13 @@ public class RicercaProfessionistiServlet extends HttpServlet {
        
         try {
             List<Utente> listaTrovati = utenteDao.ricercaTramiteProfessione(professioneCercata);
+            Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
+            for(Utente u : listaTrovati) {
+            	if(u.getId()==utenteLoggato.getId()) {
+            		listaTrovati.remove(u);
+            		break;
+            	}
+            }
 
             request.setAttribute("professionisti", listaTrovati);
             request.setAttribute("query", professioneCercata);
