@@ -84,8 +84,28 @@ private DataSource dataSource;
 	    }
 	}
 	
-	
-	
+	@Override
+	public Citta selectById(Long id) {
+		String sql = "SELECT * FROM citta WHERE id = "+id;
+		
+		try (Connection connection = dataSource.getConnection();
+			 PreparedStatement select = connection.prepareStatement(sql)) {
+			
+			try (ResultSet rs = select.executeQuery()) {
+				if(rs.next()) {
+					return new Citta(
+							rs.getString("nome"),
+							rs.getString("provincia")
+						);
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	
 	

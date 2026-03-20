@@ -26,7 +26,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
    private CittaDao cittaDao;
 	@Override
 	public void init() throws ServletException {
-	
+
 		utenteDao = DaoFactory.getInstance().getUtenteDao();
 		cittaDao=DaoFactory.getInstance().getCittaDao();
 	}
@@ -39,8 +39,6 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 	    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-   
-
 
     	String nome = request.getParameter("nome");
     	String cognome = request.getParameter("cognome");
@@ -54,21 +52,58 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 
     	List<String> errori = new ArrayList<>();
     	LocalDate ddn=null;
-    	if (nome == null || nome.trim().length() < 2) {
-            errori.add("Il nome deve contenere almeno 2 caratteri.");
-        }
+    	if (nome.length() < 2) {
+    	    errori.add("Il nome deve contenere almeno 2 caratteri.");
+    	}
 
-        if (email == null || !email.contains("@")) {
-            errori.add("Per favore, inserisci un indirizzo email valido.");
-        }
-        try {
-            if (utenteDao.presenzaUtente(email)) {
-                errori.add("Questa email è già registrata. Usa un'altra email o fai il login.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            errori.add("Si è verificato un problema tecnico durante il controllo dell'email. Riprova più tardi.");
-        }
+    	if (cognome.length() < 2) {
+    	    errori.add("Il cognome deve contenere almeno 2 caratteri.");
+    	}
+
+    	if (email.isEmpty() || !email.contains("@")) {
+    	    errori.add("Per favore, inserisci un indirizzo email valido.");
+    	} else {
+    	    try {
+
+    	        if (utenteDao.presenzaUtente(email)) {
+    	            errori.add("Questa email è già registrata. Usa un'altra email o fai il login.");
+    	        }
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        errori.add("Errore tecnico nel controllo email.");
+    	    }
+    	}
+
+    	if (codiceFiscale.length() != 16) {
+    	    errori.add("Il Codice Fiscale deve essere di 16 caratteri.");
+    	} else {
+    	    try {
+
+    	        if (utenteDao.presenzaCodiceFiscale(codiceFiscale)) {
+    	        	errori.add("Questo Codice Fiscale è già associato a un account.");
+    	        }
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        errori.add("Errore tecnico nel controllo del Codice Fiscale.");
+    	    }
+    	}
+
+    	if (numero.isEmpty()) {
+    	    errori.add("Il numero di telefono è obbligatorio.");
+    	} else if (!numero.matches("[0-9]{8,15}")) {
+    	    errori.add("Il numero di telefono non è valido (inserire solo numeri, tra 8 e 15 cifre).");
+    	} else {
+    	    try {
+
+    	        if (utenteDao.presenzaTelefono(numero)) {
+    	            errori.add("Questo numero di telefono è già associato a un altro account.");
+    	        }
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        errori.add("Errore tecnico nel controllo del numero di telefono.");
+    	    }
+    	}
+
 
 
         if (password == null || password.length() < 8) {
@@ -123,7 +158,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 
     	    utenteDao.aggiungiUtente(nuovoUtente);
 
-    	   response.sendRedirect(request.getContextPath() + "/loginUtente.jsp");
+    	    response.sendRedirect(request.getContextPath() + "/PagineWeb/login.jsp?registrato=true");
 
     	} catch (RegisterException e) {
     	    request.setAttribute("listaErrori", List.of(e.getMessage()));

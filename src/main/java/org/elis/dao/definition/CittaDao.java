@@ -20,4 +20,6 @@ public interface CittaDao {
     void aggiornaCitta(Citta citta) throws Exception;
     
     void rimuoviCitta(Long id) throws Exception;
+
+	Citta selectById(Long id);
 }

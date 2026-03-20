@@ -48,16 +48,9 @@ public class GestioneServiziServlet extends HttpServlet {
         utenteTestDiProva.setId(1L);
         utenteTestDiProva.setNome("Mario");
         utenteTestDiProva.setCognome("Rossi");
-        request.getSession().setAttribute("utenteLoggato", utenteTestDiProva);
+        //request.getSession().setAttribute("utenteLoggato", utenteTestDiProva);
         utenteTestDiProva.setRuolo(Ruolo.PROFESSIONISTA);
 
-    	
-    	
-    	
-    	
-    	
-    	
-    	
     	HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 

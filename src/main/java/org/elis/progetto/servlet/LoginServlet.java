@@ -65,7 +65,7 @@ public class LoginServlet extends HttpServlet {
 	            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
 	        } else {
 
-	            response.sendRedirect(request.getContextPath() + "/login.jsp?errore=1");
+	        	response.sendRedirect(request.getContextPath() + "/PagineWeb/login.jsp?errore=1");
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();

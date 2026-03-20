@@ -23,22 +23,27 @@
 			%>
 			<a href="<%=request.getContextPath()%>/Dashboard">Dashboard</a> <a
 				href="#">Utenti</a> <a href="#">Report</a>
-			<%
-			} else {
-			%>
-			<a href="<%=request.getContextPath()%>/HomepageServlet">Servizi</a>
-			<%
-			}
-			%>
+			<% } %>
 		</nav>
 		<div class="user-section">
 			<%
 			if (u != null) {
 			%>
+			<div class="prof-only-section">
+				<a style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>" 
+				   href="<%= request.getContextPath() %>/GestioneServiziServlet"
+				   class="servizi">
+				   Gestione Servizi
+				</a>
+			</div>
 			<div class="task-section">
 				<% String taskAnchor = (u.getRuolo()==Ruolo.UTENTE_BASE) ? request.getContextPath()+"/CronologiaRichiesteServlet" : "#";
 				taskAnchor = (u.getRuolo()==Ruolo.PROFESSIONISTA) ? request.getContextPath()+"/GestioneRichiesteServlet" : taskAnchor; %>
-				<a href="<%= taskAnchor %>">Le mie task</a>
+				<a style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>" 
+				   href="<%= taskAnchor %>"
+				   class="tasks">
+				   Le mie task
+				</a>
 			</div>
 			<div class="area-riservata-container">
 				<button class="area-riservata-btn" id="areaRiservataBtn">
@@ -84,7 +89,7 @@
 				menu.classList.toggle('show');
 			});
 
-			// Chiude il menu se clicchi fuori
+
 			document.addEventListener('click', function(e) {
 				if (!btn.contains(e.target)) {
 					menu.classList.remove('show');

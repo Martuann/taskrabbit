@@ -1,109 +1,107 @@
 @charset "UTF-8";
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url('../PagineWeb/immagini/sfondo.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
 .registrazione-container {
-	background-color: rgba(255, 255, 255, 0.7);
-	backdrop-filter: blur(15px);
-	width: 90%;
-	max-width: 550px;
-	padding: 40px;
-	border-radius: 20px;
-	margin: 50px auto;
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    width: 90%;
+    max-width: 500px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 26px;
+    font-weight: 700;
 }
 
 .input-dati {
-	margin-bottom: 15px;
-	display: flex;
-	flex-direction: column;
+    margin-bottom: 20px;
 }
 
 .input-dati label {
-	font-size: 13px;
-	font-weight: 600;
-	margin-bottom: 5px;
-	color: #444;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    font-size: 14px;
 }
 
-input {
-	padding: 10px;
-	border-radius: 8px;
-	border: 1px solid #ccc;
+input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-sizing: border-box;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+input[type="password"]:focus {
+    border-color: #3357d6;
+    box-shadow: 0 0 0 3px rgba(51, 87, 214, 0.1);
+    outline: none;
 }
 
 .btn-submit {
-	width: 100%;
-	padding: 12px;
-	background-color: #3357d6;
-	color: white;
-	border: none;
-	border-radius: 8px;
-	font-weight: 600;
-	cursor: pointer;
-	margin-top: 10px;
+    width: 100%;
+    padding: 14px;
+    background-color: #3357d6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin-top: 10px;
 }
 
-.account-closure-section {
-	margin-top: 40px;
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	background-color: #fff;
+.btn-submit:hover {
+    background-color: #2641a1;
 }
 
-.closure-content {
-	padding: 20px;
+.btn-submit:active {
+    transform: scale(0.98);
 }
 
-.closure-text h3 {
-	font-size: 16px;
-	color: #1a1a1a;
-	margin-bottom: 5px;
-}
-
-.closure-text p {
-	font-size: 13px;
-	color: #666;
-	text-align: left;
-}
-
-.closure-footer {
-	background-color: #fafafa;
-	padding: 10px 20px;
-	border-top: 1px solid #e0e0e0;
-	display: flex;
-	justify-content: flex-end;
-}
-
-.btn-action-terminate {
-	background-color: #fff;
-	color: #d32f2f;
-	border: 1px solid #d32f2f;
-	padding: 6px 15px;
-	border-radius: 6px;
-	font-size: 13px;
-	cursor: pointer;
-}
-
-.btn-action-terminate:hover {
-	background-color: #fef2f2;
-}
 
 .toast-message {
-	position: fixed;
-	top: -100px;
-	left: 50%;
-	transform: translateX(-50%);
-	background-color: #2e7d32;
-	color: white;
-	padding: 12px 25px;
-	border-radius: 30px;
-	transition: top 0.4s ease;
-	z-index: 10000;
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2e7d32;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transition: top 0.5s ease;
+    z-index: 1000;
+    font-weight: 600;
+    font-size: 14px;
 }
 
-.toast-error {
-	background-color: #d32f2f !important;
-}
-
-.toast-animation {
-	top: 20px;
-}
+.toast-animation { top: 30px; }
+.toast-error { background-color: #d32f2f !important; }

@@ -46,7 +46,7 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
         utenteTestDiProva.setNome("Mario");
         utenteTestDiProva.setCognome("Rossi");
         utenteTestDiProva.setRuolo(Ruolo.PROFESSIONISTA);
-        request.getSession().setAttribute("utenteLoggato", utenteTestDiProva);
+        //request.getSession().setAttribute("utenteLoggato", utenteTestDiProva);
 
 		
 		HttpSession session = request.getSession();

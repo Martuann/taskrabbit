@@ -19,6 +19,7 @@
 </head>
 
 <body>
+	<%@ include file="/WEB-INF/headerFooter/header.jsp" %>
 	<%
     Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
     List<Professione> catalogoProfessioni = (List<Professione>) request.getAttribute("catalogoProfessioni");
@@ -29,18 +30,11 @@
     String context = request.getContextPath();
     String err = request.getParameter("errore");
 %>
-
-	<header>
-		<a href="<%=context%>/HomepageServlet"> <img
-			src="<%=context%>/img/taskly_logo.png" alt="Taskly Logo"
-			class="logo-img">
-		</a>
-		<nav>
-			<a href="<%=context%>/HomepageServlet">Home</a> > <strong>Gestione
-				Servizi</strong>
-		</nav>
-	</header>
-
+		<div class="link-container">
+			<a href="<%= request.getContextPath() %>/GestioneOrariDefault">
+			   Imposta disponibilità settimanale --->
+			</a>
+		</div>
 	<div class="container">
 		<div class="welcome-box">
 			<h1>Area Professionista</h1>
@@ -210,6 +204,6 @@
 			</div>
 		</div>
 	</div>
-
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>
