@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +28,8 @@ import org.elis.dao.definition.VeicoloDao;
 import org.elis.progetto.model.Disponibilita;
 import org.elis.progetto.model.OrarioBase;
 import org.elis.progetto.model.Professione;
+import org.elis.progetto.model.Richiesta;
+import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
 import org.elis.progetto.model.UtenteProfessione;
 import org.elis.progetto.model.UtenteVeicolo;
@@ -43,7 +46,7 @@ public class InoltroRichieste extends HttpServlet {
 	    private ProfessioneDao professioneDao;
 	    private VeicoloDao veicoloDao;
        private UtenteVeicoloDao utenteVeicoloDao;
-       private UtenteProfessioneDao utenteProfessione;
+       private UtenteProfessioneDao utenteProfessioneDao;
        private DisponibilitaDao dispDao;
        private OrarioBaseDao orarioDao;
 	    /**
@@ -51,10 +54,6 @@ public class InoltroRichieste extends HttpServlet {
 	     */
 	    
 	        
-	    
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public InoltroRichieste() {
         super();
         
@@ -63,94 +62,247 @@ public class InoltroRichieste extends HttpServlet {
         professioneDao = DaoFactory.getInstance().getProfessioneDao();
         veicoloDao = DaoFactory.getInstance().getVeicoloDao();
         utenteVeicoloDao = DaoFactory.getInstance().getUtenteVeicoloDao();    
-utenteProfessione=DaoFactory.getInstance().getUtenteProfessioneDao();
-dispDao=DaoFactory.getInstance().getDisponibilitaDao();
-orarioDao=DaoFactory.getInstance().getOrarioBaseDao();
+        utenteProfessioneDao=DaoFactory.getInstance().getUtenteProfessioneDao();
+        dispDao=DaoFactory.getInstance().getDisponibilitaDao();
+        orarioDao=DaoFactory.getInstance().getOrarioBaseDao();
 }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-    	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	    HttpSession session = request.getSession();
+    	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-    	if (utenteLoggato == null) {
-    	    response.sendRedirect(request.getContextPath() + "/login.jsp");
-    	    return;
+    	    if (utenteLoggato == null) {
+    	        response.sendRedirect(request.getContextPath() + "/loginServlet");
+    	        return;
+    	    }
+
+    	    Long idProfessionista;
+    	    try {
+    	        idProfessionista = Long.parseLong(request.getParameter("id_Professionista"));
+    	    } catch (NumberFormatException | NullPointerException e) {
+    	        response.sendRedirect("index.jsp");
+    	        return;
+    	    }
+
+    	    Utente professionista = null;
+    	    List<Veicolo> veicolo = null;
+    	    List<Disponibilita> dispo = null;
+    	    List<OrarioBase> orario = null;
+    	    List<UtenteVeicolo> utenteVeicolo = null;
+    	    List<Professione> professioni = null;
+    	    List<UtenteProfessione> utenteProfessioni = null;
+    	    List<Richiesta> occupate = null;
+
+    	    try {
+    	        professionista = utenteDao.ricercaPerId(idProfessionista);
+    	        if (professionista == null) {
+    	            response.sendRedirect("errore.jsp");
+    	            return;
+    	        }
+    	        veicolo = veicoloDao.getVeicolibyUtente(idProfessionista);
+    	        dispo = dispDao.getDisponibilitaPerUtente(idProfessionista);
+    	        orario = orarioDao.getOrariByUtente(idProfessionista);
+    	        utenteVeicolo = utenteVeicoloDao.getDettagliVeicoliUtente(idProfessionista);
+    	        professioni = professioneDao.selectbyUtente(idProfessionista);
+    	        utenteProfessioni = utenteProfessioneDao.selectByUtente(idProfessionista);
+    	        occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        response.sendRedirect("erroreDatabase.jsp");
+    	        return;
+    	    }
+
+    	    List<Disponibilita> dispProssimeDueSettimane = new ArrayList<Disponibilita>();
+    	    LocalDate dataOggi = LocalDate.now();
+    	    LocalDate oggiPiuDueSettimane = dataOggi.plusWeeks(2);
+
+    	    while (dataOggi.isBefore(oggiPiuDueSettimane)) {
+    	        LocalTime inizio = null;
+    	        LocalTime fine = null;
+    	        Disponibilita eccezione = null;
+
+    	        for (int i = 0; i < dispo.size(); i++) {
+    	            if (dispo.get(i).getData().equals(dataOggi)) {
+    	                eccezione = dispo.get(i);
+    	                break;
+    	            }
+    	        }
+
+    	        if (eccezione != null) {
+    	            inizio = eccezione.getInizio();
+    	            fine = eccezione.getFine();
+    	        } else {
+    	            DayOfWeek giorno = dataOggi.getDayOfWeek();
+    	            for (int i = 0; i < orario.size(); i++) {
+    	                if (orario.get(i).getGiornoSettimana().equals(giorno)) {
+    	                    inizio = orario.get(i).getOraInizio();
+    	                    fine = orario.get(i).getOraFine();
+    	                    break;
+    	                }
+    	            }
+    	        }
+
+    	        if (inizio != null && fine != null) {
+    	            LocalTime ora = inizio;
+    	            while (ora.isBefore(fine)) {
+    	                boolean trovato = false;
+    	                if (occupate != null) {
+    	                    for (int i=0; i<occupate.size();i++){
+    	                        if (occupate.get(i).getData().equals(dataOggi) && 
+    	                            (occupate.get(i).getStato() == StatoRichiesta.in_corso || occupate.get(i).getStato() == StatoRichiesta.completato) &&
+    	                            !ora.isBefore(occupate.get(i).getOrarioInizio()) && ora.isBefore(occupate.get(i).getOrarioFine())) {
+    	                            trovato = true;
+    	                            break;
+    	                        }
+    	                    }
+    	                }
+
+    	                if (trovato == false) {
+    	                    Disponibilita slot = new Disponibilita();
+    	                    slot.setIdUtente(idProfessionista);
+    	                    slot.setData(dataOggi);
+    	                    slot.setInizio(ora);
+    	                    slot.setFine(ora.plusHours(1));
+    	                    dispProssimeDueSettimane.add(slot);
+    	                }
+    	                ora = ora.plusHours(1);
+    	            }
+    	        }
+    	        dataOggi = dataOggi.plusDays(1);
+    	    }
+
+    	    request.setAttribute("professionista", professionista);
+    	    request.setAttribute("utenteProf", utenteProfessioni);
+    	    request.setAttribute("ListaProf", professioni);
+    	    request.setAttribute("veicoli", veicolo);
+    	    request.setAttribute("utenteVeicolo", utenteVeicolo);
+    	    request.setAttribute("disponibilita", dispo);
+    	    request.setAttribute("orario", orario);
+    	    request.setAttribute("dispProssimeDueSettimane", dispProssimeDueSettimane);
+
+    	    request.getRequestDispatcher("/PagineWeb/RichiestaUtente.jsp").forward(request, response);
     	}
-		
-		Long idProfessionsta=Long.parseLong(request.getParameter("id_Professionista"));
-		Utente professionista = utenteDao.ricercaPerId(idProfessionsta);
-		List<Veicolo> veicolo =veicoloDao.getVeicolibyUtente(idProfessionsta);
-		List<Disponibilita> dispo = dispDao.getDisponibilitaPerUtente(idProfessionsta);
-		List<OrarioBase> orario =orarioDao.getOrariByUtente(idProfessionsta);
-		List<UtenteVeicolo> utenteVeicolo = utenteVeicoloDao.getDettagliVeicoliUtente(idProfessionsta);
-        List<Professione> professioni = professioneDao.selectbyUtente(idProfessionsta);
-	    List<UtenteProfessione> utenteProfessioni = utenteProfessione.selectByUtente(idProfessionsta);
+    	
 		
 		
-		
-	    request.setAttribute("professionista", professionista);
-		request.setAttribute("utenteProf", utenteProfessioni);
-		request.setAttribute("ListaProf", professioni);
-		request.setAttribute("veicoli", veicolo);
-		request.setAttribute("utenteVeicolo", utenteVeicolo);
-		request.setAttribute("disponibilita", dispo);
-		request.setAttribute("orario",orario);
-		
-		
-		List<Disponibilita> dispProssimeDueSettimane = new ArrayList<Disponibilita>();
-		LocalDate dataOggi= LocalDate.now();
-		LocalDate oggiPiuDueSettimane =dataOggi.plusWeeks(2);
-		Disponibilita eccezione  =null;
-		while(dataOggi.isBefore(oggiPiuDueSettimane)) {
-			LocalTime inizio=null;
-			LocalTime fine = null;
-			for(int i=0;i<dispo.size();i++) {
-				if(dispo.get(i).equals(dataOggi)) {
-					eccezione =dispo.get(i);
-					break;}
-				}	if(eccezione!=null) {
-					inizio = eccezione.getInizio();
-					fine=eccezione.getFine();
-				}
-				
-				
-				else {
-				DayOfWeek giorno= dataOggi.getDayOfWeek();
-				for(int i=0; i<orario.size();i++) {
-					if(orario.get(i).getGiornoSettimana().equals(giorno)) {
-						inizio=orario.get(i).getOraInizio();
-						fine=orario.get(i).getOraFine();
-						break;
-						
-					}
-				}
-				}
-			}
-			
-			
-			
-		}
-		
-		
-		
-		
-		
-		
-		request.getRequestDispatcher("/PagineWeb/RichiestaUtente.jsp").forward(request, response);
-
-		
-		
-		
-	}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+        HttpSession session = request.getSession();
+        Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-}
+        if (utenteLoggato == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        Long idProf, idProfess;
+        LocalDate dataValida;
+        LocalTime oraInizio;
+        int oreSelezionate;
+
+        try {
+            idProf = Long.valueOf(request.getParameter("id_professionista"));
+            idProfess = Long.valueOf(request.getParameter("id_professione"));
+            dataValida = LocalDate.parse(request.getParameter("data_scelta"));
+            oraInizio = LocalTime.parse(request.getParameter("ora_inizio"));
+            oreSelezionate = Integer.parseInt(request.getParameter("durata_ore"));
+        } catch (Exception e) {
+            response.sendRedirect("RichiestaUtente.jsp?error=dati_non_validi");
+            return;
+        }
+
+        LocalTime oraFine = oraInizio.plusHours(oreSelezionate);
+        List<Richiesta> occupate;
+        List<Disponibilita> dispo;
+        List<OrarioBase> orario;
+        UtenteProfessione up;
+
+        try {
+            occupate = richiestaDao.selectByIdUtenteRichiesto(idProf);
+            dispo = dispDao.getDisponibilitaPerUtente(idProf);
+            orario = orarioDao.getOrariByUtente(idProf);
+            up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProf, idProfess);
+        } catch (Exception e) {
+            response.sendRedirect("erroreDatabase.jsp");
+            return;
+        }
+
+        for (int i = 0; i < occupate.size(); i++) {
+            Richiesta r = occupate.get(i);
+            if (r.getData().equals(dataValida) && (r.getStato() == StatoRichiesta.in_corso || r.getStato() == StatoRichiesta.completato)) {
+                if (oraInizio.isBefore(r.getOrarioFine()) && oraFine.isAfter(r.getOrarioInizio())) {
+                    response.sendRedirect("RichiestaUtente.jsp?id_Professionista=" + idProf + "&error=conflitto");
+                    return;
+                }
+            }
+        }
+
+        LocalTime limiteInizio = null;
+        LocalTime limiteFine = null;
+
+        for (int i = 0; i < dispo.size(); i++) {
+            if (dispo.get(i).getData().equals(dataValida)) {
+                limiteInizio = dispo.get(i).getInizio();
+                limiteFine = dispo.get(i).getFine();
+                break;
+            }
+        }
+
+        if (limiteInizio == null) {
+            DayOfWeek giorno = dataValida.getDayOfWeek();
+            for (int i = 0; i < orario.size(); i++) {
+                if (orario.get(i).getGiornoSettimana().equals(giorno)) {
+                    limiteInizio = orario.get(i).getOraInizio();
+                    limiteFine = orario.get(i).getOraFine();
+                    break;
+                }
+            }
+        }
+
+        if (limiteInizio == null || oraInizio.isBefore(limiteInizio) || oraFine.isAfter(limiteFine)) {
+            response.sendRedirect("RichiestaUtente.jsp?id_Professionista=" + idProf + "&error=fuori_orario");
+            return;
+        }
+
+        BigDecimal prezzoTotale = up.getTariffaH().multiply(new BigDecimal(request.getParameter("durata_ore")));
+        String idVeicoloString = request.getParameter("id_veicolo");
+
+        if (idVeicoloString != null && !idVeicoloString.isEmpty()) {
+            try {
+                Long idV = Long.valueOf(idVeicoloString);
+                UtenteVeicolo uv = utenteVeicoloDao.selectByUtenteEVeicolo(idProf, idV);
+                if (uv != null) {
+                    prezzoTotale = prezzoTotale.add(uv.getAggiuntaServizio());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Richiesta richiesta = new Richiesta();
+        richiesta.setIdUtenteRichiedente(utenteLoggato.getId());
+        richiesta.setIdUtenteRichiesto(idProf);
+        richiesta.setIdProfessione(idProfess);
+        richiesta.setData(dataValida);
+        richiesta.setOrarioInizio(oraInizio);
+        richiesta.setOrarioFine(oraFine);
+        richiesta.setCostoEffettivo(prezzoTotale);
+        richiesta.setStato(StatoRichiesta.in_attesa);
+        richiesta.setDescrizione(request.getParameter("descrizione"));
+
+        try {
+            richiestaDao.insert(richiesta);
+        } catch (Exception e) {
+            response.sendRedirect("erroreDatabase.jsp");
+            return;
+        }
+
+        response.sendRedirect("CronologiaRichieste?success=true");
+    }}
+
