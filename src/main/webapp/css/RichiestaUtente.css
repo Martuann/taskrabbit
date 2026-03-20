@@ -117,22 +117,12 @@ input[type="text"], input[type="number"], select, textarea {
     transform: translateY(-2px);
 }
 
-.data-class {
-  display:inline-block;
-  background-color: #f0f2f5;
-  color: #555;
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  transition: background 0.2s;
-  margin-bottom: 15px;
-}
-
-.data-class:hover {
-  background-color: #e4e6e9;
-  color: #000;
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; 
 }
 	
 	
