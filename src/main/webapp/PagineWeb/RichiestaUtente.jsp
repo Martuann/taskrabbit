@@ -54,7 +54,7 @@
 
                 <div class="input-group">
                     <label>Indirizzo di esecuzione</label>
-                    <input type="text" name="indirizzo" placeholder="Via e numero civico, Città" required>
+                    <input type="text" name="indirizzo" placeholder="Via e numero civico, Citt�" required>
                 </div>
 
                 <div class="price-info-box">
@@ -65,7 +65,7 @@
                   
                     <div class="price-display">
                         <span>Tariffa base:</span>
-                        <strong>€ 50.00 / ora</strong>
+                        <strong>&#8364 50.00 / ora</strong>
                     </div>
                     <p class="price-note">*Il totale verrà confermato dal professionista.</p>
                 </div>
