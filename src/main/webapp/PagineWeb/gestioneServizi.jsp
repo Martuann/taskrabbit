@@ -19,6 +19,7 @@
 </head>
 
 <body>
+	<%@ include file="/WEB-INF/headerFooter/header.jsp" %>
 	<%
     Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
     List<Professione> catalogoProfessioni = (List<Professione>) request.getAttribute("catalogoProfessioni");
@@ -29,17 +30,6 @@
     String context = request.getContextPath();
     String err = request.getParameter("errore");
 %>
-
-	<header>
-		<a href="<%=context%>/HomepageServlet"> <img
-			src="<%=context%>/img/taskly_logo.png" alt="Taskly Logo"
-			class="logo-img">
-		</a>
-		<nav>
-			<a href="<%=context%>/HomepageServlet">Home</a> > <strong>Gestione
-				Servizi</strong>
-		</nav>
-	</header>
 
 	<div class="container">
 		<div class="welcome-box">
