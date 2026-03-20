@@ -16,13 +16,7 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/GestioneDisponibilita.css">
 </head>
 <body>
-	<header>
-		<% String context = request.getContextPath(); %>
-		<a href="<%=context%>/HomepageServlet"><img src="<%=context%>/img/taskly_logo.png" class="logo-img"></a>
-		<nav>
-			<a href="<%=context%>/HomepageServlet">Home</a> > <a href="<%=context%>/GestioneServiziServlet">Gestione servizi</a> > <strong>Agenda</strong>
-		</nav>
-	</header>
+	<%@ include file="/WEB-INF/headerFooter/header.jsp" %>
 
 	<div class="container agenda-layout">
 		<% 
