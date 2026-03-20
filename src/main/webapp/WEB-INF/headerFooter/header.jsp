@@ -21,7 +21,7 @@
 			Utente u = (Utente) session.getAttribute("utenteLoggato");
 			if (u != null && u.getRuolo() == Ruolo.ADMIN) {
 			%>
-			<a href="<%=request.getContextPath()%>/Dashboard">Dashboard</a> <a
+			<a href="#">Dashboard</a> <a
 				href="#">Utenti</a> <a href="#">Report</a>
 			<% } %>
 		</nav>
@@ -29,19 +29,19 @@
 			<%
 			if (u != null) {
 			%>
-			<div class="prof-only-section">
-				<a style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>"
-				   href="<%= request.getContextPath() %>/GestioneServiziServlet"
-				   class="servizi">
+			<div class="links-section">
+				<a style="display:<%= (u.getRuolo()==Ruolo.ADMIN) ? "inline-block" : "none" %>" 
+				   href="<%= request.getContextPath() %>/AggiungiProfessione">
+				   Gestione Professioni
+				</a>
+				<a style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>" 
+				   href="<%= request.getContextPath() %>/GestioneServiziServlet">
 				   Gestione Servizi
 				</a>
-			</div>
-			<div class="task-section">
 				<% String taskAnchor = (u.getRuolo()==Ruolo.UTENTE_BASE) ? request.getContextPath()+"/CronologiaRichiesteServlet" : "#";
 				taskAnchor = (u.getRuolo()==Ruolo.PROFESSIONISTA) ? request.getContextPath()+"/GestioneRichiesteServlet" : taskAnchor; %>
-				<a style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>"
-				   href="<%= taskAnchor %>"
-				   class="tasks">
+				<a style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>" 
+				   href="<%= taskAnchor %>">
 				   Le mie task
 				</a>
 			</div>

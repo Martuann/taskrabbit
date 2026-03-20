@@ -37,7 +37,7 @@ String query = "INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente
 	}
 
 	@Override
-	public List<Disponibilita> getDisponibilitaPerUtente(long idUtente) throws Exception {
+	public List<Disponibilita> getDisponibilitaPerUtente(Long idUtente) throws Exception {
 		List<Disponibilita> listaDisponibilita = new ArrayList<Disponibilita>();
 	    
 	    String query = "SELECT * FROM disponibilita WHERE id_utente = ? ORDER BY data ASC, ora_inizio ASC";
@@ -61,7 +61,7 @@ String query = "INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente
 	}
 
 	@Override
-	public void rimuoviDisponibilita(long idDisponibilita) throws Exception {
+	public void rimuoviDisponibilita(Long idDisponibilita) throws Exception {
 		String query = "DELETE FROM disponibilita WHERE id = ?";
 	    
 	    try (Connection connection = dataSource.getConnection();
@@ -93,7 +93,7 @@ String query = "INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente
 	}
 
 	@Override
-	public void cancellaTuttePerUtente(long idUtente) throws Exception {
+	public void cancellaTuttePerUtente(Long idUtente) throws Exception {
 		String query = "DELETE FROM disponibilita WHERE id_utente = ?";
 	    
 	    try (Connection connection = dataSource.getConnection();
@@ -121,7 +121,7 @@ String query = "INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente
 	    String queryCerca = "SELECT id FROM disponibilita WHERE id_utente = ? AND data = ?";
 	    
 	    try (Connection c = dataSource.getConnection()) {
-	        long idEsistente = -1;
+	        Long idEsistente =null;
 	        
 	        try (PreparedStatement psCerca = c.prepareStatement(queryCerca)) {
 	            psCerca.setLong(1, d.getIdUtente());
@@ -133,7 +133,7 @@ String query = "INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente
 	            }
 	        }
 
-	        if (idEsistente != -1) {
+	        if (idEsistente != null) {
 	            String queryUpdate = "UPDATE disponibilita SET ora_inizio = ?, ora_fine = ? WHERE id = ?";
 	            try (PreparedStatement psUpdate = c.prepareStatement(queryUpdate)) {
 	                psUpdate.setTime(1, java.sql.Time.valueOf(d.getInizio()));
@@ -159,7 +159,7 @@ String query = "INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente
 	
 	
 	@Override
-	public void rimuoviDisponibilitaByIdUtenteData(long idUtente, LocalDate data) throws Exception {
+	public void rimuoviDisponibilitaByIdUtenteData(Long idUtente, LocalDate data) throws Exception {
 	    String query = "DELETE FROM disponibilita WHERE id_utente = ? AND data = ?";
 	    
 	    try (Connection connection = dataSource.getConnection();

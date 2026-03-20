@@ -9,22 +9,19 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/Homepage.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">Taskly - Risultati</div>
-        <a href="/HomepageServlet" style="color:white; margin-left:20px;">Torna alla Home</a>
-    </nav>
+	<%@ include file="/WEB-INF/headerFooter/header.jsp"%>
 	<%List<Utente> professionisti = (List<Utente>)request.getAttribute("professionisti"); %>
     <div class="services-section">
         <h2>Professionisti trovati per: "${query}"</h2>
         
         <div class="services-grid">
-        <%for(Utente u : professionisti){ %>
+        <%for(Utente utente : professionisti){ %>
                 <div class="service-card">
                     <div class="card-text">
-                        <h3><%=u.getNome() +" "+ u.getCognome()%></h3>
-                        <p>Email: <%=u.getEmail()%></p>
+                        <h3><%=utente.getNome() +" "+ utente.getCognome()%></h3>
+                        <p>Email: <%=utente.getEmail()%></p>
       
-                        <a href="<%=request.getContextPath()%>/ProfiloProfessionistaServlet?id1=<%=u.getId() %>" class="view-more">Mostra il profilo</a>
+                        <a href="<%=request.getContextPath()%>/ProfiloProfessionistaServlet?id1=<%=utente.getId() %>" class="view-more">Mostra il profilo</a>
                         
                         
                     </div>

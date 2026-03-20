@@ -20,9 +20,11 @@ justify-content: space-between;
 align-items: center;
 padding: 0 50px;
 }
+
 .logo{
 flex:0 1 auto;
 }
+
 .logo-img {
 height: 70px;
 width: auto;
@@ -31,7 +33,6 @@ transition: transform 0.3s ease;
 
 .logo-img:hover {
 transform: translateY(-2px) scale(1.05);
-
 }
 
 .nav-menu {
@@ -55,21 +56,16 @@ transition: color 0.2s;
 transform: translateY(-2px) scale(1.05);
 color: #1a3ab3;
 }
-.admin-link {
-color: #3357d6;
-font-weight: 600;
-}
-
-.nav-divider {
-color: #ddd;
-font-weight: 100;
-margin: 0 5px;
-}
 
 .user-section {
 display: flex;
 align-items: center;
 gap:20px;
+}
+
+.links-section {
+display: flex;
+gap:15px;
 }
 
 .links-container {
@@ -85,7 +81,7 @@ font-family: 'Inter', sans-serif;
 transition: color 0.2s;
 }
 
-.login, .registrati, .tasks, .servizi{
+.login, .registrati, .links-section a{
 text-decoration: none;
 color: #3357d6;
 font-size: 16px;
@@ -93,13 +89,14 @@ display: inline-block;
 transition: transform 0.2s ease, color 0.2s ease;
 font-weight: 700;
 }
-.login:hover, .registrati:hover, .tasks:hover, .servizi:hover{
+
+.login:hover, .registrati:hover, .links-section a:hover{
 transform: translateY(-2px) scale(1.05);
 color: #1a3ab3;
 }
+
 .login.bold, .registrati.bold {
 font-weight: 700;
-
 }
 
 .slash {

@@ -74,55 +74,54 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-    	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-    	if (utenteLoggato == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-        if (utenteLoggato.getRuolo() != Ruolo.PROFESSIONISTA) {
-    	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
-    	    return;
-    	}
+	    if (utenteLoggato == null || utenteLoggato.getRuolo() != Ruolo.PROFESSIONISTA) {
+	        response.sendRedirect("login.jsp");
+	        return;
+	    }
 
-        String offSetParam = request.getParameter("offSetAttuale");
-        int offSet = (offSetParam != null) ? Integer.parseInt(offSetParam) : 0;
-	
-        try {
-            for(int i=0; i < 7; i++) {
-                String booleanSeLavoraoNoString = request.getParameter("lavora_"+i);
-                String inizio = request.getParameter("oraInizio_" + i);
-                String fine = request.getParameter("oraFine_" + i);
-                String dataStr = request.getParameter("data_" + i); // Coerente con name="data_<%=i%>" nella JSP
-         
-                if(dataStr != null) {
-                    LocalDate dataCorrente = LocalDate.parse(dataStr);
-                    
-                    if(booleanSeLavoraoNoString != null) {
-                        LocalTime orarioInizio = LocalTime.parse(inizio);
-                        LocalTime orarioFine = LocalTime.parse(fine);
-                        
-                        Disponibilita disp = new Disponibilita(utenteLoggato.getId(), dataCorrente, orarioInizio, orarioFine);
-                        OrarioBase checkOrarioSeUgualeADisp = orarioDao.getOrariByUtenteEGiorno(utenteLoggato.getId(), dataCorrente.getDayOfWeek());
-    
-                        if(checkOrarioSeUgualeADisp == null) {
-                            dispoDao.salvaOAggiorna(disp);
-                        } else {
-                            if(!checkOrarioSeUgualeADisp.getOraInizio().equals(disp.getInizio()) || !checkOrarioSeUgualeADisp.getOraFine().equals(disp.getFine())) {
-                                dispoDao.salvaOAggiorna(disp);
-                            } else {
-                                dispoDao.rimuoviDisponibilitaByIdUtenteData(utenteLoggato.getId(), dataCorrente);
-                            }
-                        }
-                    } else {
-                        dispoDao.rimuoviDisponibilitaByIdUtenteData(utenteLoggato.getId(), dataCorrente);
-                    }
-                }
-            }
-            response.sendRedirect("GestioneOrariDateSpecifiche?offSet=" + offSet + "&success=true");
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("GestioneOrariDateSpecifiche?offSet=" + offSet + "&error=save");
-        }
-	}}
+	    String offSetParam = request.getParameter("offSetAttuale");
+	    int offSet = (offSetParam != null) ? Integer.parseInt(offSetParam) : 0;
+
+	    try {
+	        for (int i = 0; i < 7; i++) {
+	            String lavora = request.getParameter("lavora_" + i);
+	            String inizio = request.getParameter("oraInizio_" + i);
+	            String fine = request.getParameter("oraFine_" + i);
+	            String dataStr = request.getParameter("data_" + i);
+
+	            if (dataStr != null) {
+	                LocalDate dataCorrente = LocalDate.parse(dataStr);
+	                
+	                if (lavora != null) {
+	                    LocalTime orarioInizio = LocalTime.parse(inizio);
+	                    LocalTime orarioFine = LocalTime.parse(fine);
+	                    
+	                    Disponibilita disp = new Disponibilita(utenteLoggato.getId(), dataCorrente, orarioInizio, orarioFine);
+	                    OrarioBase base = orarioDao.getOrariByUtenteEGiorno(utenteLoggato.getId(), dataCorrente.getDayOfWeek());
+
+	                    if (base != null && base.getOraInizio().equals(orarioInizio) && base.getOraFine().equals(orarioFine)) {
+	                        dispoDao.rimuoviDisponibilitaByIdUtenteData(utenteLoggato.getId(), dataCorrente);
+	                    } else {
+	                        dispoDao.salvaOAggiorna(disp);
+	                    }
+	                } else {
+	                    Disponibilita chiuso = new Disponibilita(
+	                        utenteLoggato.getId(), 
+	                        dataCorrente, 
+	                        LocalTime.MIDNIGHT, 
+	                        LocalTime.MIDNIGHT  
+	                    );
+	                    dispoDao.salvaOAggiorna(chiuso);
+	                }
+	            }
+	        }
+	        response.sendRedirect("GestioneOrariDateSpecifiche?offSet=" + offSet + "&success=true");
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.sendRedirect("GestioneOrariDateSpecifiche?offSet=" + offSet + "&error=save");
+	    }
+	}
+	}
