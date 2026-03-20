@@ -1,3 +1,4 @@
+<%@ page import="java.time.LocalDate" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -32,46 +33,51 @@
                     </select>
                 </div>
 
+             
                 <div class="input-group">
                     <label>Descrizione della Task </label>
                     <textarea name="descrizione" placeholder="Es: Ho bisogno di imbiancare una stanza di 20mq..." rows="4" required></textarea>
                 </div>
 
-                <div class="input-group">
-                    <label>Veicolo necessario per il trasporto</label>
-                    <div class="vehicle-options">
-                        <label class="vehicle-radio">
-                            <input type="radio" name="veicolo" value="nessuno" checked> Nessuno
-                        </label>
-                        <label class="vehicle-radio">
-                            <input type="radio" name="veicolo" value="auto"> Auto
-                        </label>
-                        <label class="vehicle-radio">
-                            <input type="radio" name="veicolo" value="furgone"> Furgone
-                        </label>
-                    </div>
-                </div>
-
+               
                 <div class="input-group">
                     <label>Indirizzo di esecuzione</label>
                     <input type="text" name="indirizzo" placeholder="Via e numero civico, Citt‡" required>
                 </div>
+                <div class="input-group">
+                    <label>Data di esecuzione </label>
+                    <input type="date" name="data_esecuzione" min="<%= LocalDate.now() %> " max="<%=LocalDate.now().plusMonths(1) %>" required>
+                </div>
 
+               
+                <div class="input-group">
+                    <label>Veicolo necessario </label>
+                    <select name="veicolo" required>
+                        <option value="" disabled selected>Seleziona tipo di veicolo</option>
+                        <option value="nessuno">Nessuno (A piedi)</option>
+                        <option value="auto">Auto</option>
+                        <option value="moto">Moto/Scooter</option>
+                        <option value="furgone-grande">Furgone Grande</option>
+                        <option value="furgone-piccolo">Furgone Piccolo </option>
+                        <option value="bicicletta">Bicicletta </option>
+                       
+                    </select>
+                </div>
+				
+                
+             <div class="input-group">
+                    <label>Durata stimata dell'intervento (ore)</label>
+                    <input type="number" name="ore" value="1" min="1" max="8" required 
+                           style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px;">
+                </div>
                 <div class="price-info-box">
-                    <div class="price-row">
-                        <label>Ore stimate:</label>
-                        <input type="number" name="ore" value="1" min=1 max=8>
-                    </div>
-                  
                     <div class="price-display">
                         <span>Tariffa base:</span>
                         <strong>&#8364 50.00 / ora</strong>
                     </div>
-                    <p class="price-note">*Il totale verr√† confermato dal professionista.</p>
+                    <p class="price-note">*Il totale verr‡ confermato dal professionista.</p>
                 </div>
-                <div class="data-class">
-				 <a href="/taskrabbit/PagineWeb/CalendarioUtente.jsp">Clicca qui per selezionare la data</a>
-				 </div>
+                
                 <button type="submit" class="btn-submit">Invia Richiesta</button>
             </form>
 
@@ -79,7 +85,7 @@
                 <a href="taskrabbit/HomepageServlet">Annulla e torna alla Home</a>
             </div>
         </div>
-    </div>
+   </div>
 
 </body>
 </html>
