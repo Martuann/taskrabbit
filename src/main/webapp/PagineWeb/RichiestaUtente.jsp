@@ -46,7 +46,7 @@
                 </div>
                 <div class="input-group">
                     <label>Data di esecuzione </label>
-                    <input type="date" name="data_esecuzione" min="<%= LocalDate.now() %>" required>
+                    <input type="date" name="data_esecuzione" min="<%= LocalDate.now() %> " max="<%=LocalDate.now().plusMonths(1) %>" required>
                 </div>
 
                
@@ -63,14 +63,14 @@
                        
                     </select>
                 </div>
-
+				
                 
+             <div class="input-group">
+                    <label>Durata stimata dell'intervento (ore)</label>
+                    <input type="number" name="ore" value="1" min="1" max="8" required 
+                           style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px;">
+                </div>
                 <div class="price-info-box">
-                    <div class="price-row">
-                        <label>Ore stimate:</label>
-                        <input type="number" name="ore" value="1" min="1" max="8">
-                    </div>
-                  
                     <div class="price-display">
                         <span>Tariffa base:</span>
                         <strong>&#8364 50.00 / ora</strong>

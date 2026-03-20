@@ -98,7 +98,13 @@ input[type="text"], input[type="number"], select, textarea {
     font-style: italic;
 }
 
-
+.classe-orario{
+	 width: 100%;
+    padding: 7px;
+    border-radius: 8px;
+    box-sizing: border-box; 
+	
+}
 .btn-submit {
     width: 100%;
     padding: 16px;
@@ -124,6 +130,7 @@ input[type="text"], input[type="number"], select, textarea {
     border: 1px solid #ccc;
     box-sizing: border-box; 
 }
+
 	
 	
 	
