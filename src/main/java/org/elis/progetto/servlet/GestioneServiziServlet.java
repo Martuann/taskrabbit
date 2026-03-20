@@ -43,13 +43,7 @@ public class GestioneServiziServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
-    	//UTENTE DI PROVA RICORDARSI DI CANCELLARLO
-    	Utente utenteTestDiProva = new Utente();
-        utenteTestDiProva.setId(1L);
-        utenteTestDiProva.setNome("Mario");
-        utenteTestDiProva.setCognome("Rossi");
-        //request.getSession().setAttribute("utenteLoggato", utenteTestDiProva);
-        utenteTestDiProva.setRuolo(Ruolo.PROFESSIONISTA);
+    	
 
     	HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
@@ -68,8 +62,8 @@ public class GestioneServiziServlet extends HttpServlet {
 
             List<Professione> catalogoTutteLeProfessioni = professioneDao.selectAll();
             List<Veicolo> catalogoTuttiIVeicoli = veicoloDao.getAllVeicoli();
-            List<UtenteProfessione> professioniPosseduteDallUtente = utenteProfessioneDao.selectByUtente(utenteTestDiProva.getId());
-            List<UtenteVeicolo> veicoliPossedutiDallUtente = utenteVeicoloDao.selectByUtente(utenteTestDiProva.getId());
+            List<UtenteProfessione> professioniPosseduteDallUtente = utenteProfessioneDao.selectByUtente(utenteLoggato.getId());
+            List<UtenteVeicolo> veicoliPossedutiDallUtente = utenteVeicoloDao.selectByUtente(utenteLoggato.getId());
 
             request.setAttribute("catalogoProfessioni", catalogoTutteLeProfessioni);
             request.setAttribute("professioniUtente", professioniPosseduteDallUtente);
