@@ -73,17 +73,14 @@ public class InoltroRichieste extends HttpServlet {
     	    HttpSession session = request.getSession();
     	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-    	    if (utenteLoggato == null) {
-    	        response.sendRedirect(request.getContextPath() + "/loginServlet");
-    	        return;
-    	    }
+    	   
 
     	    Long idProfessionista;
     	    try {
     	        idProfessionista = Long.parseLong(request.getParameter("id_Professionista"));
     	    } catch (NumberFormatException | NullPointerException e) {
-    	        response.sendRedirect("index.jsp");
-    	        return;
+    	    	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+    	    	return;
     	    }
 
     	    Utente professionista = null;
@@ -98,8 +95,8 @@ public class InoltroRichieste extends HttpServlet {
     	    try {
     	        professionista = utenteDao.ricercaPerId(idProfessionista);
     	        if (professionista == null) {
-    	            response.sendRedirect("errore.jsp");
-    	            return;
+    	        	response.sendError(500, "Errore Imprevisto");    	 
+    	        	return;
     	        }
     	        veicolo = veicoloDao.getVeicolibyUtente(idProfessionista);
     	        dispo = dispDao.getDisponibilitaPerUtente(idProfessionista);
@@ -110,7 +107,7 @@ public class InoltroRichieste extends HttpServlet {
     	        occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
     	    } catch (Exception e) {
     	        e.printStackTrace();
-    	        response.sendRedirect("erroreDatabase.jsp");
+    	        response.sendError(500, "Errore nel collegamento con il db");
     	        return;
     	    }
 
@@ -182,8 +179,7 @@ public class InoltroRichieste extends HttpServlet {
     	    request.setAttribute("orario", orario);
     	    request.setAttribute("dispProssimeDueSettimane", dispProssimeDueSettimane);
 
-    	    request.getRequestDispatcher("/PagineWeb/RichiestaUtente.jsp").forward(request, response);
-    	}
+    	    request.getRequestDispatcher("/WEB-INF/jsp/utente/RichiestaUtente.jsp").forward(request, response);	}
     	
 		
 		
@@ -196,10 +192,7 @@ public class InoltroRichieste extends HttpServlet {
         HttpSession session = request.getSession();
         Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-        if (utenteLoggato == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
+     
 
         Long idProf, idProfess;
         LocalDate dataValida;
@@ -213,8 +206,8 @@ public class InoltroRichieste extends HttpServlet {
             oraInizio = LocalTime.parse(request.getParameter("ora_inizio"));
             oreSelezionate = Integer.parseInt(request.getParameter("durata_ore"));
         } catch (Exception e) {
-            response.sendRedirect("RichiestaUtente.jsp?error=dati_non_validi");
-            return;
+        	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + request.getParameter("id_professionista") + "&error=dati_non_validi");         
+        	return;
         }
 
         LocalTime oraFine = oraInizio.plusHours(oreSelezionate);
@@ -229,7 +222,7 @@ public class InoltroRichieste extends HttpServlet {
             orario = orarioDao.getOrariByUtente(idProf);
             up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProf, idProfess);
         } catch (Exception e) {
-            response.sendRedirect("erroreDatabase.jsp");
+	        response.sendError(500, "Errore nel collegamento con il db");
             return;
         }
 
@@ -237,8 +230,8 @@ public class InoltroRichieste extends HttpServlet {
             Richiesta r = occupate.get(i);
             if (r.getData().equals(dataValida) && (r.getStato() == StatoRichiesta.in_corso || r.getStato() == StatoRichiesta.completato)) {
                 if (oraInizio.isBefore(r.getOrarioFine()) && oraFine.isAfter(r.getOrarioInizio())) {
-                    response.sendRedirect("RichiestaUtente.jsp?id_Professionista=" + idProf + "&error=conflitto");
-                    return;
+                	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProf + "&error=conflitto");
+                	return;
                 }
             }
         }
@@ -266,8 +259,8 @@ public class InoltroRichieste extends HttpServlet {
         }
 
         if (limiteInizio == null || oraInizio.isBefore(limiteInizio) || oraFine.isAfter(limiteFine)) {
-            response.sendRedirect("RichiestaUtente.jsp?id_Professionista=" + idProf + "&error=fuori_orario");
-            return;
+        	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProf + "&error=fuori_orario");
+        	return;
         }
 
         BigDecimal prezzoTotale = up.getTariffaH().multiply(new BigDecimal(request.getParameter("durata_ore")));
@@ -286,7 +279,9 @@ public class InoltroRichieste extends HttpServlet {
         }
 
         Richiesta richiesta = new Richiesta();
-        richiesta.setIdUtenteRichiedente(utenteLoggato.getId());
+        try{richiesta.setIdUtenteRichiedente(utenteLoggato.getId());}catch(Exception e){
+        	response.sendError(500, "Sessione scaduta");
+        }
         richiesta.setIdUtenteRichiesto(idProf);
         richiesta.setIdProfessione(idProfess);
         richiesta.setData(dataValida);
@@ -299,10 +294,9 @@ public class InoltroRichieste extends HttpServlet {
         try {
             richiestaDao.insert(richiesta);
         } catch (Exception e) {
-            response.sendRedirect("erroreDatabase.jsp");
+        	response.sendError(500, "Errore durante il collegamento con il db");
             return;
         }
 
-        response.sendRedirect("CronologiaRichieste?success=true");
-    }}
+        response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?success=true");   }}
 

@@ -52,8 +52,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	List<Professione> tutteLeProfessioni =professioneDao.selectAll();
 	
 	request.setAttribute("listaProfessioni", tutteLeProfessioni);
-	request.getRequestDispatcher("/PagineWeb/registrazioneProfessionista.jsp").forward(request, response);	
-	
+	request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);	
 
 	
     }
@@ -129,7 +128,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
         request.setAttribute("listaErrori", errori); 
         
       
-        request.getRequestDispatcher("/PagineWeb/registrazioneProfessionista.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
         return; 
     }
 
@@ -139,29 +138,28 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	
 	try {
 	    Citta citta =new Citta(nomeCitta, provincia);
-	    cittaDao.getOrCreateCitta(citta);
 	    
-
 
 	    Utente nuovoProf = new Utente(
 		    nome, cognome, email, numero, password, ddn,
 		    codiceFiscale, Ruolo.PROFESSIONISTA,cittaDao.getOrCreateCitta(citta)  );
 
 	   Long idUtente= utenteDao.aggiungiUtente(nuovoProf);
+	   if(listaIdProfessioni != null) {
 	   for(int i=0;i<listaIdProfessioni.length;i++) {
 	   
 		   utenteProfessioneDao.insert( new UtenteProfessione(idUtente,Long.parseLong(listaIdProfessioni[i]), null));
 	   }
+	   }
 	   
-	   response.sendRedirect(request.getContextPath() + "/loginUtente.jsp?success=prof");
-
+	   response.sendRedirect(request.getContextPath() + "/Login?success=prof");
 	} catch (RegisterException e) {
 	    request.setAttribute("listaErrori", List.of(e.getMessage()));
-	    request.getRequestDispatcher("/PagineWeb/registrazioneProfessionista.jsp").forward(request, response);
-	} catch (Exception e) {
+	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
+	    } catch (Exception e) {
 	    e.printStackTrace();
 	    request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
-	    request.getRequestDispatcher("/PagineWeb/registrazioneProfessionista.jsp").forward(request, response);
-	}
+	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
+	    }
     }
 }

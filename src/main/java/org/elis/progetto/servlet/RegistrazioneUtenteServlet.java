@@ -35,8 +35,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/PagineWeb/registrazioneUtente.jsp").forward(request, response);
-	    }
+		request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);	    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -139,7 +138,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
             request.setAttribute("listaErrori", errori);
 
 
-            request.getRequestDispatcher("/PagineWeb/registrazioneUtente.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);
             return;
         }
 
@@ -158,15 +157,15 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 
     	    utenteDao.aggiungiUtente(nuovoUtente);
 
-    	    response.sendRedirect(request.getContextPath() + "/PagineWeb/login.jsp?registrato=true");
+    	    response.sendRedirect(request.getContextPath() + "/Login?registrato=true");
 
     	} catch (RegisterException e) {
     	    request.setAttribute("listaErrori", List.of(e.getMessage()));
-    	    request.getRequestDispatcher("/PagineWeb/registrazioneUtente.jsp").forward(request, response);
+    	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);
     	} catch (Exception e) {
     	    e.printStackTrace();
     	    request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
-    	    request.getRequestDispatcher("/PagineWeb/registrazioneUtente.jsp").forward(request, response);
+    	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);
     	}
         }
     }

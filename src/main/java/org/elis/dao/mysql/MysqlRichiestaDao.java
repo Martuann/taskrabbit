@@ -174,12 +174,13 @@ public class MysqlRichiestaDao implements RichiestaDao {
 
 	@Override
 	public List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto) {
-		String sql = "SELECT * FROM richiesta WHERE id_utenteRichiesto="+idUtenteRichiesto;
+		String sql = "SELECT * FROM richiesta WHERE id_utenteRichiesto=?";
+		
 		List<Richiesta> richieste = new ArrayList<>();
 		try (Connection connection = dataSource.getConnection();
-			 PreparedStatement select = connection.prepareStatement(sql);
-			 ResultSet rs = select.executeQuery()) {
-			
+			 PreparedStatement select = connection.prepareStatement(sql)){
+			select.setLong(1, idUtenteRichiesto);
+			 ResultSet rs = select.executeQuery();
 			while(rs.next()) {
 				Richiesta richiesta = new Richiesta(
 					rs.getLong("id"),
@@ -209,12 +210,13 @@ public class MysqlRichiestaDao implements RichiestaDao {
 
 	@Override
 	public List<Richiesta> selectByIdUtenteRichiedente(Long idUtenteRichiedente) {
-		String sql = "SELECT * FROM richiesta WHERE id_utenteRichiedente="+idUtenteRichiedente;
+		String sql = "SELECT * FROM richiesta WHERE id_utenteRichiedente=?";
 		List<Richiesta> richieste = new ArrayList<>();
 		try (Connection connection = dataSource.getConnection();
-			 PreparedStatement select = connection.prepareStatement(sql);
-			 ResultSet rs = select.executeQuery()) {
-			
+			 PreparedStatement select = connection.prepareStatement(sql)){
+			select.setLong(1, idUtenteRichiedente);
+			 ResultSet rs = select.executeQuery();
+
 			while(rs.next()) {
 				Richiesta richiesta = new Richiesta(
 					rs.getLong("id"),

@@ -34,27 +34,24 @@ public class RicercaProfessionistiServlet extends HttpServlet {
         
   
         if (professioneCercata == null || professioneCercata.isEmpty()) {
-            response.sendRedirect("/HomepageServlet");
-            return;
+        	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+        	return;
         }
 
        
         try {
             List<Utente> listaTrovati = utenteDao.ricercaTramiteProfessione(professioneCercata);
             Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
-            for(Utente u : listaTrovati) {
-            	if(u.getId()==utenteLoggato.getId()) {
-            		listaTrovati.remove(u);
-            		break;
-            	}
+            if (utenteLoggato != null && listaTrovati != null) {
+                long idLoggato = utenteLoggato.getId();
+                listaTrovati.removeIf(u -> u.getId() == idLoggato);
             }
 
             request.setAttribute("professionisti", listaTrovati);
             request.setAttribute("query", professioneCercata);
 
-            request.getRequestDispatcher("/PagineWeb/RisultatiRicerca.jsp").forward(request, response);
-
-        } catch (Exception e) {
+            request.getRequestDispatcher("/WEB-INF/jsp/pubblico/RisultatiRicerca.jsp").forward(request, response);
+            } catch (Exception e) {
             e.printStackTrace();
            
             response.getWriter().println( e.getMessage());

@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -31,16 +33,20 @@ public class ScriviRecensioneServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long id = Long.parseLong(request.getParameter("id"));
-		request.getRequestDispatcher("/PagineWeb/scriviRecensione.jsp?id="+id).forward(request, response);
-	}
+		request.setAttribute("idProfessionista", id);
+
+		request.getRequestDispatcher("/WEB-INF/jsp/utente/scriviRecensione.jsp").forward(request, response);	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+
 		Integer voto = Integer.parseInt(request.getParameter("voto"));
 		String descrizione = request.getParameter("descrizione");
-		Long idRecensore = ((Utente) request.getSession().getAttribute("utenteLoggato")).getId();
+		Long idRecensore = utenteLoggato.getId();
 		Long idRecensito = Long.parseLong(request.getParameter("id"));
 		recensioneDao.insert(new Recensione(voto,descrizione,LocalDate.now(),idRecensore,idRecensito));
 		response.sendRedirect(request.getContextPath()+"/CronologiaRichiesteServlet");

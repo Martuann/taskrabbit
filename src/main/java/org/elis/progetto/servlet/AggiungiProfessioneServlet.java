@@ -27,27 +27,17 @@ public class AggiungiProfessioneServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-		if (utenteLoggato == null) {
-			response.sendRedirect(request.getContextPath() + "/PagineWeb/login.jsp");
-			return;
-		}
-		if (utenteLoggato.getRuolo()!=Ruolo.ADMIN) {
-			response.sendRedirect(request.getContextPath() + "/HomepageServlet");
-			return;
-		}
+	
 
 
-		request.getRequestDispatcher("/WEB-INF/pagineAdmin/aggiungiProfessione.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/admin/aggiungiProfessione.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-		if (utenteLoggato == null || utenteLoggato.getRuolo() != Ruolo.ADMIN) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN); // Blocco tentativi non autorizzati
-			return;
-		}
+		
 
 		String nomeProf = request.getParameter("nomeProfessione");
 
@@ -66,7 +56,7 @@ public class AggiungiProfessioneServlet extends HttpServlet {
 		} else {
 			request.setAttribute("messaggio", "Inserisci un nome valido.");
 		}
-		request.getRequestDispatcher("/WEB-INF/pagineAdmin/aggiungiProfessione.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/admin/aggiungiProfessione.jsp").forward(request, response);
 	}
 }
 

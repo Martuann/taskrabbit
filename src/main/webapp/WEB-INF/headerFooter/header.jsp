@@ -10,7 +10,7 @@
 	<div class="header-inner">
 		<div class="logo">
 			<a href="<%=request.getContextPath()%>/HomepageServlet"> <img
-				src="<%=request.getContextPath()%>/PagineWeb/immagini/logo.png"
+				src="<%=request.getContextPath()%>/immagini/logo.png"
 				alt="Taskly Logo" class="logo-img">
 			</a>
 		</div>

@@ -37,10 +37,8 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 
-		    request.getRequestDispatcher("/PagineWeb/login.jsp").forward(request, response);
-		}
+		request.getRequestDispatcher("/WEB-INF/jsp/pubblico/login.jsp").forward(request, response);		}
 
 
 	/**
@@ -65,13 +63,10 @@ public class LoginServlet extends HttpServlet {
 	            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
 	        } else {
 
-	        	response.sendRedirect(request.getContextPath() + "/PagineWeb/login.jsp?errore=1");
-	        }
+	        	response.sendRedirect(request.getContextPath() + "/Login?errore=1");        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        response.sendError(500, "Errore interno del server durante il login");
-
-	        doGet(request,response);
+	        response.sendRedirect(request.getContextPath() + "/Login?errore=tecnico");
 	    }
 	}
 

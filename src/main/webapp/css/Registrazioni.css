@@ -9,7 +9,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url('../PagineWeb/immagini/sfondo.png');
+    background-image: url('../immagini/sfondo.png');
     background-size: cover;
     background-attachment: fixed;
     font-family: 'Inter', sans-serif;

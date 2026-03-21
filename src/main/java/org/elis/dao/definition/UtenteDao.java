@@ -19,7 +19,7 @@ public interface UtenteDao {
 
     void aggiornaUtente(Utente utente) throws Exception;
 
-    void rimuoviUtente(long id) throws Exception;
+    void rimuoviUtente(Long id) throws Exception;
 
 
 
@@ -30,7 +30,7 @@ public interface UtenteDao {
     Utente ricercaTramiteEmail(String email) throws Exception;
 
 
-    Utente ricercaPerId(long id) throws Exception;
+    Utente ricercaPerId(Long id) throws Exception;
 
 
     List<Utente> getUtentiProfessionisti() throws Exception;

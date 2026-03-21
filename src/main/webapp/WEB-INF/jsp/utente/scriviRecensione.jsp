@@ -21,8 +21,7 @@
 		<label for="descrizione">Descrizione</label><br>
 		<textarea name="descrizione" required></textarea><br>
 		
-    	<input type="hidden" name="id" value="<%= request.getParameter("id") %>">
-    	
+		<input type="hidden" name="id" value="<%= request.getAttribute("idProfessionista") %>">    	
 		<input type="submit" value="Conferma">
 	</form>
 </body>

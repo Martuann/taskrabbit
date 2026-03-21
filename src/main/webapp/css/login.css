@@ -11,7 +11,7 @@ body {
     justify-content: center;
     align-items: center;
 
-    background: url('../PagineWeb/immagini/sfondo.png') no-repeat center center;
+    background: url('../immagini/sfondo.png') no-repeat center center;
     background-size: cover;
     position: relative;
 }

@@ -44,10 +44,7 @@ public class GestioneRichiesteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
-		if(utenteLoggato==null) {
-			request.getRequestDispatcher("/HomepageServlet").forward(request, response);
-			return;
-		}
+
 		try {
 			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(utenteLoggato.getId());
 			List<Richiesta> richieste = new ArrayList<>();
@@ -114,8 +111,7 @@ public class GestioneRichiesteServlet extends HttpServlet {
 		catch (Exception e) {
 			e.printStackTrace();
 	    }
-		request.getRequestDispatcher("/PagineWeb/gestioneRichieste.jsp")
-			   .forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/professionista/gestioneRichieste.jsp").forward(request, response);;
 	}
 
 	/**

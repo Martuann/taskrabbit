@@ -48,14 +48,7 @@ public class GestioneServiziServlet extends HttpServlet {
     	HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-    	if (utenteLoggato == null) {
-    	    response.sendRedirect(request.getContextPath() + "/login.jsp"); 
-    	    return;
-    	}
-    	if (utenteLoggato.getRuolo()!=Ruolo.PROFESSIONISTA) {
-    	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
-    	    return;
-    	}
+    
     	
         try {
           
@@ -70,8 +63,7 @@ public class GestioneServiziServlet extends HttpServlet {
             request.setAttribute("catalogoVeicoli", catalogoTuttiIVeicoli);
             request.setAttribute("veicoliUtente", veicoliPossedutiDallUtente);
 
-            request.getRequestDispatcher("/PagineWeb/gestioneServizi.jsp").forward(request, response);
-            
+            request.getRequestDispatcher("/WEB-INF/jsp/professionista/gestioneServizi.jsp").forward(request, response);            
         } catch (Exception exception) {
             exception.printStackTrace();
             response.sendError(500, "Errore nel caricamento dati: " + exception.getMessage());
@@ -85,14 +77,7 @@ public class GestioneServiziServlet extends HttpServlet {
     	HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-    	if (utenteLoggato == null) {
-    	    response.sendRedirect(request.getContextPath() + "/login.jsp"); 
-    	    return;
-    	}
-    	if (utenteLoggato.getRuolo()!=Ruolo.PROFESSIONISTA) {
-    	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
-    	    return;
-    	}
+    
     	
 
        String operazioneRichiesta = request.getParameter("azione");

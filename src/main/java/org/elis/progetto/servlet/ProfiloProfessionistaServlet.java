@@ -82,8 +82,8 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			request.setAttribute("galleria", galleria);
 			request.setAttribute("proPicProfilo", proPic);
 
-			request.getRequestDispatcher("/PagineWeb/profilo_professionista.jsp").forward(request, response);
-		} catch (Exception e) {
+			request.getRequestDispatcher("/WEB-INF/jsp/pubblico/profilo_professionista.jsp").forward(request, response);;
+			} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

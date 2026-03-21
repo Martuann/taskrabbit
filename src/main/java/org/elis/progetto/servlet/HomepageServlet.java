@@ -35,8 +35,7 @@ public class HomepageServlet extends HttpServlet {
 		List<Professione> professioni = professioneDao.selectAll();
 		request.setAttribute("professioni", professioni);
 		
-		request.getRequestDispatcher("/PagineWeb/Homepage.jsp").forward(request, response);
-	}
+		request.getRequestDispatcher("/WEB-INF/jsp/pubblico/Homepage.jsp").forward(request, response);	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

@@ -32,11 +32,6 @@ public class MysqlUtenteDao implements UtenteDao {
 	public Long aggiungiUtente(Utente utente) throws Exception {
 		String query = "INSERT INTO utente (nome, cognome, email, telefono, password, ddn, cf, ruolo, id_citta) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		MysqlUtenteDao utenteDao = new MysqlUtenteDao(dataSource);
-
-
-
-
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement insertStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -96,7 +91,7 @@ public class MysqlUtenteDao implements UtenteDao {
 
 
 	@Override
-	public void rimuoviUtente(long id) throws Exception {
+	public void rimuoviUtente(Long id) throws Exception {
 
 	}
 
@@ -168,7 +163,7 @@ public class MysqlUtenteDao implements UtenteDao {
 	}
 
 	@Override
-	public Utente ricercaPerId(long id) throws Exception {
+	public Utente ricercaPerId(Long id) throws Exception {
 		String query = "SELECT * FROM utente WHERE id = ?";
 
 		try (Connection connection = dataSource.getConnection();
@@ -235,7 +230,7 @@ public class MysqlUtenteDao implements UtenteDao {
 	private Utente MysqlToUtente(ResultSet resultSet) throws Exception {
 		Utente utente = new Utente();
 
-		long id = resultSet.getLong("id");
+		Long id = resultSet.getLong("id");
 		String nome = resultSet.getString("nome");
 		String cognome = resultSet.getString("cognome");
 		String email = resultSet.getString("email");
@@ -250,7 +245,7 @@ public class MysqlUtenteDao implements UtenteDao {
 		int indiceRuolo = resultSet.getInt("ruolo");
 		Ruolo ruoloEnum = Ruolo.values()[indiceRuolo];
 
-		long idCitta = resultSet.getLong("id_citta");
+		Long idCitta = resultSet.getLong("id_citta");
 
 		utente.setId(id);
 		utente.setNome(nome);
@@ -315,8 +310,8 @@ public class MysqlUtenteDao implements UtenteDao {
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-			preparedStatement.setString(1, professione);
-
+			preparedStatement.setString(1, "%" + professione + "%");
+			
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				while (resultSet.next()) {
 

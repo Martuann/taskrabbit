@@ -18,10 +18,7 @@ public class ProfiloUtenteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("utenteLoggato") == null) {
-			response.sendRedirect(request.getContextPath() + "/Login");
-			return;
-		}
+		
 
 		Utente utenteProfilo = (Utente) session.getAttribute("utenteLoggato");
 
@@ -35,7 +32,7 @@ public class ProfiloUtenteServlet extends HttpServlet {
 			request.setAttribute("listaCitta", listaCitta);
 
 
-			request.getRequestDispatcher("PagineWeb/profiloUtente.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/jsp/utente/profiloUtente.jsp").forward(request, response);;
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendError(500, "Errore nel caricamento dei dati del profilo.");

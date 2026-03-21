@@ -29,29 +29,14 @@ public class GestioneOrariDefault extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	Utente utenteTestDiProva = new Utente();
-        utenteTestDiProva.setId(1L);
-        utenteTestDiProva.setNome("Mario");
-        utenteTestDiProva.setCognome("Rossi");
-        utenteTestDiProva.setRuolo(Ruolo.PROFESSIONISTA);
-        //request.getSession().setAttribute("utenteLoggato", utenteTestDiProva);
-
+    	
     	HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-    	if (utenteLoggato == null) {
-    	    response.sendRedirect(request.getContextPath() + "/login.jsp"); 
-    	    return;
-    	}
-    	if (utenteLoggato.getRuolo()!=Ruolo.PROFESSIONISTA) {
-    	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
-    	    return;
-    	}
 
     	try {
     		request.setAttribute("orarioDefault", orarioProfessionistaDao.getOrariByUtente(utenteLoggato.getId()));
-    		request.getRequestDispatcher("/PagineWeb/GestioneDisponibilitaBase.jsp").forward(request, response);
-    	}
+    		request.getRequestDispatcher("/WEB-INF/jsp/professionista/GestioneDisponibilitaBase.jsp").forward(request, response);;    	}
     	catch(Exception e){
     		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=loading");    	}
 	}

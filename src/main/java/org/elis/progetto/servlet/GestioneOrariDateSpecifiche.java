@@ -41,32 +41,20 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	Utente utenteTestDiProva = new Utente();
-        utenteTestDiProva.setId(1L);
-        utenteTestDiProva.setNome("Mario");
-        utenteTestDiProva.setCognome("Rossi");
-        utenteTestDiProva.setRuolo(Ruolo.PROFESSIONISTA);
-        //request.getSession().setAttribute("utenteLoggato", utenteTestDiProva);
+
 
 		
 		HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-    	if (utenteLoggato == null) {
-    	    response.sendRedirect(request.getContextPath() + "/login.jsp"); 
-    	    return;
-    	}
-    	if (utenteLoggato.getRuolo() != Ruolo.PROFESSIONISTA) {
-    	    response.sendRedirect(request.getContextPath() + "/index.jsp"); 
-    	    return;
-    	}
+    	
  
         try {
         	request.setAttribute("orarioStandard", orarioDao.getOrariByUtente(utenteLoggato.getId()));
         	request.setAttribute("orarioSettimana", dispoDao.getDisponibilitaPerUtente(utenteLoggato.getId()));
             
-            request.getRequestDispatcher("/PagineWeb/GestioneDisponibilitaSettimanale.jsp").forward(request, response);
-        } catch(Exception e){
+        	request.getRequestDispatcher("/WEB-INF/jsp/professionista/GestioneDisponibilitaSettimanale.jsp").forward(request, response);
+        	} catch(Exception e){
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=loading");
         }
@@ -76,10 +64,7 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
 		HttpSession session = request.getSession();
 	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-	    if (utenteLoggato == null || utenteLoggato.getRuolo() != Ruolo.PROFESSIONISTA) {
-	        response.sendRedirect("login.jsp");
-	        return;
-	    }
+
 
 	    String offSetParam = request.getParameter("offSetAttuale");
 	    int offSet = (offSetParam != null) ? Integer.parseInt(offSetParam) : 0;
@@ -117,11 +102,10 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
 	                }
 	            }
 	        }
-	        response.sendRedirect("GestioneOrariDateSpecifiche?offSet=" + offSet + "&success=true");
+	        response.sendRedirect(request.getContextPath() + "/GestioneOrariDateSpecifiche?offSet=" + offSet + "&success=true");
 	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        response.sendRedirect("GestioneOrariDateSpecifiche?offSet=" + offSet + "&error=save");
-	    }
+	        response.sendRedirect(request.getContextPath() + "/GestioneOrariDateSpecifiche?offSet=" + offSet + "&error=save");	    }
 	}
 	}
