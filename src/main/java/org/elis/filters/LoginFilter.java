@@ -22,7 +22,9 @@ import org.elis.progetto.model.Utente;
  */
 @WebFilter(urlPatterns = {
 	    "/AggiornaRichiesta", 
-	    "/Profilo",})
+	    "/Profilo",
+	    "/AggiornaProfilo",
+})
 public class LoginFilter extends HttpFilter implements Filter {
        
     /**
