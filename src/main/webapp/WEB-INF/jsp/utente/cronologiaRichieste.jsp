@@ -67,11 +67,18 @@
                 <p>Indirizzo: <%= r.getIndirizzo() %></p>
                 
                 <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(r.getIdUtenteRichiesto())) { %>
-                    <a href="ScriviRecensioneServlet?id=<%= r.getIdUtenteRichiesto() %>" class="btn-link">Scrivi una Recensione</a>
+                	<form action="ScriviRecensioneServlet" method="POST">
+                		<input type="hidden" name="idProfessionista" value="<%= r.getIdUtenteRichiesto() %>">
+                    	<input type="submit" value="Scrivi una Recensione">
+                	</form>
                 <% } %>
 
                 <% if(r.getStato() == StatoRichiesta.in_corso) { %>
-                <a href="AggiornaRichiesta?type=completato&id1=<%= r.getId() %>&redirect=CronologiaRichiesteServlet" class="btn-link">Segna come completata</a>
+				<form action="AggiornaRichiesta" method="POST">
+					<input type="hidden" name="idRichiesta" value="<%= r.getId() %>">
+					<input type="hidden" name="nuovoStato" value="completato">
+					<input type="submit" value="Segna come completata">
+				</form>
                 <% } %>
             </div>
         <%      } 

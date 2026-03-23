@@ -6,10 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.time.LocalDate;
-
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.RecensioneDao;
 import org.elis.progetto.model.Recensione;
@@ -32,15 +30,6 @@ public class ScriviRecensioneServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Long id = Long.parseLong(request.getParameter("id"));
-		request.setAttribute("idProfessionista", id);
-
-		request.getRequestDispatcher("/WEB-INF/jsp/utente/scriviRecensione.jsp").forward(request, response);	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
@@ -50,5 +39,18 @@ public class ScriviRecensioneServlet extends HttpServlet {
 		Long idRecensito = Long.parseLong(request.getParameter("id"));
 		recensioneDao.insert(new Recensione(voto,descrizione,LocalDate.now(),idRecensore,idRecensito));
 		response.sendRedirect(request.getContextPath()+"/CronologiaRichiesteServlet");
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Long id = 0L;
+		if(!request.getParameter("idProfessionista").trim().isEmpty() || request.getParameter("idProfessionista")!=null) {
+			id = Long.parseLong(request.getParameter("idProfessionista"));
+		}
+		request.setAttribute("idProfessionista", id);
+
+		request.getRequestDispatcher("/WEB-INF/jsp/utente/scriviRecensione.jsp").forward(request, response);	
 	}
 }

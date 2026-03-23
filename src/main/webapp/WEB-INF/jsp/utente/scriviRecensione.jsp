@@ -9,7 +9,7 @@
 </head>
 <body>
 	<h1>Lascia una recensione:</h1>
-	<form action="ScriviRecensioneServlet" method="POST">
+	<form action="ScriviRecensioneServlet" method="GET">
 		<label for="voto">Voto:</label>
 		<select name="voto">
 			<option value="1">1 stella</option>
