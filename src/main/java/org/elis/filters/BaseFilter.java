@@ -25,7 +25,6 @@ import org.elis.progetto.model.Utente;
 	    "/InoltroRichieste", 
 	    "/ScriviRecensioneServlet", 
 	     
-	    "/AggiornaProfilo",
 	    "/CronologiaRichiesteServlet",
 	})
 public class BaseFilter extends HttpFilter implements Filter {
