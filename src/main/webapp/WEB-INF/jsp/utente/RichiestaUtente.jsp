@@ -70,7 +70,7 @@
 
 
 <div class="task-options">
-    <label class="section-title">Quanto è grande la tua task?</label>
+    <label class="section-title">Quanto &egrave; grande la tua task?</label>
     <div class="duration-picker">
         <label class="radio-card">
             <input type="radio" name="durata_ore" value="1" checked onchange="aggiornaDati()">
