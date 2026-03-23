@@ -21,7 +21,10 @@ import org.elis.progetto.model.Utente;
  * Servlet Filter implementation class AdminFilter
  */
 @WebFilter(urlPatterns = {
-	    "/AggiungiProfessione"
+	    "/AggiungiProfessione",
+		"/AggiungiVeicoloServlet",
+		"/AggiungiCittaServlet"
+		
 	})
 public class AdminFilter extends HttpFilter implements Filter {
        
