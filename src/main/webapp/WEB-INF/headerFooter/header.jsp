@@ -27,19 +27,21 @@
 			<%
 			if (u != null) {
 			%>
-			<div class="links-section">
-				<a
-					style="display:<%= (u.getRuolo()==Ruolo.ADMIN) ? "inline-block" : "none" %>"
-					href="<%= request.getContextPath() %>/AggiungiProfessione">
-					Gestione Professioni </a> <a
-					style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>"
-					href="<%= request.getContextPath() %>/GestioneServiziServlet">
-					Gestione Servizi </a>
+			<div class="prof-only-section">
+				<a style="display:<%= (u.getRuolo()==Ruolo.PROFESSIONISTA) ? "inline-block" : "none" %>"
+				   href="<%= request.getContextPath() %>/GestioneServiziServlet"
+				   class="servizi">
+				   Gestione Servizi
+				</a>
+			</div>
+			<div class="task-section">
 				<% String taskAnchor = (u.getRuolo()==Ruolo.UTENTE_BASE) ? request.getContextPath()+"/CronologiaRichiesteServlet" : "#";
 				taskAnchor = (u.getRuolo()==Ruolo.PROFESSIONISTA) ? request.getContextPath()+"/GestioneRichiesteServlet" : taskAnchor; %>
-				<a
-					style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>"
-					href="<%= taskAnchor %>"> Le mie task </a>
+				<a style="display:<%= (u.getRuolo()!=Ruolo.ADMIN) ? "inline-block" : "none" %>"
+				   href="<%= taskAnchor %>"
+				   class="tasks">
+				   Le mie task
+				</a>
 			</div>
 			<div class="area-riservata-container">
 				<button class="area-riservata-btn" id="areaRiservataBtn">
