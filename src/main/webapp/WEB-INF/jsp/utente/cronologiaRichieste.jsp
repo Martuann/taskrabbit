@@ -1,3 +1,5 @@
+<%@page import="java.util.Set"%>
+<%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
@@ -13,35 +15,70 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/headerFooter/header.jsp" %>
-	<div id="main-container">
-	<h1>Cronologia Richieste:</h1>
-	<% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); %>
-	<div class="container-richieste">
-	<div id="empty-message1" style="display:<%= (richieste.isEmpty()) ? "block":"none" %>">
-		<p>Nessuna richiesta ricevuta.</p>
-	</div>
-	<% int counter=0;
-	for(Richiesta r : richieste) { %>
-		<div class="richiesta">
-			<div class="titolo">
-				<img src="#">
-				<p><%= request.getAttribute("nomeutente"+counter) %></p>
-			</div>
-			<p style="color:<%= request.getAttribute("coloreStato"+counter) %>">
-				Stato richiesta: <%= request.getAttribute("statoRichiesta"+counter) %>
-			</p>
-			<p>Task: <%= request.getAttribute("task"+counter) %></p>
-			<p>In data: <%= request.getAttribute("data"+counter) %></p>
-			<p>Ore: <%= request.getAttribute("orario"+counter) %></p>
-			<p>Veicolo richiesto: <%= request.getAttribute("veicolo"+counter) %></p>
-			<p>Indirizzo: <%= request.getAttribute("indirizzo"+counter) %></p>
-			<a href="ScriviRecensioneServlet?id=<%= request.getAttribute("idProfessionista"+counter) %>" style="display:<%= request.getAttribute("recensioneFlag"+counter) %>">Scrivi una Recensione</a>
-			<a href="AggiornaRichiesta?type=completato&id1=<%= r.getId() %>&redirect=CronologiaRichiesteServlet&id2=<%= request.getParameter("id") %>" style="display:<%= (r.getStato()==StatoRichiesta.in_attesa) ? "inline-block":"none" %>">Segna richiesta come completata</a>
-		</div>
-	<% counter++;
-	} %>
-	</div>
-	</div>
+<div id="main-container">
+    <h1>Cronologia Richieste:</h1>
+    
+    <% 
+        List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); 
+        Map<Long, Utente> mappaPro = (Map<Long, Utente>) request.getAttribute("mappaProfessionisti");
+        Map<Long, String> mappaTask = (Map<Long, String>) request.getAttribute("mappaTask");
+        Set<Long> giaRecensiti = (Set<Long>) request.getAttribute("giaRecensiti");
+        Map<Long, String> mappaFoto=(Map<Long, String>) request.getAttribute("mappaFoto");
+    %>
+
+    <div class="container-richieste">
+        <% if(richieste == null || richieste.isEmpty()) { %>
+            <div id="empty-message1">
+                <p>Nessuna richiesta effettuata.</p>
+            </div>
+        <% } else { 
+            for(Richiesta r : richieste) { 
+                Utente pro = mappaPro.get(r.getIdUtenteRichiesto());
+                
+                String colore = "#E4A11B"; 
+                if(r.getStato() == StatoRichiesta.completato) colore = "#14A44D";
+                if(r.getStato() == StatoRichiesta.rifiutato) colore = "#DC4C64";
+        %>
+        <div class="richiesta">
+   <div class="titolo">
+    <% 
+        String pathFoto = mappaFoto.get(r.getIdUtenteRichiesto());
+   
+        if(pathFoto == null || pathFoto.trim().isEmpty()) {
+            pathFoto = request.getContextPath() + "/immagini/default-avatar.png";
+        } else {
+         
+            if(!pathFoto.startsWith("http") && !pathFoto.startsWith("/")) {
+                pathFoto = request.getContextPath() + "/" + pathFoto;
+            }
+        }
+    %>
+    <img src="<%= pathFoto %>" style="width:50px; height:50px; border-radius:50%; object-fit: cover;" onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">
+    <p><%= pro.getNome() + " " + pro.getCognome() %></p>
+</div>
+
+                <p style="color: <%= colore %>">
+                    Stato richiesta: <%= r.getStato().toString().replace("_", " ") %>
+                </p>
+
+                <p>Task: <%= mappaTask.get(r.getIdProfessione()) %></p>
+                <p>In data: <%= r.getData() %></p>
+                <p>Orario: <%= r.getOrarioInizio() %> - <%= r.getOrarioFine() %></p>
+                <p>Indirizzo: <%= r.getIndirizzo() %></p>
+                
+                <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(r.getIdUtenteRichiesto())) { %>
+                    <a href="ScriviRecensioneServlet?id=<%= r.getIdUtenteRichiesto() %>" class="btn-link">Scrivi una Recensione</a>
+                <% } %>
+
+                <% if(r.getStato() == StatoRichiesta.in_corso) { %>
+                <a href="AggiornaRichiesta?type=completato&id1=<%= r.getId() %>&redirect=CronologiaRichiesteServlet" class="btn-link">Segna come completata</a>
+                <% } %>
+            </div>
+        <%      } 
+           } 
+        %>
+    </div>
+</div>
 	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>

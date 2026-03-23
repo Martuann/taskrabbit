@@ -5,7 +5,7 @@
 <footer class="main-footer">
     <div class="footer-inner">
         <div class="footer-col">
-            <img src="<%= request.getContextPath() %>/PagineWeb/immagini/logo.png" alt="Taskly Logo" class="footer-logo">
+            <img src="<%= request.getContextPath() %>/immagini/logo.png" alt="Taskly Logo" class="footer-logo">
             <div class="contact-info">
                 <p><strong>Sede:</strong> Via Roma 123, 00100 Roma (RM)</p>
                 <p><strong>Tel:</strong> +39 06 1234567</p>

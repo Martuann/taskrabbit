@@ -45,4 +45,9 @@ public class UtenteProfessione {
 		this.tariffaH = tariffaH;
 	}
 
+
+	
+	
+	
+	
 }

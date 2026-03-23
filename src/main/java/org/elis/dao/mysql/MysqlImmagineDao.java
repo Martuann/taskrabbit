@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.sql.DataSource;
 import org.elis.dao.definition.ImmagineDao;
 import org.elis.progetto.model.Immagine;
@@ -154,4 +158,50 @@ public class MysqlImmagineDao implements ImmagineDao {
 		
 		return immagini;
 	}
+	
+	
+	
+	
+	
+	
+	@Override
+	public Map<Long, String> getMappaFotoProfilo(List<Long> id_utenti) throws Exception {
+	    Map<Long, String> mappaFoto = new HashMap<>();
+	    if (id_utenti == null || id_utenti.isEmpty()) return mappaFoto;
+
+	    String placeholders = id_utenti.stream().map(id -> "?").collect(Collectors.joining(","));
+	    String sql = "SELECT id_utente, percorso FROM immagine WHERE isfotoprofilo = true AND id_utente IN (" + placeholders + ")";
+
+	    try (Connection conn = dataSource.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        
+	        for (int i = 0; i < id_utenti.size(); i++) {
+	            ps.setLong(i + 1, id_utenti.get(i));
+	        }
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	                mappaFoto.put(rs.getLong("id_utente"), rs.getString("percorso"));
+	            }
+	        }
+	    }
+	    return mappaFoto;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

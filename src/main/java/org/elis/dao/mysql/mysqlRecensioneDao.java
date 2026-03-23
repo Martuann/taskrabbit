@@ -157,4 +157,62 @@ public class mysqlRecensioneDao implements RecensioneDao {
 		
 		return recensioni;
 	}
+	
+	
+	
+	
+	@Override
+	public Boolean esisteRecensionePerRichiesta(Long idScrittore, Long idRicevente) {
+	    String query = "SELECT COUNT(*) FROM recensione WHERE id_utenteScrittore = ? AND id_utenteRicevente = ?";
+	    try (Connection conn = dataSource.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(query)) {
+	        ps.setLong(1, idScrittore);
+	        ps.setLong(2, idRicevente);
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                return rs.getInt(1) > 0;
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+	
+	@Override
+	public List<Recensione> selectByIdUtenteScrittore(Long idUtenteScrittore) {
+	    String sql = "SELECT * FROM recensione WHERE id_utenteScrittore = ?";
+	    List<Recensione> recensioni = new ArrayList<>();
+	    
+	    try (Connection connection = dataSource.getConnection();
+	         PreparedStatement select = connection.prepareStatement(sql)) {
+	        
+	        select.setLong(1, idUtenteScrittore);
+	        
+	        try (ResultSet rs = select.executeQuery()) {
+	            while(rs.next()) {
+	                recensioni.add(new Recensione(
+	                    rs.getInt("voto"),
+	                    rs.getString("descrizione"),
+	                    rs.getDate("data").toLocalDate(),
+	                    rs.getLong("id_utenteScrittore"),
+	                    rs.getLong("id_utenteRicevente")
+	                ));
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return recensioni;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

@@ -11,6 +11,7 @@ import java.io.IOException;
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.progetto.model.Richiesta;
+import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
 
@@ -35,20 +36,42 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-		
-	StatoRichiesta stato = StatoRichiesta.valueOf(request.getParameter("type"));
-		Long idRichiesta = Long.parseLong(request.getParameter("id1"));
-		Richiesta richiesta = richiestaDao.selectById(idRichiesta);
-		richiesta.setStato(stato);
-		if(richiesta.getIdUtenteRichiesto() == utenteLoggato.getId()) {
-		richiestaDao.update(richiesta);}
-		if(request.getParameter("redirect")!=null) {
-			response.sendRedirect(request.getParameter("redirect")+"?id="+request.getParameter("id2"));
-			return;
-		}
-		response.sendRedirect(request.getContextPath() + "/GestioneRichiesteServlet");	}
+	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+	    
+	
 
+	    try {
+	        String type = request.getParameter("type");
+	        long idRichiesta = Long.parseLong(request.getParameter("id1"));
+	        StatoRichiesta nuovoStato = StatoRichiesta.valueOf(type);
+	        
+	        Richiesta richiesta = richiestaDao.selectById(idRichiesta);
+	        
+	        if (richiesta != null) {
+	        	if (richiesta.getIdUtenteRichiesto().equals(utenteLoggato.getId()) || 
+	        		    richiesta.getIdUtenteRichiedente().equals(utenteLoggato.getId())) {
+	                richiesta.setStato(nuovoStato);
+	                richiestaDao.update(richiesta);
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    String redirectParam = request.getParameter("redirect");
+	    
+	    if (redirectParam != null && !redirectParam.isEmpty()) {
+	    	response.sendRedirect(request.getContextPath() + "/" + redirectParam);
+	    	} else {
+	        if (utenteLoggato.getRuolo() == Ruolo.PROFESSIONISTA) { 
+	            response.sendRedirect(request.getContextPath() +"/GestioneRichiesteServlet");
+	        } else {
+	            response.sendRedirect(request.getContextPath() +"/CronologiaRichiesteServlet");
+	        }
+	    }
+	}
+
+ 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

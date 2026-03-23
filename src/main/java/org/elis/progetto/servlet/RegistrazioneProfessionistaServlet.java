@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
@@ -148,7 +149,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	   if(listaIdProfessioni != null) {
 	   for(int i=0;i<listaIdProfessioni.length;i++) {
 	   
-		   utenteProfessioneDao.insert( new UtenteProfessione(idUtente,Long.parseLong(listaIdProfessioni[i]), null));
+		   utenteProfessioneDao.insert( new UtenteProfessione(idUtente,Long.parseLong(listaIdProfessioni[i]), BigDecimal.ZERO));
 	   }
 	   }
 	   

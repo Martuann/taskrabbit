@@ -25,9 +25,9 @@
 			displayValue1 = "none"; %>
 			<div class="richiesta">
 				<div class="titolo">
-					<img src="#">
-					<p class="nome-utente"><%= request.getAttribute("nomeutente"+i) %></p>
-				</div>
+    <img src="<%= request.getContextPath() %>/immagini/default-avatar.png" style="width:50px; height:50px; border-radius:50%; object-fit: cover;">
+    <p class="nome-utente"><%= request.getAttribute("nomeutente"+i) %></p>
+</div>
 				<p style="color:<%= request.getAttribute("coloreStato"+i) %>">
 					Stato richiesta: <%= request.getAttribute("statoRichiesta"+i) %>
 				</p>
@@ -37,8 +37,8 @@
 				<p>Veicolo richiesto: <%= request.getAttribute("veicolo"+i) %></p>
 				<p>Indirizzo: <%= request.getAttribute("indirizzo"+i) %></p>
 				<p>Retribuzione: €<%= request.getAttribute("costoeffettivo"+i) %></p>
-				<a href="AggiornaRichiesta?type=in_corso&id1=<%= request.getAttribute("idRichiesta"+i) %>&id2=<%= request.getParameter("id") %>">Accetta richiesta</a>
-				<a href="AggiornaRichiesta?type=rifiutato&id1=<%= request.getAttribute("idRichiesta"+i) %>&id2=<%= request.getParameter("id") %>">Rifiuta richiesta</a>
+				<a href="AggiornaRichiesta?type=in_corso&id1=<%= request.getAttribute("idRichiesta"+i) %>&redirect=GestioneRichiesteServlet">Accetta richiesta</a>
+<a href="AggiornaRichiesta?type=rifiutato&id1=<%= request.getAttribute("idRichiesta"+i) %>&redirect=GestioneRichiesteServlet">Rifiuta richiesta</a>
 			</div>
 	<% }
 	} %>
@@ -52,10 +52,10 @@
 		if(richieste.get(i).getStato()!=StatoRichiesta.in_attesa) {
 			displayValue2 = "none"; %>
 			<div class="richiesta">
-				<div class="titolo">
-					<img src="#">
-					<p class="nome-utente"><%= request.getAttribute("nomeutente"+i) %></p>
-				</div>
+			<div class="titolo">
+    <img src="<%= request.getContextPath() %>/immagini/default-avatar.png" style="width:50px; height:50px; border-radius:50%; object-fit: cover;">
+    <p class="nome-utente"><%= request.getAttribute("nomeutente"+i) %></p>
+</div>
 				<p style="color:<%= request.getAttribute("coloreStato"+i) %>">
 					Stato richiesta: <%= request.getAttribute("statoRichiesta"+i) %>
 				</p>

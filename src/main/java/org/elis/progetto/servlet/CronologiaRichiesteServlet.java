@@ -6,13 +6,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.elis.dao.definition.DaoFactory;
+import org.elis.dao.definition.ImmagineDao;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.VeicoloDao;
+import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Recensione;
 import org.elis.progetto.model.Richiesta;
 import org.elis.progetto.model.StatoRichiesta;
@@ -29,7 +36,7 @@ public class CronologiaRichiesteServlet extends HttpServlet {
     private ProfessioneDao professioneDao;
     private VeicoloDao veicoloDao;
     private RecensioneDao recensioneDao;
-       
+    private ImmagineDao immagineDao;   
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -40,6 +47,7 @@ public class CronologiaRichiesteServlet extends HttpServlet {
         professioneDao = DaoFactory.getInstance().getProfessioneDao();
         veicoloDao = DaoFactory.getInstance().getVeicoloDao();
         recensioneDao = DaoFactory.getInstance().getRecensioneDao();
+        immagineDao=DaoFactory.getInstance().getImmagineDao();
     }
 
 	/**
@@ -50,60 +58,43 @@ public class CronologiaRichiesteServlet extends HttpServlet {
 	
 		try {
 			List<Richiesta> richieste = richiestaDao.selectByIdUtenteRichiedente(utenteLoggato.getId());
+			List<Utente> utentiRichiesti=new ArrayList<Utente>();
+		
+				
+				utentiRichiesti=(utenteDao.listaUtentiRichiestiDaRichiedente(utenteLoggato.getId())); 
+				
+				Map<Long, Utente> mappaProfessionisti = utentiRichiesti.stream()
+				        .collect(Collectors.toMap(Utente::getId, u -> u, (u1, u2) -> u1));
+
+				List<Professione> tutteLeProfessioni = professioneDao.selectAll();
+	            Map<Long, String> mappaTask = tutteLeProfessioni.stream()
+	                .collect(Collectors.toMap(Professione::getId, Professione::getNome));
+	            List<Recensione> mieRecensioni = recensioneDao.selectByIdUtenteScrittore(utenteLoggato.getId());				
+	            Set<Long> idProfessionistiRecensiti = mieRecensioni.stream()
+	            	    .map(Recensione::getId_utenteRicevente)
+	            	    .collect(Collectors.toSet());
+	            List<Long> idsProfessionisti = utentiRichiesti.stream()
+	            	    .map(Utente::getId)
+	            	    .collect(Collectors.toList());
+
+	            	Map<Long, String> mappaFoto = immagineDao.getMappaFotoProfilo(idsProfessionisti);
+	          
+	        request.setAttribute("mappaFoto", mappaFoto);
+	        request.setAttribute("giaRecensiti", idProfessionistiRecensiti);
+	        request.setAttribute("mappaProfessionisti", mappaProfessionisti);
+			request.setAttribute("mappaTask", mappaTask);
 			request.setAttribute("richieste", richieste);
 			
-			int counter=0;
-			for(Richiesta r : richieste) {
-				Utente richiedente = utenteDao.ricercaPerId(r.getIdUtenteRichiesto());
-				request.setAttribute("nomeutente"+counter,richiedente.getNome()+" "+richiedente.getCognome());
-				
-				switch(r.getStato()) {
-				case in_attesa:
-					request.setAttribute("statoRichiesta"+counter, "In attesa di conferma");
-					request.setAttribute("coloreStato"+counter, "#E4A11B");
-					break;
-				case in_corso:
-					request.setAttribute("statoRichiesta"+counter, "In corso");
-					request.setAttribute("coloreStato"+counter, "#E4A11B");
-					break;
-				case completato:
-					request.setAttribute("statoRichiesta"+counter, "Completato");
-					request.setAttribute("coloreStato"+counter, "#14A44D");
-					break;
-				case rifiutato:
-					request.setAttribute("statoRichiesta"+counter, "Rifiutato");
-					request.setAttribute("coloreStato"+counter, "#DC4C64");
-				}
-				String professione = professioneDao.selectById(r.getIdProfessione()).getNome();
-				request.setAttribute("task"+counter,professione);
-				
-				request.setAttribute("data"+counter, r.getData().toString());
-				
-				request.setAttribute("orario"+counter, r.getOrarioInizio().toString()+" - "+r.getOrarioFine().toString());
-				
-				if(r.getIdVeicolo()==null) {
-					request.setAttribute("veicolo"+counter, "nessuno");
-				}
-				else {
-					String veicolo = veicoloDao.ricercaPerId(r.getIdVeicolo()).getCategoria();
-					request.setAttribute("veicolo"+counter, veicolo);
-				}
-				
-				request.setAttribute("indirizzo"+counter, r.getIndirizzo());
-				
-				if(r.getStato()!=StatoRichiesta.completato || hasRecensioneAlready(r)) {
-					request.setAttribute("recensioneFlag"+counter, "none");
-				}
-				request.setAttribute("idProfessionista"+counter, r.getIdUtenteRichiesto());
-				
-				counter++;
-			}
+			
+			
+			request.getRequestDispatcher("/WEB-INF/jsp/utente/cronologiaRichieste.jsp").forward(request, response);	
+
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Impossibile caricare la cronologia.");
 	    }
-		
-		request.getRequestDispatcher("/WEB-INF/jsp/utente/cronologiaRichieste.jsp").forward(request, response);	}
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -113,13 +104,6 @@ public class CronologiaRichiesteServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	private boolean hasRecensioneAlready(Richiesta richiesta) {
-		for(Recensione rec : recensioneDao.selectAll()) {
-			if(rec.getId_utenteScrittore()==richiesta.getIdUtenteRichiedente() &&
-			   rec.getId_utenteRicevente()==richiesta.getIdUtenteRichiesto()) {
-				return true;
-			}
-		}
-		return false;
-	}
+
+	
 }

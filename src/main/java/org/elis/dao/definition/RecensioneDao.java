@@ -10,4 +10,6 @@ public interface RecensioneDao {
 	void update(Recensione r);
 	void delete(Long id);
 	List<Recensione> selectByIdUtenteRicevente(Long idUtenteRicevente);
+	Boolean esisteRecensionePerRichiesta(Long idScrittore, Long idRicevente);
+	List<Recensione> selectByIdUtenteScrittore(Long idUtenteScrittore);
 }

@@ -20,7 +20,13 @@ import org.elis.progetto.model.Utente;
 /**
  * Servlet Filter implementation class ProfessionistaFilter
  */
-@WebFilter(urlPatterns = {"/professionista/*"})
+@WebFilter(urlPatterns = {
+	    "/GestioneOrariDefault", 
+	    "/GestioneOrariDateSpecifiche", 
+	    "/GestioneServiziServlet", 
+	    "/GestioneRichiesteServlet", 
+	    
+	})
 public class ProfessionistaFilter extends HttpFilter implements Filter {
        
     /**

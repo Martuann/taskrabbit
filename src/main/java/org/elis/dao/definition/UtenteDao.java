@@ -52,6 +52,11 @@ public interface UtenteDao {
 
 
 
+	List<Utente> listaUtentiRichiestiDaRichiedente(Long id_utenteRichiedente) throws Exception;
+
+
+
+
 
 
 

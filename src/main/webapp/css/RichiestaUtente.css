@@ -9,109 +9,151 @@
 
 body {
     min-height: 100vh;
+    background: url('../immagini/sfondo.png') no-repeat center center fixed;
+    background-size: cover;
+    padding-top: 100px;
+    padding-bottom: 50px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background: url('../PagineWeb/immagini/sfondo.png') no-repeat center center fixed;
-    background-size: cover;
-    padding: 20px;
+    align-items: flex-start;
 }
 
-
-.top-logo {
-    position: absolute;
-    top: 25px;
-    left: 40px;
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
-.top-logo img { height: 45px; }
-
 
 .request-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: 40px;
-    border-radius: 30px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-h2 { color: #222; font-size: 26px; text-align: center; margin-bottom: 8px; }
-.subtitle { color: #555; font-size: 14px; text-align: center; margin-bottom: 30px; }
+h2 { 
+    color: #222; 
+    font-size: 24px; 
+    text-align: left; 
+    margin-bottom: 25px; 
+}
 
-.input-group { margin-bottom: 18px; }
-.input-group label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; font-size: 14px; }
+.input-group, .task-options, .calendar-section, .time-section { 
+    margin-bottom: 30px; 
+}
+
+.input-group label, .section-title { 
+    display: block; 
+    font-weight: 700; 
+    margin-bottom: 12px; 
+    color: #333; 
+    font-size: 14px; 
+}
 
 input[type="text"], input[type="number"], select, textarea {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     font-size: 15px;
-    background: white;
+    background: #fff;
     outline: none;
 }
 
+input:focus, select:focus, textarea:focus {
+    border-color: #00705a;
+}
 
-.vehicle-options { display: flex; gap: 10px; }
-.vehicle-radio {
-    flex: 1;
-    background: white;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 14px;
+.duration-picker { 
+    display: flex; 
+    gap: 12px; 
+}
+
+.radio-card { 
+    flex: 1; 
+    border: 1px solid #ddd; 
+    padding: 15px 5px; 
+    border-radius: 8px; 
+    text-align: center; 
     cursor: pointer;
+    background: #fff;
+    position: relative;
 }
 
-
-.price-info-box {
-    background: rgba(65, 105, 225, 0.1);
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 20px;
-    margin-bottom: 25px;
-    border: 1px solid rgba(65, 105, 225, 0.2);
+.radio-card input { 
+    position: absolute; 
+    opacity: 0; 
 }
 
-.price-row {
+.radio-card span { 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+}
+
+.radio-card:has(input:checked) { 
+    border-color: #00705a; 
+    background: #f0f7f6; 
+    color: #00705a; 
+    box-shadow: 0 0 0 1px #00705a;
+}
+
+.visual-calendar { 
+    display: grid; 
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 10px; 
+    padding: 20px; 
+    border: 1px solid #eee; 
+    border-radius: 12px;
+    background: #fff;
+}
+
+.cal-header { 
+    font-size: 0.7rem; 
+    font-weight: 800; 
+    color: #999; 
+    text-align: center; 
+    text-transform: uppercase; 
+}
+
+.cal-day { 
+    height: 40px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-}
-.price-row input { width: 70px; text-align: center; }
-
-.price-display {
-    display: flex;
-    justify-content: space-between;
-    font-size: 18px;
-    color: #4169E1;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    transition: 0.2s;
 }
 
-.price-note {
-    font-size: 11px;
-    color: #777;
-    margin-top: 8px;
-    font-style: italic;
+.cal-day.disabled { color: #ccc; cursor: not-allowed; }
+.cal-day.available { color: #333; font-weight: 700; }
+.cal-day.available:hover { background: #e8f3f0; }
+.cal-day.selected { background: #00705a !important; color: #fff !important; }
+
+.custom-select { 
+    width: 100%; 
+    padding: 14px; 
+    border-radius: 25px; 
+    border: 1px solid #ccc; 
+    appearance: none; 
+    background: #fff url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="%23333" stroke-width="2" d="M6 9l6 6 6-6"/></svg>') no-repeat right 15px center;
+    background-size: 15px;
 }
 
-.classe-orario{
-	 width: 100%;
-    padding: 7px;
-    border-radius: 8px;
-    box-sizing: border-box; 
-	
-}
 .btn-submit {
     width: 100%;
-    padding: 16px;
-    background: #4169E1; 
+    padding: 18px;
+    background: #00705a; 
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 30px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
@@ -119,22 +161,17 @@ input[type="text"], input[type="number"], select, textarea {
 }
 
 .btn-submit:hover {
-    background: #0035cc;
-    transform: translateY(-2px);
+    background: #005a48;
+    box-shadow: 0 5px 15px rgba(0, 112, 90, 0.3);
 }
 
-.input-group input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box; 
+.request-footer { 
+    text-align: center; 
+    margin-top: 25px; 
 }
 
-	
-	
-	
-	
-
-.request-footer { text-align: center; margin-top: 20px; }
-.request-footer a { color: #666; text-decoration: none; font-size: 13px; }
+.request-footer a { 
+    color: #666; 
+    text-decoration: none; 
+    font-size: 13px; 
+}

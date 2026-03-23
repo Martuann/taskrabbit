@@ -369,7 +369,46 @@ public class MysqlUtenteDao implements UtenteDao {
 		return false;
 	}
 
-}
+
+
+
+
+
+
+
+
+
+@Override
+public List<Utente> listaUtentiRichiestiDaRichiedente(Long id_utenteRichiedente) throws Exception {
+	List<Utente> listaRisultato = new ArrayList<>();
+
+	String query = "SELECT u.* FROM utente u JOIN richiesta r ON r.id_utenteRichiesto = u.id WHERE r.id_utenteRichiedente = ?";
+	try (Connection connection = dataSource.getConnection();
+			PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+		preparedStatement.setLong(1, id_utenteRichiedente);
+
+		try (ResultSet resultSet = preparedStatement.executeQuery()) {
+			while (resultSet.next()) {
+				Utente richiesti = MysqlToUtente(resultSet);
+				listaRisultato.add(richiesti);
+			}
+		}
+	} catch (Exception e) {
+		throw new Exception("Errore nella ricerca per professione: " + id_utenteRichiedente, e);
+	}
+
+	return listaRisultato;	}}
+
+
+
+
+
+
+
+
+
+
 
 
 

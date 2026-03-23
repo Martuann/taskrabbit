@@ -129,32 +129,39 @@ public class MysqlRichiestaDao implements RichiestaDao {
 
 	@Override
 	public void update(Richiesta r) {
-		String sql = "UPDATE richiesta SET descrizione=?, data=?, orario_inizio=?, orario_fine=?, costoeffettivo=?, indirizzo=?, stato=?, id_utenteRichiedente=?, id_utenteRichiesto=?, id_professione=?, id_veicolo=? WHERE id="+r.getId();
-		if(r.getIdVeicolo()==null) {
-			sql = "UPDATE richiesta SET descrizione=?, data=?, orario_inizio=?, orario_fine=?, costoeffettivo=?, indirizzo=?, stato=?, id_utenteRichiedente=?, id_utenteRichiesto=?, id_professione=? WHERE id="+r.getId();
-		}
-		try (Connection connection = dataSource.getConnection();
-			 PreparedStatement update = connection.prepareStatement(sql)) {
-			
-			update.setString(1, r.getDescrizione());
-			update.setDate(2, Date.valueOf(r.getData()));
-			update.setTime(3, Time.valueOf(r.getOrarioInizio()));
-			update.setTime(4, Time.valueOf(r.getOrarioFine()));
-			update.setBigDecimal(5, r.getCostoEffettivo());
-			update.setString(6, r.getIndirizzo());
-			update.setInt(7, r.getStato().ordinal());
-			update.setLong(8, r.getIdUtenteRichiedente());
-			update.setLong(9, r.getIdUtenteRichiesto());
-			update.setLong(10, r.getIdProfessione());
-			if(r.getIdVeicolo()!=null) {
-				update.setLong(11, r.getIdVeicolo());
-			}
-			
-			update.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	    String sql = "UPDATE richiesta SET descrizione=?, data=?, orario_inizio=?, orario_fine=?, " +
+	                 "costoeffettivo=?, indirizzo=?, stato=?, id_utenteRichiedente=?, " +
+	                 "id_utenteRichiesto=?, id_professione=?, id_veicolo=? WHERE id=?";
+	    
+	    try (Connection connection = dataSource.getConnection();
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
+	        
+	        ps.setString(1, r.getDescrizione());
+	        ps.setDate(2, java.sql.Date.valueOf(r.getData()));
+	        ps.setTime(3, java.sql.Time.valueOf(r.getOrarioInizio()));
+	        ps.setTime(4, java.sql.Time.valueOf(r.getOrarioFine()));
+	        ps.setBigDecimal(5, r.getCostoEffettivo());
+	        ps.setString(6, r.getIndirizzo());
+	        ps.setInt(7, r.getStato().ordinal());
+	        ps.setLong(8, r.getIdUtenteRichiedente());
+	        ps.setLong(9, r.getIdUtenteRichiesto());
+	        ps.setLong(10, r.getIdProfessione());
+	        
+	     
+	        if (r.getIdVeicolo() != null) {
+	            ps.setLong(11, r.getIdVeicolo());
+	        } else {
+	            ps.setNull(11, java.sql.Types.BIGINT);
+	        }
+	        
+	    
+	        ps.setLong(12, r.getId());
+	        
+	        ps.executeUpdate();
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override

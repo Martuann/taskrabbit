@@ -26,7 +26,8 @@
     List<UtenteProfessione> professioniUtente = (List<UtenteProfessione>) request.getAttribute("professioniUtente");
     List<Veicolo> catalogoVeicoli = (List<Veicolo>) request.getAttribute("catalogoVeicoli");
     List<UtenteVeicolo> veicoliUtente = (List<UtenteVeicolo>) request.getAttribute("veicoliUtente");
-    
+     List<Professione> professioniDisponibili = (List<Professione>) request.getAttribute("professioniDisponibili"); 
+     List<Veicolo> veicoliDisponibili =(List<Veicolo>) request.getAttribute("veicoliDisponibili");
     String context = request.getContextPath();
     String err = request.getParameter("errore");
 %>
@@ -39,14 +40,15 @@
 		<div class="welcome-box">
 			<h1>Area Professionista</h1>
 
-			<%-- GESTIONE ERRORI CENTRALIZZATA --%>
-			<% if("input".equals(err)) { %>
-			<div class="error-msg">⚠️ Errore: Controlla i dati inseriti
-				(assicurati che i prezzi siano numeri validi).</div>
-			<% } else if("1".equals(err)) { %>
-			<div class="error-msg">❌ Si è verificato un errore di sistema
-				durante il salvataggio.</div>
-			<% } %>
+		<% if("input".equals(err)) { %>
+    <div class="error-msg"> Errore: Controlla i dati inseriti (assicurati che i prezzi siano numeri validi).</div>
+<% } else if("duplicato".equals(err)) { %>
+    <div class="error-msg" style="background-color: #fff3cd; color: #856404; border-left-color: #ffeeba;">
+         Attenzione: Hai già associato questa competenza o veicolo al tuo profilo!
+    </div>
+<% } else if("1".equals(err)) { %>
+    <div class="error-msg"> Si è verificato un errore di sistema durante il salvataggio.</div>
+<% } %>
 
 			<p>
 				Benvenuto, <strong><%= (utenteLoggato != null) ? utenteLoggato.getNome() + " " + utenteLoggato.getCognome() : "Ospite" %></strong>.
@@ -115,8 +117,8 @@
 					<input type="hidden" name="azione" value="aggiungi_professione">
 					<select name="idProfessioneScelta" required>
 						<option value="">-- Seleziona Professione --</option>
-						<% if (catalogoProfessioni != null) {
-                        for (Professione pCat : catalogoProfessioni) { %>
+						<% if (professioniDisponibili != null) {
+                        for (Professione pCat : professioniDisponibili) { %>
 						<option value="<%= pCat.getId() %>"><%= pCat.getNome() %></option>
 						<% } } %>
 					</select> <input type="number" step="0.01" name="tariffaOraria"
@@ -193,8 +195,8 @@
 					<input type="hidden" name="azione" value="aggiungi_veicolo">
 					<select name="idVeicoloScelto" required>
 						<option value="">-- Seleziona Mezzo --</option>
-						<% if (catalogoVeicoli != null) {
-                        for (Veicolo vCat : catalogoVeicoli) { %>
+						<% if (veicoliDisponibili != null) {
+                        for (Veicolo vCat : veicoliDisponibili) { %>
 						<option value="<%= vCat.getId() %>"><%= vCat.getCategoria() %></option>
 						<% } } %>
 					</select> <input type="number" step="0.01" name="prezzoAggiuntivo"

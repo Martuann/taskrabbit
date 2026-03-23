@@ -175,8 +175,7 @@ public class InoltroRichieste extends HttpServlet {
     	    request.setAttribute("ListaProf", professioni);
     	    request.setAttribute("veicoli", veicolo);
     	    request.setAttribute("utenteVeicolo", utenteVeicolo);
-    	    request.setAttribute("disponibilita", dispo);
-    	    request.setAttribute("orario", orario);
+    	 
     	    request.setAttribute("dispProssimeDueSettimane", dispProssimeDueSettimane);
 
     	    request.getRequestDispatcher("/WEB-INF/jsp/utente/RichiestaUtente.jsp").forward(request, response);	}
@@ -198,13 +197,15 @@ public class InoltroRichieste extends HttpServlet {
         LocalDate dataValida;
         LocalTime oraInizio;
         int oreSelezionate;
-
+        String indirizzo;
         try {
             idProf = Long.valueOf(request.getParameter("id_professionista"));
             idProfess = Long.valueOf(request.getParameter("id_professione"));
             dataValida = LocalDate.parse(request.getParameter("data_scelta"));
             oraInizio = LocalTime.parse(request.getParameter("ora_inizio"));
             oreSelezionate = Integer.parseInt(request.getParameter("durata_ore"));
+             indirizzo=request.getParameter("indirizzo");
+
         } catch (Exception e) {
         	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + request.getParameter("id_professionista") + "&error=dati_non_validi");         
         	return;
@@ -290,7 +291,7 @@ public class InoltroRichieste extends HttpServlet {
         richiesta.setCostoEffettivo(prezzoTotale);
         richiesta.setStato(StatoRichiesta.in_attesa);
         richiesta.setDescrizione(request.getParameter("descrizione"));
-
+        richiesta.setIndirizzo(indirizzo);
         try {
             richiestaDao.insert(richiesta);
         } catch (Exception e) {
