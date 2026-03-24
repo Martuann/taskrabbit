@@ -21,5 +21,5 @@ public interface CittaDao {
 
     void rimuoviCitta(Long id) throws Exception;
 
-	Citta selectById(Long id);
+	Citta selectById(Long id) throws Exception;
 }
