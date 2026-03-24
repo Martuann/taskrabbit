@@ -3,21 +3,22 @@ package org.elis.progetto.model;
 import java.time.LocalDate;
 
 public class Utente {
-	private Long id;                 
-    private String nome;                 
-    private String cognome;            
-    private String email;            
-    private String telefono;          
-    private String password;         
-    private LocalDate ddn;           
-    private String cf;               
-    private Ruolo ruolo;             
+	private Long id;
+    private String nome;
+    private String cognome;
+    private String email;
+    private String telefono;
+    private String password;
+    private LocalDate ddn;
+    private String cf;
+    private Ruolo ruolo;
     private Long idCitta;
-    
-	public Utente() {};
-	
+    private String nomeCitta;
 
-	
+	public Utente() {};
+
+
+
 	public Utente(Long id, String nome, String cognome, String email, String telefono, String password, LocalDate ddn,
 			String cf, Ruolo ruolo, Long idCitta) {
 		super();
@@ -127,5 +128,12 @@ public class Utente {
 
 	public void setIdCitta(Long idCitta) {
 		this.idCitta = idCitta;
+	}
+	public String getNomeCitta() {
+	    return nomeCitta;
+	}
+
+	public void setNomeCitta(String nomeCitta) {
+	    this.nomeCitta = nomeCitta;
 	}
 }

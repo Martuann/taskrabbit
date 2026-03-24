@@ -12,36 +12,33 @@ import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.progetto.model.Professione;
 
-/**
- * Servlet implementation class HomepageServlet
- */
+
 @WebServlet("/HomepageServlet")
 public class HomepageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	ProfessioneDao professioneDao;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public HomepageServlet() {
-        super();
-        professioneDao = DaoFactory.getInstance().getProfessioneDao();
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	public HomepageServlet() {
+		super();
+		professioneDao = DaoFactory.getInstance().getProfessioneDao();
+	}
+
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Professione> professioni = professioneDao.selectAll();
-		request.setAttribute("professioni", professioni);
-		
-		request.getRequestDispatcher("/WEB-INF/jsp/pubblico/Homepage.jsp").forward(request, response);	}
+		try {
+			List<Professione> professioni = professioneDao.selectAll();
+			request.setAttribute("professioni", professioni);
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+			request.getRequestDispatcher("/WEB-INF/jsp/pubblico/Homepage.jsp").forward(request, response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore nel caricamento della homepage: " + e.getMessage());
+		}
+
+	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

@@ -1,0 +1,187 @@
+@charset "UTF-8";
+.results-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.results-header {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.results-header h2 {
+    color: #1e293b;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.results-header span {
+    color: #3b82f6;
+}
+
+.refinement-bar {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.filter-form label {
+    font-weight: 600;
+    color: #475569;
+}
+
+.input-comune {
+    padding: 10px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    min-width: 250px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-comune:focus {
+    border-color: #3b82f6;
+}
+
+.btn-update {
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-update:hover {
+    background-color: #2563eb;
+}
+
+.btn-reset {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+.btn-reset:hover {
+    text-decoration: underline;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.service-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-text h3 {
+    display: flex;
+    justify-content:间;
+    align-items: center;
+    gap: 10px;
+}
+.city-tag {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: normal;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.card-text p {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin: 5px 0;
+}
+
+.view-more {
+    display: block;
+    text-align: center;
+    background-color: #1e293b;
+    color: white;
+    padding: 12px;
+    margin-top: auto;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.view-more:hover {
+    background-color: #334155;
+}
+
+.no-results {
+    text-align: center;
+    padding: 50px;
+    width: 100%;
+    color: #64748b;
+}
+
+
+.results-container {
+    max-width: 1100px;
+    margin: 120px auto 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.results-header {
+    background-color: #f8fafc;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border-left: 6px solid #3b82f6;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.results-header h2 {
+    color: #1e293b;
+    font-size: 1.6rem;
+    margin: 0 0 10px 0;
+}
+
+.refinement-bar {
+    margin-bottom: 40px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.search-context {
+    margin-top: 8px;
+    color: #64748b;
+    font-weight: 400;
+    font-size: 1rem;
+    display: block;
+}

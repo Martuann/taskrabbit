@@ -168,5 +168,28 @@ private DataSource dataSource;
 	    }
 	    return lista;
 	}
+	@Override
+	public Citta getByName(String nome) {
+	    String query = "SELECT id, nome, provincia FROM citta WHERE nome = ?";
+
+	    try (Connection c = dataSource.getConnection();
+	         PreparedStatement ps = c.prepareStatement(query)) {
+
+	        ps.setString(1, nome);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                Citta citta = new Citta();
+	                citta.setId(rs.getLong("id"));
+	                citta.setNome(rs.getString("nome"));
+	                citta.setProvincia(rs.getString("provincia"));
+	                return citta;
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
 
 }
