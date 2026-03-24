@@ -2,7 +2,7 @@
 
 body {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	background-image: url('../PagineWeb/immagini/sfondo.png');
+	background-image: url('../immagini/sfondo.png');
 	background-size: cover;
 	background-attachment: fixed;
 	background-position: center;
