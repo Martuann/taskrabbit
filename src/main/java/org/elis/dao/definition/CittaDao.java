@@ -21,4 +21,6 @@ public interface CittaDao {
     void rimuoviCitta(Long id) throws Exception;
 
 	Citta selectById(Long id);
+
+	Citta getByName(String cittaDaPulire);
 }
