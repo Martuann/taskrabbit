@@ -1,7 +1,6 @@
 package org.elis.dao.definition;
 
 import java.util.List;
-
 import org.elis.progetto.model.Citta;
 
 public interface CittaDao {
@@ -21,7 +20,5 @@ public interface CittaDao {
 
     void rimuoviCitta(Long id) throws Exception;
 
-	Citta selectById(Long id) throws Exception;
-
-	Citta getByName(String nome);
+	Citta selectById(Long id);
 }

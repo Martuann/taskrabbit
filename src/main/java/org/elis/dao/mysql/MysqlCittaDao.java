@@ -3,7 +3,6 @@ package org.elis.dao.mysql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
@@ -56,7 +55,6 @@ private DataSource dataSource;
 
 
 	}
-	@Override
 	public boolean esisteCitta(Citta citta) throws Exception {
 	    String query = "select count(*) from citta where nome = ? and provincia = ?";
 
@@ -77,7 +75,7 @@ private DataSource dataSource;
 
 
 
-@Override
+
 	public Long getOrCreateCitta(Citta citta) throws Exception {
 	    try {
 	        return getIdCitta(citta);
@@ -87,12 +85,12 @@ private DataSource dataSource;
 	}
 
 	@Override
-	public Citta selectById(Long id) throws Exception{
-		String sql = "SELECT * FROM citta WHERE id =? ";
+	public Citta selectById(Long id) {
+		String sql = "SELECT * FROM citta WHERE id = "+id;
 
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement select = connection.prepareStatement(sql)) {
-			select.setLong(1, id);
+
 			try (ResultSet rs = select.executeQuery()) {
 				if(rs.next()) {
 					return new Citta(
@@ -102,8 +100,9 @@ private DataSource dataSource;
 				}
 			}
 
-		} catch (SQLException e) {
-			throw new RuntimeException("Errore nel DB durante la ricerca della città", e);		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return null;
 	}
