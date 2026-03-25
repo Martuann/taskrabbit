@@ -11,18 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.ImmagineDao;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.definition.VeicoloDao;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Recensione;
 import org.elis.progetto.model.Richiesta;
-import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
 
 /**
@@ -34,7 +31,6 @@ public class CronologiaRichiesteServlet extends HttpServlet {
     private RichiestaDao richiestaDao;
     private UtenteDao utenteDao;
     private ProfessioneDao professioneDao;
-    private VeicoloDao veicoloDao;
     private RecensioneDao recensioneDao;
     private ImmagineDao immagineDao;   
     /**
@@ -45,7 +41,6 @@ public class CronologiaRichiesteServlet extends HttpServlet {
         richiestaDao = DaoFactory.getInstance().getRichiestaDao();
         utenteDao = DaoFactory.getInstance().getUtenteDao();
         professioneDao = DaoFactory.getInstance().getProfessioneDao();
-        veicoloDao = DaoFactory.getInstance().getVeicoloDao();
         recensioneDao = DaoFactory.getInstance().getRecensioneDao();
         immagineDao=DaoFactory.getInstance().getImmagineDao();
     }

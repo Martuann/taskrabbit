@@ -5,13 +5,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.progetto.model.Professione;
-import org.elis.progetto.model.Ruolo;
-import org.elis.progetto.model.Utente;
 
 @WebServlet("/AggiungiProfessione")
 public class AggiungiProfessioneServlet extends HttpServlet {
@@ -24,21 +21,10 @@ public class AggiungiProfessioneServlet extends HttpServlet {
 		professioneDao = DaoFactory.getInstance().getProfessioneDao();
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-
-	
-
-
 		request.getRequestDispatcher("/WEB-INF/jsp/admin/aggiungiProfessione.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-
-		
-
 		String nomeProf = request.getParameter("nomeProfessione");
 
 		if (nomeProf != null && !nomeProf.trim().isEmpty()) {

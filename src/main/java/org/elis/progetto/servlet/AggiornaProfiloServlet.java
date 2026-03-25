@@ -14,12 +14,13 @@ import org.elis.progetto.model.Utente;
 @WebServlet("/AggiornaProfilo")
 public class AggiornaProfiloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+	}
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-
-		
-
 		Utente utenteProfilo = (Utente) session.getAttribute("utenteLoggato");
 
 		try {
@@ -30,7 +31,14 @@ public class AggiornaProfiloServlet extends HttpServlet {
 			String ddnStr = request.getParameter("ddn");
 			String idCittaStr = request.getParameter("idCitta");
 			String nuovaPw = request.getParameter("nuovaPassword");
-
+			
+			if(nome != null) {
+				nome = nome.substring(0,1).toUpperCase() + nome.substring(1);
+			}
+			if(cognome != null) {
+				cognome = cognome.substring(0,1).toUpperCase() + cognome.substring(1);
+			}
+			
 			utenteProfilo.setNome(nome);
 			utenteProfilo.setCognome(cognome);
 			utenteProfilo.setEmail(email);

@@ -12,7 +12,6 @@ import java.time.LocalTime;
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.progetto.model.OrarioBase;
-import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 
 @WebServlet("/GestioneOrariDefault")
