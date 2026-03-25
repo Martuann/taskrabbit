@@ -38,7 +38,7 @@
                         <option value="" data-prezzo="0" disabled selected>Seleziona professione</option>
                         <% for(Professione p : professioni){ 
                              for(UtenteProfessione up : utenteProfessioni){
-                                if(up.getIdProfessione().equals(p.getId())){ %>
+                                if(up.getProfessione().getId().equals(p.getId())){ %>
                                     <option value="<%=p.getId()%>" data-prezzo="<%=up.getTariffaH()%>"><%=p.getNome()%> - <%=up.getTariffaH()%>&euro;/H</option>
                         <% break; } } } %>
                     </select>
@@ -62,7 +62,7 @@
                         <option value="" data-prezzo="0">Nessun veicolo</option>
                         <% for(Veicolo v : veicolo){ 
                              for(UtenteVeicolo uv : utenteVeicolo){
-                                if(v.getId().equals(uv.getIdVeicolo())){ %>
+                                if(v.getId().equals(uv.getVeicolo().getId())){ %>
                                     <option value="<%=v.getId()%>" data-prezzo="<%=uv.getAggiuntaServizio()%>"><%=v.getCategoria()%> (+<%=uv.getAggiuntaServizio()%>&euro;)</option>
                         <% break; } } } %>
                     </select>

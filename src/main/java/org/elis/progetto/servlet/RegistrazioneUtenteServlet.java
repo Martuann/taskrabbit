@@ -35,7 +35,14 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);	    }
+		try {
+            List<Citta> tutteLeCitta = cittaDao.getAllCitta();
+            request.setAttribute("listaCitta", tutteLeCitta);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);
+    }	    
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -48,14 +55,15 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     	String nomeCitta = request.getParameter("citta");
     	String provincia = request.getParameter("provincia");
     	String codiceFiscale = request.getParameter("codiceFiscale");
-
+    	String idCittaStr = request.getParameter("id_citta");
+    	
     	List<String> errori = new ArrayList<>();
     	LocalDate ddn=null;
-    	if (nome.length() < 2) {
+    	if (nome == null || nome.trim().length() < 2) {
     	    errori.add("Il nome deve contenere almeno 2 caratteri.");
     	}
 
-    	if (cognome.length() < 2) {
+    	if (cognome == null || cognome.trim().length() < 2) {
     	    errori.add("Il cognome deve contenere almeno 2 caratteri.");
     	}
 
@@ -137,7 +145,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 
             request.setAttribute("listaErrori", errori);
 
-
+            caricaCitta(request);
             request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);
             return;
         }
@@ -146,13 +154,15 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
 
 
     	try {
-    	    Citta citta =new Citta(nomeCitta, provincia);
+    		Long idCitta = Long.parseLong(idCittaStr);
+            Citta cittaScelta = cittaDao.selectById(idCitta);
+    		
 
 
 
     	    Utente nuovoUtente = new Utente(
     		    nome, cognome, email, numero, password, ddn,
-    		    codiceFiscale, Ruolo.UTENTE_BASE,cittaDao.getOrCreateCitta(citta)  );
+    		    codiceFiscale, Ruolo.UTENTE_BASE,cittaScelta  );
 
 
     	    utenteDao.aggiungiUtente(nuovoUtente);
@@ -160,12 +170,26 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     	    response.sendRedirect(request.getContextPath() + "/Login?registrato=true");
 
     	} catch (RegisterException e) {
+    		caricaCitta(request);
     	    request.setAttribute("listaErrori", List.of(e.getMessage()));
     	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);
     	} catch (Exception e) {
+    		caricaCitta(request);
     	    e.printStackTrace();
     	    request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
     	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneUtente.jsp").forward(request, response);
     	}
         }
+    
+
+
+private void caricaCitta(HttpServletRequest request) {
+    try {
+        List<Citta> tutteLeCitta = cittaDao.getAllCitta();
+        request.setAttribute("listaCitta", tutteLeCitta);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+}
+

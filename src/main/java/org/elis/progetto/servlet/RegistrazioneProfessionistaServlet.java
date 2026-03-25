@@ -49,10 +49,12 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+	try {
 	List<Professione> tutteLeProfessioni =professioneDao.selectAll();
-	
+	List<Citta>tutteLeCitta =cittaDao.getAllCitta();
 	request.setAttribute("listaProfessioni", tutteLeProfessioni);
+	request.setAttribute("listaCitta", tutteLeCitta);}
+	catch(Exception e) {}
 	request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);	
 
 	
@@ -71,6 +73,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	String nomeCitta = request.getParameter("citta");
 	String provincia = request.getParameter("provincia");
 	String codiceFiscale = request.getParameter("codiceFiscale");
+	String idCittaStr = request.getParameter("id_citta");
 	String listaIdProfessioni[] = request.getParameterValues("professione");
 
 	List<String> errori = new ArrayList<>();
@@ -123,6 +126,8 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
         
    
         List<Professione> tutteLeProfessioni =professioneDao.selectAll();
+    	caricaCitta(request);
+
         request.setAttribute("listaProfessioni", tutteLeProfessioni);
         
       
@@ -136,31 +141,53 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	
 	
 	
-	
+    Long idCitta = Long.parseLong(idCittaStr);
 	try {
-	    Citta citta =new Citta(nomeCitta, provincia);
-	    
-
+		Citta cittaScelta = cittaDao.selectById(idCitta);
 	    Utente nuovoProf = new Utente(
 		    nome, cognome, email, numero, password, ddn,
-		    codiceFiscale, Ruolo.PROFESSIONISTA,cittaDao.getOrCreateCitta(citta)  );
+		    codiceFiscale, Ruolo.PROFESSIONISTA,cittaScelta  );
 
-	   Long idUtente= utenteDao.aggiungiUtente(nuovoProf);
+	   utenteDao.aggiungiUtente(nuovoProf);
 	   if(listaIdProfessioni != null) {
 	   for(int i=0;i<listaIdProfessioni.length;i++) {
-	   
-		   utenteProfessioneDao.insert( new UtenteProfessione(idUtente,Long.parseLong(listaIdProfessioni[i]), BigDecimal.ZERO));
+		  
+				Professione professione=  professioneDao.selectById(Long.parseLong(listaIdProfessioni[i]));
+			
+		   utenteProfessioneDao.insert( new UtenteProfessione(nuovoProf,professione, BigDecimal.ZERO));
 	   }
 	   }
 	   
 	   response.sendRedirect(request.getContextPath() + "/Login?success=prof");
 	} catch (RegisterException e) {
+    	caricaCitta(request);
+        List<Professione> tutteLeProfessioni =professioneDao.selectAll();
+
+    	 request.setAttribute("listaProfessioni", tutteLeProfessioni);
 	    request.setAttribute("listaErrori", List.of(e.getMessage()));
 	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
 	    } catch (Exception e) {
+	    	caricaCitta(request);
+	        List<Professione> tutteLeProfessioni =professioneDao.selectAll();
+
+	    	 request.setAttribute("listaProfessioni", tutteLeProfessioni);
 	    e.printStackTrace();
 	    request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
 	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
+
 	    }
+    
+    
+    
     }
-}
+    
+    
+    private void caricaCitta(HttpServletRequest request) {
+        try {
+            List<Citta> tutteLeCitta = cittaDao.getAllCitta();
+            request.setAttribute("listaCitta", tutteLeCitta);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+    }}

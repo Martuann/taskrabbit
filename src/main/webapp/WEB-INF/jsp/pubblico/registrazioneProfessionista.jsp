@@ -1,3 +1,4 @@
+<%@page import="org.elis.progetto.model.Citta"%>
 <%@page import="org.elis.progetto.model.Professione"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -83,6 +84,7 @@
 
 					<%
 					List<Professione> listaProfessioni = (List<Professione>) request.getAttribute("listaProfessioni");
+					List<Citta> listaCitta = (List<Citta>) request.getAttribute("listaCitta");
 
 					if (listaProfessioni != null && listaProfessioni.size() > 0) {
 						for (int i = 0; i < listaProfessioni.size(); i++) {
@@ -123,14 +125,25 @@
 
 
 			<div class="input-row">
-				<div class="input-citta">
-					<input type="text" id="citta" name="citta" placeholder="Città"
-						required>
-				</div>
-				<div class="input-province">
-					<input type="text" id="provincia" name="provincia" placeholder="PR"
-						maxlength="2" required>
-				</div>
+			<div class="input-citta-select">
+    <label for="id_citta">Seleziona la tua città:</label>
+    <select name="id_citta" id="id_citta" required>
+        <option value="" disabled selected>Scegli una città...</option>
+        
+        <% 
+            
+            if (listaCitta != null) {
+                for (Citta c : listaCitta) {
+        %>
+            <option value="<%= c.getId() %>">
+                <%= c.getNome() %> (<%= c.getProvincia() %>)
+            </option>
+        <% 
+                } 
+            } 
+        %>
+    </select>
+</div>
 			</div>
 
 			<button type="submit" class="btn-submit">Registrati</button>

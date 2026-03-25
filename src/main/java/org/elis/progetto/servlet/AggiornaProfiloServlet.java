@@ -8,13 +8,24 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
+
+import org.elis.dao.definition.CittaDao;
 import org.elis.dao.definition.DaoFactory;
+import org.elis.dao.definition.UtenteDao;
+import org.elis.progetto.model.Citta;
 import org.elis.progetto.model.Utente;
 
 @WebServlet("/AggiornaProfilo")
 public class AggiornaProfiloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private  CittaDao cittaDao;
+    private UtenteDao utenteDao;
+	@Override
+	public void init() throws ServletException {
+		cittaDao=DaoFactory.getInstance().getCittaDao();
+        utenteDao=DaoFactory.getInstance().getUtenteDao();
 
+	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 
@@ -41,16 +52,19 @@ public class AggiornaProfiloServlet extends HttpServlet {
 			}
 
 			if (idCittaStr != null && !idCittaStr.isEmpty()) {
-				utenteProfilo.setIdCitta(Long.parseLong(idCittaStr));
+		Citta	citta	=cittaDao.selectById(Long.parseLong(idCittaStr));
+				
+				utenteProfilo.setCitta(citta);
 			}
 
 			if (nuovaPw != null && !nuovaPw.trim().isEmpty()) {
 				utenteProfilo.setPassword(nuovaPw);
 			}
 
-			DaoFactory.getInstance().getUtenteDao().aggiornaUtente(utenteProfilo);
+			Utente utenteAgg=utenteDao.aggiornaUtente(utenteProfilo);
 
-			session.setAttribute("utenteLoggato", utenteProfilo);
+			session.setAttribute("utenteLoggato", utenteAgg);
+			
 			response.sendRedirect(request.getContextPath() + "/Profilo?update=success");
 
 		} catch (Exception e) {

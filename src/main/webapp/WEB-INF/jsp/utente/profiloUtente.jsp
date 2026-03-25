@@ -77,7 +77,7 @@
             if (listaCitta != null) {
                 for (Citta c : listaCitta) {
 
-                    String selected = (utenteProfilo.getIdCitta() == c.getId()) ? "selected" : "";
+                    String selected = (utenteProfilo.getCitta().getId().equals(c.getId())) ? "selected" : "";
         %>
 					<option value="<%= c.getId() %>" <%= selected %>>
 						<%= c.getNome() %> (<%= c.getProvincia() %>)

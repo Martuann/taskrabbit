@@ -61,21 +61,11 @@ public class GestioneServiziServlet extends HttpServlet {
             List<UtenteProfessione> professioniPosseduteDallUtente = utenteProfessioneDao.selectByUtente(utenteLoggato.getId());
             List<UtenteVeicolo> veicoliPossedutiDallUtente = utenteVeicoloDao.selectByUtente(utenteLoggato.getId());
             
-            Set<Long> idProfessioniPossedute = professioniPosseduteDallUtente.stream()
-                    .map(UtenteProfessione::getIdProfessione)
-                    .collect(Collectors.toSet());
+            Set<Long> idsPosseduti = professioniPosseduteDallUtente.stream().map(up -> up.getProfessione().getId()).collect(Collectors.toSet());
+            List<Professione> professioniDisponibili = catalogoTutteLeProfessioni.stream().filter(p -> !idsPosseduti.contains(p.getId())).collect(Collectors.toList());
 
-            List<Professione> professioniDisponibili = catalogoTutteLeProfessioni.stream()
-                    .filter(p -> !idProfessioniPossedute.contains(p.getId()))
-                    .collect(Collectors.toList());
-
-            Set<Long> idVeicoliPosseduti = veicoliPossedutiDallUtente.stream()
-                    .map(UtenteVeicolo::getIdVeicolo)
-                    .collect(Collectors.toSet());
-
-            List<Veicolo> veicoliDisponibili = catalogoTuttiIVeicoli.stream()
-                    .filter(v -> !idVeicoliPosseduti.contains(v.getId()))
-                    .collect(Collectors.toList());
+            Set<Long> veiPosseduti = veicoliPossedutiDallUtente.stream().map(uv -> uv.getVeicolo().getId()).collect(Collectors.toSet());
+            List<Veicolo> veicoliDisponibili = catalogoTuttiIVeicoli.stream().filter(v -> !veiPosseduti.contains(v.getId())).collect(Collectors.toList());
             
             request.setAttribute("catalogoProfessioni", catalogoTutteLeProfessioni);
             request.setAttribute("professioniUtente", professioniPosseduteDallUtente);
@@ -115,12 +105,12 @@ public class GestioneServiziServlet extends HttpServlet {
                 BigDecimal tariffaOraria = validaEConvertiPrezzo(request.getParameter("tariffaOraria"));
                 List<UtenteProfessione> mieProfessioni = utenteProfessioneDao.selectByUtente(utenteLoggatoInSessione.getId());
                 boolean giaPosseduta = mieProfessioni.stream()
-                        .anyMatch(up -> up.getIdProfessione() == idProfessione);
-
+                        .anyMatch(up -> up.getProfessione().getId().equals(idProfessione));
                 if (giaPosseduta) {
                     throw new IllegalArgumentException("Professione già assegnata.");
                 }
-                utenteProfessioneDao.insert(new UtenteProfessione(utenteLoggatoInSessione.getId(), idProfessione, tariffaOraria));
+             Professione professione=   professioneDao.selectById(idProfessione);
+                utenteProfessioneDao.insert(new UtenteProfessione(utenteLoggatoInSessione, professione, tariffaOraria));
 
             } else if ("rimuovi_professione".equals(operazioneRichiesta)) {
                 long idDaRimuovere = Long.parseLong(request.getParameter("idProfessioneDaRimuovere"));
@@ -130,11 +120,11 @@ public class GestioneServiziServlet extends HttpServlet {
                 long idAssociazione = Long.parseLong(request.getParameter("idAssociazione"));
                 long idProfessione = Long.parseLong(request.getParameter("idProfessione"));
                 BigDecimal nuovaTariffa = validaEConvertiPrezzo(request.getParameter("nuovaTariffa"));
-                
+                Professione professione=   professioneDao.selectById(idProfessione);
                 UtenteProfessione upAggiornato = new UtenteProfessione();
                 upAggiornato.setId(idAssociazione);
-                upAggiornato.setIdUtente(utenteLoggatoInSessione.getId());
-                upAggiornato.setIdProfessione(idProfessione);
+                upAggiornato.setUtente(utenteLoggatoInSessione);
+                upAggiornato.setProfessione(professione);
                 upAggiornato.setTariffaH(nuovaTariffa);
                 
                 utenteProfessioneDao.update(upAggiornato);
@@ -144,12 +134,13 @@ public class GestioneServiziServlet extends HttpServlet {
                 BigDecimal sovrapprezzo = validaEConvertiPrezzo(request.getParameter("prezzoAggiuntivo"));
                 List<UtenteVeicolo> mieiVeicoli = utenteVeicoloDao.selectByUtente(utenteLoggatoInSessione.getId());
                 boolean veicoloGiaPosseduto = mieiVeicoli.stream()
-                        .anyMatch(uv -> uv.getIdVeicolo() == idVeicolo);
+                        .anyMatch(uv -> uv.getVeicolo().getId().equals(idVeicolo));
                 
                 if (veicoloGiaPosseduto) {
                     throw new IllegalArgumentException("Veicolo già assegnato.");
                 }
-                utenteVeicoloDao.associaVeicolo(new UtenteVeicolo(utenteLoggatoInSessione.getId(), idVeicolo, sovrapprezzo));
+                Veicolo veicolo= veicoloDao.ricercaPerId(idVeicolo);
+                utenteVeicoloDao.associaVeicolo(new UtenteVeicolo(utenteLoggatoInSessione, veicolo, sovrapprezzo));
 
             } else if ("rimuovi_veicolo".equals(operazioneRichiesta)) {
                 long idVeicoloDaRimuovere = Long.parseLong(request.getParameter("idVeicoloDaRimuovere"));

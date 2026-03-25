@@ -16,11 +16,22 @@ import org.elis.dao.definition.UtenteProfessioneDao;
 import org.elis.dao.definition.UtenteVeicoloDao;
 import org.elis.dao.definition.VeicoloDao;
 
+
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class JpaDaoFactory extends DaoFactory {
-
+	private UtenteDao utenteDao;
+	private CittaDao cittaDao;
+	private DisponibilitaDao disponibilitaDao;
+	private ImmagineDao immagineDao;
+	private OrarioBaseDao orarioBaseDao;
+	private ProfessioneDao professioneDao;
+	private RecensioneDao recensioneDao;
+	private RichiestaDao richiestaDao;
+	private UtenteProfessioneDao utenteProfessioneDao;
+	private UtenteVeicoloDao UtenteVeicoloDao;
+	private VeicoloDao veicoloDao;
 	public JpaDaoFactory() {
 		
 		//se ci sono persone con il mac
@@ -35,72 +46,59 @@ public class JpaDaoFactory extends DaoFactory {
 		
 		
 		
-EntityManagerFactory emf= Persistence.createEntityManagerFactory("taskly");	}
+EntityManagerFactory emf= Persistence.createEntityManagerFactory("taskly");	
 
-	@Override
+this.utenteDao=new JpaUtenteDao(emf);
+this.cittaDao=new JpaCittaDao(emf);
+this.disponibilitaDao=new JpaDisponibilitaDao(emf);	
+this.immagineDao=new JpaImmagineDao(emf);		
+this.orarioBaseDao=new JpaOrarioBaseDao(emf);		
+this.professioneDao=new JpaProfessioneDao(emf);	
+this.recensioneDao=new JpaRecensioneDao(emf);		
+this.richiestaDao=new JpaRichiestaDao(emf);		
+this.utenteProfessioneDao=new JpaUtenteProfessioneDao(emf);		
+this.UtenteVeicoloDao=new JpaUtenteVeicoloDao(emf);		
+this.veicoloDao=new JpaVeicoloDao(emf);		
+
+
+}
 	public UtenteDao getUtenteDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return utenteDao;
 	}
-
-	@Override
 	public CittaDao getCittaDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return cittaDao;
 	}
-
-	@Override
 	public DisponibilitaDao getDisponibilitaDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return disponibilitaDao;
 	}
-
-	@Override
 	public ImmagineDao getImmagineDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return immagineDao;
 	}
-
-	@Override
 	public OrarioBaseDao getOrarioBaseDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return orarioBaseDao;
 	}
-
-	@Override
 	public ProfessioneDao getProfessioneDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return professioneDao;
 	}
-
-	@Override
 	public RecensioneDao getRecensioneDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return recensioneDao;
 	}
-
-	@Override
 	public RichiestaDao getRichiestaDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return richiestaDao;
 	}
-
-	@Override
 	public UtenteProfessioneDao getUtenteProfessioneDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return utenteProfessioneDao;
 	}
-
-	@Override
 	public UtenteVeicoloDao getUtenteVeicoloDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return UtenteVeicoloDao;
 	}
-
-	@Override
 	public VeicoloDao getVeicoloDao() {
-		// TODO Auto-generated method stub
-		return null;
+		return veicoloDao;
 	}
+	
+	
+	
+	
+	
 
 }

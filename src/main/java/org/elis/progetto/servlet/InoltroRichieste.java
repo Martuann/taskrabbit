@@ -158,7 +158,7 @@ public class InoltroRichieste extends HttpServlet {
 
     	                if (trovato == false) {
     	                    Disponibilita slot = new Disponibilita();
-    	                    slot.setIdUtente(idProfessionista);
+    	                    slot.setUtente(professionista);
     	                    slot.setData(dataOggi);
     	                    slot.setInizio(ora);
     	                    slot.setFine(ora.plusHours(1));
@@ -193,13 +193,13 @@ public class InoltroRichieste extends HttpServlet {
 
      
 
-        Long idProf, idProfess;
+        Long idProfessionista, idProfess;
         LocalDate dataValida;
         LocalTime oraInizio;
         int oreSelezionate;
         String indirizzo;
         try {
-            idProf = Long.valueOf(request.getParameter("id_professionista"));
+            idProfessionista = Long.valueOf(request.getParameter("id_professionista"));
             idProfess = Long.valueOf(request.getParameter("id_professione"));
             dataValida = LocalDate.parse(request.getParameter("data_scelta"));
             oraInizio = LocalTime.parse(request.getParameter("ora_inizio"));
@@ -216,12 +216,15 @@ public class InoltroRichieste extends HttpServlet {
         List<Disponibilita> dispo;
         List<OrarioBase> orario;
         UtenteProfessione up;
-
+        Utente professionista;
+        Professione professione;
         try {
-            occupate = richiestaDao.selectByIdUtenteRichiesto(idProf);
-            dispo = dispDao.getDisponibilitaPerUtente(idProf);
-            orario = orarioDao.getOrariByUtente(idProf);
-            up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProf, idProfess);
+            occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
+            dispo = dispDao.getDisponibilitaPerUtente(idProfessionista);
+            orario = orarioDao.getOrariByUtente(idProfessionista);
+            up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProfessionista, idProfess);
+            professionista=utenteDao.ricercaPerId(idProfessionista);
+            professione=professioneDao.selectById(idProfess);
         } catch (Exception e) {
 	        response.sendError(500, "Errore nel collegamento con il db");
             return;
@@ -231,7 +234,7 @@ public class InoltroRichieste extends HttpServlet {
             Richiesta r = occupate.get(i);
             if (r.getData().equals(dataValida) && (r.getStato() == StatoRichiesta.in_corso || r.getStato() == StatoRichiesta.completato)) {
                 if (oraInizio.isBefore(r.getOrarioFine()) && oraFine.isAfter(r.getOrarioInizio())) {
-                	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProf + "&error=conflitto");
+                	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProfessionista + "&error=conflitto");
                 	return;
                 }
             }
@@ -260,7 +263,7 @@ public class InoltroRichieste extends HttpServlet {
         }
 
         if (limiteInizio == null || oraInizio.isBefore(limiteInizio) || oraFine.isAfter(limiteFine)) {
-        	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProf + "&error=fuori_orario");
+        	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProfessionista + "&error=fuori_orario");
         	return;
         }
 
@@ -270,7 +273,7 @@ public class InoltroRichieste extends HttpServlet {
         if (idVeicoloString != null && !idVeicoloString.isEmpty()) {
             try {
                 Long idV = Long.valueOf(idVeicoloString);
-                UtenteVeicolo uv = utenteVeicoloDao.selectByUtenteEVeicolo(idProf, idV);
+                UtenteVeicolo uv = utenteVeicoloDao.selectByUtenteEVeicolo(idProfessionista, idV);
                 if (uv != null) {
                     prezzoTotale = prezzoTotale.add(uv.getAggiuntaServizio());
                 }
@@ -280,11 +283,22 @@ public class InoltroRichieste extends HttpServlet {
         }
 
         Richiesta richiesta = new Richiesta();
-        try{richiesta.setIdUtenteRichiedente(utenteLoggato.getId());}catch(Exception e){
+        
+        if (idVeicoloString != null && !idVeicoloString.isEmpty()) {
+            Veicolo v=null;
+			try {
+				v = veicoloDao.ricercaPerId(Long.valueOf(idVeicoloString));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            richiesta.setVeicolo(v);
+        }
+        try{richiesta.setUtenteRichiedente(utenteLoggato);}catch(Exception e){
         	response.sendError(500, "Sessione scaduta");
         }
-        richiesta.setIdUtenteRichiesto(idProf);
-        richiesta.setIdProfessione(idProfess);
+        richiesta.setUtenteRichiesto(professionista);
+        richiesta.setProfessione(professione);
         richiesta.setData(dataValida);
         richiesta.setOrarioInizio(oraInizio);
         richiesta.setOrarioFine(oraFine);

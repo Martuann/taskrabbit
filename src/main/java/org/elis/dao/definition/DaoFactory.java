@@ -1,6 +1,7 @@
 package org.elis.dao.definition;
 
-import org.elis.dao.mysql.JdbcDaoFactory;
+import org.elis.dao.jpa.JpaDaoFactory;
+//import org.elis.dao.mysql.JdbcDaoFactory;
 
 public abstract class DaoFactory {
 
@@ -15,7 +16,9 @@ static{
         FACTORY_IMPLEMENTATION = "JDBC";
     }
 	INSTANCE=switch(FACTORY_IMPLEMENTATION) {
-	case "JDBC"-> new JdbcDaoFactory();
+	//case "JDBC"-> new JdbcDaoFactory();
+	case "JPA"-> new JpaDaoFactory();
+
 	default -> throw new IllegalStateException("Errore durante il caricamento della factory");
 	
 	};

@@ -1,23 +1,42 @@
 package org.elis.progetto.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="immagine")
 public class Immagine {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	@Column(nullable = false)
 	private String nome;
-	private String percorso; 
+	@Column(nullable = false)
+	private String percorso;
+	@Column(nullable = false, columnDefinition="Default false" )
 	private Boolean isFotoProfilo; 
-	private Long idUtente;
+	@ManyToOne
+	@JoinColumn(name="id_utente", nullable = false)
+
+	private Utente utente;
 
 	public Immagine() {};
 
-	public Immagine(String nome, String percorso, Boolean isFotoProfilo, Long idUtente) {
+	public Immagine(String nome, String percorso, Boolean isFotoProfilo, Utente utente) {
 		this.nome = nome;
 		this.percorso = percorso;
 		this.isFotoProfilo = isFotoProfilo;
-		this.idUtente = idUtente;
+		this.utente = utente;
 	}
 
-	public Immagine(Long id, String nome, String percorso, Boolean isFotoProfilo, Long idUtente) {
-			this(nome,percorso,isFotoProfilo,idUtente);
+	public Immagine(Long id, String nome, String percorso, Boolean isFotoProfilo, Utente utente) {
+			this(nome,percorso,isFotoProfilo,utente);
 			this.id=id;
 	}
 
@@ -53,13 +72,15 @@ public class Immagine {
 		this.isFotoProfilo = isFotoProfilo;
 	}
 
-	public Long getIdUtente() {
-		return idUtente;
+	public Utente getUtente() {
+		return utente;
 	}
 
-	public void setIdUtente(Long idUtente) {
-		this.idUtente = idUtente;
+	public void setUtente(Utente utente) {
+		this.utente = utente;
 	}
+
+
 }
 
 

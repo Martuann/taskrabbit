@@ -24,7 +24,7 @@ public class ProfiloUtenteServlet extends HttpServlet {
 
 		try {
 
-			Citta cittaUtente = DaoFactory.getInstance().getCittaDao().selectById((long) utenteProfilo.getIdCitta());
+			Citta cittaUtente = DaoFactory.getInstance().getCittaDao().selectById((long) utenteProfilo.getCitta().getId());
 			request.setAttribute("cittaDati", cittaUtente);
 
 

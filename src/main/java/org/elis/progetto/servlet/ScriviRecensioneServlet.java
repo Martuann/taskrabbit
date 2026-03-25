@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.RecensioneDao;
+import org.elis.dao.definition.UtenteDao;
 import org.elis.progetto.model.Recensione;
 import org.elis.progetto.model.Utente;
 
@@ -22,10 +23,11 @@ import org.elis.progetto.model.Utente;
 public class ScriviRecensioneServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private RecensioneDao recensioneDao;
-
+private UtenteDao utenteDao;
     public ScriviRecensioneServlet() {
         super();
         recensioneDao = DaoFactory.getInstance().getRecensioneDao();
+        utenteDao=DaoFactory.getInstance().getUtenteDao();
     }
 
 	/**
@@ -44,11 +46,36 @@ public class ScriviRecensioneServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-		Integer voto = Integer.parseInt(request.getParameter("voto"));
-		String descrizione = request.getParameter("descrizione");
-		Long idRecensore = utenteLoggato.getId();
-		Long idRecensito = Long.parseLong(request.getParameter("id"));
-		recensioneDao.insert(new Recensione(voto,descrizione,LocalDate.now(),idRecensore,idRecensito));
+		String votoStr=request.getParameter("voto");
+		String descrizione=request.getParameter("descrizione");
+		String idRecensitoStr=	request.getParameter("id");
+		
+		
+		
+		
+		if (votoStr != null && idRecensitoStr != null) {
+	        try {
+	            int voto = Integer.parseInt(votoStr);
+	            long idRecensito = Long.parseLong(idRecensitoStr);
+	            
+	            Utente utenteRecensito = utenteDao.ricercaPerId(idRecensito);
+	            
+	            if (utenteRecensito != null && utenteLoggato != null) {
+	                Recensione r = new Recensione();
+	                r.setVoto(voto);
+	                r.setDescrizione(descrizione);
+	                r.setData(LocalDate.now());
+	                r.setUtenteScrittore(utenteLoggato);
+	                r.setUtenteRicevente(utenteRecensito);
+	                
+	                recensioneDao.insert(r);
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?error=true");
+	            return;
+	        }
+		
 		response.sendRedirect(request.getContextPath()+"/CronologiaRichiesteServlet");
 	}
-}
+}}

@@ -1,4 +1,4 @@
-package org.elis.dao.mysql;
+/*package org.elis.dao.mysql;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -412,3 +412,4 @@ public List<Utente> listaUtentiRichiestiDaRichiedente(Long id_utenteRichiedente)
 
 
 
+*/

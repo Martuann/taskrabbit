@@ -83,29 +83,26 @@ public class GestioneOrariDateSpecifiche extends HttpServlet {
 	                    LocalTime orarioInizio = LocalTime.parse(inizio);
 	                    LocalTime orarioFine = LocalTime.parse(fine);
 	                    
-	                    Disponibilita disp = new Disponibilita(utenteLoggato.getId(), dataCorrente, orarioInizio, orarioFine);
+	                    
 	                    OrarioBase base = orarioDao.getOrariByUtenteEGiorno(utenteLoggato.getId(), dataCorrente.getDayOfWeek());
 
 	                    if (base != null && base.getOraInizio().equals(orarioInizio) && base.getOraFine().equals(orarioFine)) {
+	                        
 	                        dispoDao.rimuoviDisponibilitaByIdUtenteData(utenteLoggato.getId(), dataCorrente);
+	                        
 	                    } else {
+	                        Disponibilita disp = new Disponibilita(utenteLoggato, dataCorrente, orarioInizio, orarioFine);
 	                        dispoDao.salvaOAggiorna(disp);
 	                    }
+	                    
 	                } else {
-	                    Disponibilita chiuso = new Disponibilita(
-	                        utenteLoggato.getId(), 
-	                        dataCorrente, 
-	                        LocalTime.MIDNIGHT, 
-	                        LocalTime.MIDNIGHT  
-	                    );
+	                    Disponibilita chiuso = new Disponibilita(utenteLoggato, dataCorrente, LocalTime.MIDNIGHT, LocalTime.MIDNIGHT);
 	                    dispoDao.salvaOAggiorna(chiuso);
-	                }
-	            }
-	        }
+	                }}}
 	        response.sendRedirect(request.getContextPath() + "/GestioneOrariDateSpecifiche?offSet=" + offSet + "&success=true");
 	        
-	    } catch (Exception e) {
+	            } catch (Exception e) {
 	        e.printStackTrace();
 	        response.sendRedirect(request.getContextPath() + "/GestioneOrariDateSpecifiche?offSet=" + offSet + "&error=save");	    }
-	}
-	}
+	}}
+	

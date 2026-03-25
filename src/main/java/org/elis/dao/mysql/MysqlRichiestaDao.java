@@ -1,4 +1,4 @@
-package org.elis.dao.mysql;
+/*package org.elis.dao.mysql;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -251,3 +251,4 @@ public class MysqlRichiestaDao implements RichiestaDao {
 		return richieste;
 	}
 }
+*/

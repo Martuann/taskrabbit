@@ -1,4 +1,4 @@
-package org.elis.dao.mysql;
+/*package org.elis.dao.mysql;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -144,4 +144,4 @@ String query = "INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServi
         return null;
     }
 
-}
+}*/

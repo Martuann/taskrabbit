@@ -19,4 +19,5 @@ public interface DisponibilitaDao {
 	void salvaOAggiorna(Disponibilita d) throws Exception;
 
 	void rimuoviDisponibilitaByIdUtenteData(Long idUtente, LocalDate data) throws Exception;
+
 }

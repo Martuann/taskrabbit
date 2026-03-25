@@ -48,8 +48,8 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	        Richiesta richiesta = richiestaDao.selectById(idRichiesta);
 	        
 	        if (richiesta != null) {
-	        	if (richiesta.getIdUtenteRichiesto().equals(utenteLoggato.getId()) || 
-	        		    richiesta.getIdUtenteRichiedente().equals(utenteLoggato.getId())) {
+	        	if (richiesta.getUtenteRichiesto().equals(utenteLoggato.getId()) || 
+	        		    richiesta.getUtenteRichiedente().equals(utenteLoggato.getId())) {
 	                richiesta.setStato(nuovoStato);
 	                richiestaDao.update(richiesta);
 	            }

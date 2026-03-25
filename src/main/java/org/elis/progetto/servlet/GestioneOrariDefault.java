@@ -59,7 +59,7 @@ public class GestioneOrariDefault extends HttpServlet {
     		    	if(booleanSeLavoraoNoString != null) {
     		    		LocalTime orarioInizio = LocalTime.parse(inizio);
     		    	    LocalTime orarioFine = LocalTime.parse(fine);
-    		    	    orarioProfessionistaDao.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato.getId()));
+    		    	    orarioProfessionistaDao.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato));
     		    	} else {
     		    		orarioProfessionistaDao.eliminaOrario(utenteLoggato.getId(), idGiorno);
     				}

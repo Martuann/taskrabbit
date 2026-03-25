@@ -56,38 +56,22 @@ public class CronologiaRichiesteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
 	
-		try {
-			List<Richiesta> richieste = richiestaDao.selectByIdUtenteRichiedente(utenteLoggato.getId());
-			List<Utente> utentiRichiesti=new ArrayList<Utente>();
-		
-				
-				utentiRichiesti=(utenteDao.listaUtentiRichiestiDaRichiedente(utenteLoggato.getId())); 
-				
-				Map<Long, Utente> mappaProfessionisti = utentiRichiesti.stream()
-				        .collect(Collectors.toMap(Utente::getId, u -> u, (u1, u2) -> u1));
+	
+			try {
+	            
+	            List<Richiesta> richieste = richiestaDao.selectByIdUtenteRichiedente(utenteLoggato.getId());
 
-				List<Professione> tutteLeProfessioni = professioneDao.selectAll();
-	            Map<Long, String> mappaTask = tutteLeProfessioni.stream()
-	                .collect(Collectors.toMap(Professione::getId, Professione::getNome));
-	            List<Recensione> mieRecensioni = recensioneDao.selectByIdUtenteScrittore(utenteLoggato.getId());				
+	            
+	            List<Recensione> mieRecensioni = recensioneDao.selectByIdUtenteScrittore(utenteLoggato.getId());                
+	            
 	            Set<Long> idProfessionistiRecensiti = mieRecensioni.stream()
-	            	    .map(Recensione::getId_utenteRicevente)
-	            	    .collect(Collectors.toSet());
-	            List<Long> idsProfessionisti = utentiRichiesti.stream()
-	            	    .map(Utente::getId)
-	            	    .collect(Collectors.toList());
+	                .map(r -> r.getUtenteRicevente().getId())
+	                .collect(Collectors.toSet());
 
-	            	Map<Long, String> mappaFoto = immagineDao.getMappaFotoProfilo(idsProfessionisti);
-	          
-	        request.setAttribute("mappaFoto", mappaFoto);
-	        request.setAttribute("giaRecensiti", idProfessionistiRecensiti);
-	        request.setAttribute("mappaProfessionisti", mappaProfessionisti);
-			request.setAttribute("mappaTask", mappaTask);
-			request.setAttribute("richieste", richieste);
-			
-			
-			
-			request.getRequestDispatcher("/WEB-INF/jsp/utente/cronologiaRichieste.jsp").forward(request, response);	
+	            request.setAttribute("richieste", richieste);
+	            request.setAttribute("giaRecensiti", idProfessionistiRecensiti);
+	            
+	            request.getRequestDispatcher("/WEB-INF/jsp/utente/cronologiaRichieste.jsp").forward(request, response);
 
 		}
 		catch (Exception e) {

@@ -70,22 +70,18 @@
 					<%
                 if (professioniUtente != null && !professioniUtente.isEmpty()) {
                     for (UtenteProfessione up : professioniUtente) {
-                        String nomeProf = "Sconosciuta";
-                        if(catalogoProfessioni != null) {
-                            for (Professione p : catalogoProfessioni) {
-                                if (p.getId().equals(up.getIdProfessione())) { nomeProf = p.getNome(); break; }
-                            }
-                        }
+                     
+                        
             %>
 					<tr>
-						<td><strong><%= nomeProf %></strong></td>
+						<td><strong><%= up.getProfessione().getNome() %></strong></td>
 						<td>
 							<form action="<%=context%>/GestioneServiziServlet" method="post"
 								class="form-inline">
 								<input type="hidden" name="azione" value="modifica_tariffa">
 								<input type="hidden" name="idAssociazione"
 									value="<%= up.getId() %>"> <input type="hidden"
-									name="idProfessione" value="<%= up.getIdProfessione() %>">
+									name="idProfessione" value="<%= up.getProfessione().getId() %>">
 
 								<input type="number" name="nuovaTariffa" step="0.01"
 									value="<%= up.getTariffaH() %>" required>
@@ -102,7 +98,7 @@
 							</form>
 						</td>
 					</tr>
-					<% } } else { %>
+					<% }}  else { %>
 					<tr>
 						<td colspan="3" style="text-align: center;">Nessuna
 							competenza configurata.</td>
@@ -142,24 +138,16 @@
 					<%
             if (veicoliUtente != null && !veicoliUtente.isEmpty()) {
                 for (UtenteVeicolo uv : veicoliUtente) {
-                    String nomeVeicolo = "Sconosciuto";
-                    if(catalogoVeicoli != null) {
-                        for (Veicolo v : catalogoVeicoli) {
-                            if (v.getId().equals(uv.getIdVeicolo())) { 
-                                nomeVeicolo = v.getCategoria(); 
-                                break; 
-                            }
-                        }
-                    }
+                  
         %>
 					<tr>
-						<td><strong><%= nomeVeicolo %></strong></td>
+						<td><strong><%= uv.getVeicolo().getCategoria() %></strong></td>
 						<td>
 							<form action="<%=context%>/GestioneServiziServlet" method="post"
 								class="form-inline">
 								<input type="hidden" name="azione" value="modifica_sovrapprezzo">
 								<input type="hidden" name="idVeicolo"
-									value="<%= uv.getIdVeicolo() %>"> <input type="number"
+									value="<%= uv.getVeicolo().getId() %>"> <input type="number"
 									name="nuovoPrezzo" step="0.01"
 									value="<%= uv.getAggiuntaServizio() %>" required
 									style="width: 80px;">
@@ -171,7 +159,7 @@
 								style="margin: 0;">
 								<input type="hidden" name="azione" value="rimuovi_veicolo">
 								<input type="hidden" name="idVeicoloDaRimuovere"
-									value="<%= uv.getIdVeicolo() %>">
+									value="<%= uv.getVeicolo().getId() %>">
 								<button type="submit" class="btn-delete"
 									onclick="return confirm('Vuoi eliminare questo veicolo?')">Elimina</button>
 							</form>

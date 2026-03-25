@@ -4,25 +4,62 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="richiesta")
 public class Richiesta {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(name = "descrizione", 
+	        columnDefinition = "text NOT NULL")  
     private String descrizione;
+	@Column(nullable = false)
     private LocalDate data;
+	@Column(nullable = false)
+
     private LocalTime orarioInizio;
+	@Column(nullable = false)
+
     private LocalTime orarioFine;
+	@Column(name = "costo_effettivo", nullable = false, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal costoEffettivo;
+	@Column(nullable = false)
+
     private String indirizzo;
+	@Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false, columnDefinition = "TINYINT DEFAULT 0 CHECK (stato BETWEEN 0 AND 3)")
+
     private StatoRichiesta stato;
-    private Long idUtenteRichiedente;
-    private Long idUtenteRichiesto;
-    private Long idProfessione;
-    private Long idVeicolo;
+	@ManyToOne	
+	@JoinColumn(name="id_utenteRichiedente",nullable = false)
+
+    private Utente utenteRichiedente;
+	@ManyToOne	
+	@JoinColumn(name="id_utenteRichiesto",nullable = false)
+    private Utente utenteRichiesto;
+	@ManyToOne	
+	@JoinColumn(name="id_professione",nullable = false)
+    private Professione professione;
+	@ManyToOne	
+	@JoinColumn(name="id_veicolo")
+    private Veicolo veicolo;
     
 	public Richiesta() {};
 
 	public Richiesta(String descrizione, LocalDate data, LocalTime orarioInizio, LocalTime orarioFine,
-			BigDecimal costoEffettivo, String indirizzo, StatoRichiesta stato, Long idUtenteRichiedente,
-			Long idUtenteRichiesto, Long idProfessione, Long idVeicolo) {
+			BigDecimal costoEffettivo, String indirizzo, StatoRichiesta stato, Utente utenteRichiedente,
+			Utente utenteRichiesto, Professione professione, Veicolo veicolo) {
 		this.descrizione = descrizione;
 		this.data = data;
 		this.orarioInizio = orarioInizio;
@@ -30,19 +67,63 @@ public class Richiesta {
 		this.costoEffettivo = costoEffettivo;
 		this.indirizzo = indirizzo;
 		this.stato = stato;
-		this.idUtenteRichiedente = idUtenteRichiedente;
-		this.idUtenteRichiesto = idUtenteRichiesto;
-		this.idProfessione = idProfessione;
-		this.idVeicolo = idVeicolo;
+		this.utenteRichiedente = utenteRichiedente;
+		this.utenteRichiesto = utenteRichiesto;
+		this.professione = professione;
+		this.veicolo = veicolo;
 	}
-	public Richiesta(Long id, String descrizione, LocalDate data, LocalTime orarioInizio, LocalTime orarioFine,
-			BigDecimal costoEffettivo, String indirizzo, StatoRichiesta stato, Long idUtenteRichiedente,
-			Long idUtenteRichiesto, Long idProfessione, Long idVeicolo) {
-		this(descrizione,data,orarioInizio,orarioFine,costoEffettivo,indirizzo,stato,idUtenteRichiedente,idUtenteRichiesto,
-			 idProfessione,idVeicolo);
-		this.id = id;
-	}
+
 	
+	public Richiesta(Long id, String descrizione, LocalDate data, LocalTime orarioInizio, LocalTime orarioFine,
+			BigDecimal costoEffettivo, String indirizzo, StatoRichiesta stato, Utente utenteRichiedente,
+			Utente utenteRichiesto, Professione professione, Veicolo veicolo) {
+		super();
+		this.id = id;
+		this.descrizione = descrizione;
+		this.data = data;
+		this.orarioInizio = orarioInizio;
+		this.orarioFine = orarioFine;
+		this.costoEffettivo = costoEffettivo;
+		this.indirizzo = indirizzo;
+		this.stato = stato;
+		this.utenteRichiedente = utenteRichiedente;
+		this.utenteRichiesto = utenteRichiesto;
+		this.professione = professione;
+		this.veicolo = veicolo;
+	}
+
+	public Utente getUtenteRichiedente() {
+		return utenteRichiedente;
+	}
+
+	public void setUtenteRichiedente(Utente utenteRichiedente) {
+		this.utenteRichiedente = utenteRichiedente;
+	}
+
+	public Utente getUtenteRichiesto() {
+		return utenteRichiesto;
+	}
+
+	public void setUtenteRichiesto(Utente utenteRichiesto) {
+		this.utenteRichiesto = utenteRichiesto;
+	}
+
+	public Professione getProfessione() {
+		return professione;
+	}
+
+	public void setProfessione(Professione professione) {
+		this.professione = professione;
+	}
+
+	public Veicolo getVeicolo() {
+		return veicolo;
+	}
+
+	public void setVeicolo(Veicolo veicolo) {
+		this.veicolo = veicolo;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -90,30 +171,6 @@ public class Richiesta {
 	}
 	public void setStato(StatoRichiesta stato) {
 		this.stato = stato;
-	}
-	public Long getIdUtenteRichiedente() {
-		return idUtenteRichiedente;
-	}
-	public void setIdUtenteRichiedente(Long idUtenteRichiedente) {
-		this.idUtenteRichiedente = idUtenteRichiedente;
-	}
-	public Long getIdUtenteRichiesto() {
-		return idUtenteRichiesto;
-	}
-	public void setIdUtenteRichiesto(Long idUtenteRichiesto) {
-		this.idUtenteRichiesto = idUtenteRichiesto;
-	}
-	public Long getIdProfessione() {
-		return idProfessione;
-	}
-	public void setIdProfessione(Long idProfessione) {
-		this.idProfessione = idProfessione;
-	}
-	public Long getIdVeicolo() {
-		return idVeicolo;
-	}
-	public void setIdVeicolo(Long idVeicolo) {
-		this.idVeicolo = idVeicolo;
 	}
 
 }

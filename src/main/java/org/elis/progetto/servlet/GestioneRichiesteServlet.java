@@ -62,7 +62,7 @@ public class GestioneRichiesteServlet extends HttpServlet {
 			
 			counter=0;
 			for(Richiesta r : richieste) {
-				Utente richiedente = utenteDao.ricercaPerId(r.getIdUtenteRichiedente());
+				Utente richiedente = utenteDao.ricercaPerId(r.getUtenteRichiedente().getId());
 				request.setAttribute("nomeutente"+counter,richiedente.getNome()+" "+richiedente.getCognome());
 				
 				switch(r.getStato()) {
@@ -83,18 +83,18 @@ public class GestioneRichiesteServlet extends HttpServlet {
 					request.setAttribute("coloreStato"+counter, "#DC4C64");
 				}
 				
-				String professione = professioneDao.selectById(r.getIdProfessione()).getNome();
+				String professione = professioneDao.selectById(r.getProfessione().getId()).getNome();
 				request.setAttribute("task"+counter,professione);
 				
 				request.setAttribute("data"+counter, r.getData().toString());
 				
 				request.setAttribute("orario"+counter, r.getOrarioInizio().toString()+" - "+r.getOrarioFine().toString());
 				
-				if(r.getIdVeicolo()==null) {
+				if(r.getVeicolo()==null) {
 					request.setAttribute("veicolo"+counter, "nessuno");
 				}
 				else {
-					String veicolo = veicoloDao.ricercaPerId(r.getIdVeicolo()).getCategoria();
+					String veicolo = veicoloDao.ricercaPerId(r.getVeicolo().getId()).getCategoria();
 					request.setAttribute("veicolo"+counter, veicolo);
 				}
 				

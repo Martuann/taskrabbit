@@ -1,4 +1,4 @@
-package org.elis.dao.mysql;
+/*package org.elis.dao.mysql;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -181,4 +181,4 @@ String query = "INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente
 	
 	
 	
-}
+}*/

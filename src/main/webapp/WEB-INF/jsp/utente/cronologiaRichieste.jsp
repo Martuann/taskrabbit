@@ -1,3 +1,4 @@
+<%@page import="org.elis.progetto.model.Immagine"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -18,12 +19,9 @@
 <div id="main-container">
     <h1>Cronologia Richieste:</h1>
     
-    <% 
+   <% 
         List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); 
-        Map<Long, Utente> mappaPro = (Map<Long, Utente>) request.getAttribute("mappaProfessionisti");
-        Map<Long, String> mappaTask = (Map<Long, String>) request.getAttribute("mappaTask");
         Set<Long> giaRecensiti = (Set<Long>) request.getAttribute("giaRecensiti");
-        Map<Long, String> mappaFoto=(Map<Long, String>) request.getAttribute("mappaFoto");
     %>
 
     <div class="container-richieste">
@@ -31,9 +29,9 @@
             <div id="empty-message1">
                 <p>Nessuna richiesta effettuata.</p>
             </div>
-        <% } else { 
+   <% } else { 
             for(Richiesta r : richieste) { 
-                Utente pro = mappaPro.get(r.getIdUtenteRichiesto());
+                Utente pro = r.getUtenteRichiesto(); 
                 
                 String colore = "#E4A11B"; 
                 if(r.getStato() == StatoRichiesta.completato) colore = "#14A44D";
@@ -41,39 +39,36 @@
         %>
         <div class="richiesta">
    <div class="titolo">
-    <% 
-        String pathFoto = mappaFoto.get(r.getIdUtenteRichiesto());
+  
+    
+    
    
-        if(pathFoto == null || pathFoto.trim().isEmpty()) {
-            pathFoto = request.getContextPath() + "/immagini/default-avatar.png";
-        } else {
-         
-            if(!pathFoto.startsWith("http") && !pathFoto.startsWith("/")) {
-                pathFoto = request.getContextPath() + "/" + pathFoto;
-            }
-        }
-    %>
-    <img src="<%= pathFoto %>" style="width:50px; height:50px; border-radius:50%; object-fit: cover;" onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">
+  <img src="<%= pro.getFotoProfiloPath(request.getContextPath()) %>" 
+          style="width:50px; height:50px; border-radius:50%; object-fit: cover;" 
+          onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">
+          
     <p><%= pro.getNome() + " " + pro.getCognome() %></p>
 </div>
 
-                <p style="color: <%= colore %>">
-                    Stato richiesta: <%= r.getStato().toString().replace("_", " ") %>
-                </p>
+      
+            <p style="color: <%= colore %>">
+                Stato richiesta: <%= r.getStato().toString().replace("_", " ") %>
+            </p>
 
-                <p>Task: <%= mappaTask.get(r.getIdProfessione()) %></p>
-                <p>In data: <%= r.getData() %></p>
-                <p>Orario: <%= r.getOrarioInizio() %> - <%= r.getOrarioFine() %></p>
-                <p>Indirizzo: <%= r.getIndirizzo() %></p>
-                
-                <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(r.getIdUtenteRichiesto())) { %>
-                    <a href="ScriviRecensioneServlet?id=<%= r.getIdUtenteRichiesto() %>" class="btn-link">Scrivi una Recensione</a>
-                <% } %>
+            <p>Task: <%= r.getProfessione().getNome() %></p>
+            
+            <p>In data: <%= r.getData() %></p>
+            <p>Orario: <%= r.getOrarioInizio() %> - <%= r.getOrarioFine() %></p>
+            <p>Indirizzo: <%= r.getIndirizzo() %></p>
+            
+             <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(pro.getId())) { %>
+                <a href="ScriviRecensioneServlet?id=<%= pro.getId() %>" class="btn-link">Scrivi una Recensione</a>
+            <% } %>
 
-                <% if(r.getStato() == StatoRichiesta.in_corso) { %>
+            <% if(r.getStato() == StatoRichiesta.in_corso) { %>
                 <a href="AggiornaRichiesta?type=completato&id1=<%= r.getId() %>&redirect=CronologiaRichiesteServlet" class="btn-link">Segna come completata</a>
-                <% } %>
-            </div>
+            <% } %>
+        </div>
         <%      } 
            } 
         %>

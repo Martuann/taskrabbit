@@ -45,7 +45,7 @@
                                 for(UtenteProfessione up : utenteProf) { 
                                     String nomeAttivita = "Servizio";
                                     for(Professione p : professioni) {
-                                        if(p.getId() == up.getIdProfessione()) {
+                                        if(p.getId().equals(up.getProfessione().getId())) {
                                             nomeAttivita = p.getNome();
                                             break;
                                         }

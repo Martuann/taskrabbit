@@ -7,9 +7,8 @@ import org.elis.progetto.model.Citta;
 public interface CittaDao {
     Long aggiungiCitta(Citta citta) throws Exception;
 
-    Long getIdCitta(Citta citta) throws Exception;
+    Citta getCitta(Citta citta) throws Exception;
 
-    Long getOrCreateCitta(Citta citta) throws Exception;
 
     boolean esisteCitta(Citta citta) throws Exception;
 

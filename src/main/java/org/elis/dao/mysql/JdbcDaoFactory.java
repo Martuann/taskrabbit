@@ -16,7 +16,7 @@ import org.elis.dao.definition.UtenteVeicoloDao;
 import org.elis.dao.definition.VeicoloDao;
 import org.elis.utilities.DataSourceConfig;
 
-public class JdbcDaoFactory extends DaoFactory {
+/*public class JdbcDaoFactory extends DaoFactory {
 private UtenteDao utenteDao;
 private CittaDao cittaDao;
 private DisponibilitaDao disponibilitaDao;
@@ -94,4 +94,4 @@ private VeicoloDao veicoloDao;
 
 
 
-}
+}*/

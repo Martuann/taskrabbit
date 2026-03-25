@@ -1,25 +1,89 @@
 package org.elis.progetto.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="utente")
 public class Utente {
-	private Long id;                 
-    private String nome;                 
-    private String cognome;            
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;   
+	@Column(nullable = false)
+    private String nome;     
+	@Column(nullable = false)
+
+    private String cognome; 
+	@Column(nullable = false,unique = true)
+
     private String email;            
+	@Column(nullable = false,unique = true)
+
     private String telefono;          
-    private String password;         
-    private LocalDate ddn;           
-    private String cf;               
+	@Column(nullable = false)
+
+    private String password; 
+	@Column(nullable = false)
+
+    private LocalDate ddn;
+	@Column(nullable = false,unique = true)
+
+    private String cf;             
+	@Enumerated(EnumType.ORDINAL)
+	@Column(columnDefinition = "TINYINT CHECK(ruolo IN (0,1,2))")
     private Ruolo ruolo;             
-    private Long idCitta;
+	@ManyToOne
+    @JoinColumn(name = "id_citta", nullable = false)
+    private Citta citta;
+	@OneToMany(mappedBy = "utente") 
+	private List<UtenteVeicolo> veicoli;
+
+	@OneToMany(mappedBy = "utente")
+	private List<Immagine> immagini;
+
+	@OneToMany(mappedBy = "utente")
+	private List<UtenteProfessione> professioni;
+
+	@OneToMany(mappedBy = "utente")
+	private List<OrarioBase> orariBase;
     
+	@OneToMany(mappedBy = "utente")
+	private List<Disponibilita> disponibilita;
+
+	@OneToMany(mappedBy = "utenteRichiedente")
+	private List<Richiesta> richiesteFatte;
+
+	@OneToMany(mappedBy = "utenteRichiesto")
+	private List<Richiesta> richiesteRicevute;
+
+	@OneToMany(mappedBy = "utenteScrittore")
+	private List<Recensione> recensioniScritte;
+
+	@OneToMany(mappedBy = "utenteRicevente")
+	private List<Recensione> recensioniRicevute;	
+	
+	
+	
+	
+	
 	public Utente() {};
 	
 
 	
 	public Utente(Long id, String nome, String cognome, String email, String telefono, String password, LocalDate ddn,
-			String cf, Ruolo ruolo, Long idCitta) {
+			String cf, Ruolo ruolo, Citta citta) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -30,13 +94,25 @@ public class Utente {
 		this.ddn = ddn;
 		this.cf = cf;
 		this.ruolo = ruolo;
-		this.idCitta = idCitta;
+		this.citta=citta;
+	}
+
+
+
+	public Citta getCitta() {
+		return citta;
+	}
+
+
+
+	public void setCitta(Citta citta) {
+		this.citta = citta;
 	}
 
 
 
 	public Utente(String nome, String cognome,String email,  String telefono, String password, LocalDate ddn, String cf,
-			Ruolo ruolo, Long idCitta) {
+			Ruolo ruolo, Citta citta) {
 		super();
 		this.nome = nome;
 		this.cognome = cognome;
@@ -46,7 +122,8 @@ public class Utente {
 		this.ddn = ddn;
 		this.cf = cf;
 		this.ruolo = ruolo;
-		this.idCitta = idCitta;
+		this.citta=citta;
+
 	}
 
 	public Long getId() {
@@ -120,12 +197,26 @@ public class Utente {
 	public void setRuolo(Ruolo ruolo) {
 		this.ruolo = ruolo;
 	}
+	public String getFotoProfiloPath(String contextPath) {
+	    String path = null;
+	    if (immagini != null && !immagini.isEmpty()) {
+	        for (Immagine img : immagini) {
+	            if (img.getIsFotoProfilo()) {
+	                path = img.getPercorso();
+	                break;
+	            }
+	        }
+	    }
 
-	public Long getIdCitta() {
-		return idCitta;
+	    if (path == null || path.trim().isEmpty()) {
+	        return contextPath + "/immagini/default-avatar.png";
+	    }
+
+	    if (!path.startsWith("http") && !path.startsWith("/")) {
+	        return contextPath + "/" + path;
+	    }
+
+	    return path;
 	}
 
-	public void setIdCitta(Long idCitta) {
-		this.idCitta = idCitta;
-	}
 }
