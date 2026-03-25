@@ -66,7 +66,7 @@ private UtenteDao utenteDao;
 	        }
 		
 		response.sendRedirect(request.getContextPath()+"/CronologiaRichiesteServlet");
-	}
+	}}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

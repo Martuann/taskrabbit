@@ -58,14 +58,14 @@
             <p>Task: <%= r.getProfessione().getNome() %></p>
             
 
-                <p>Task: <%= mappaTask.get(r.getIdProfessione()) %></p>
+                
                 <p>In data: <%= r.getData() %></p>
                 <p>Orario: <%= r.getOrarioInizio() %> - <%= r.getOrarioFine() %></p>
                 <p>Indirizzo: <%= r.getIndirizzo() %></p>
                 
-                <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(r.getIdUtenteRichiesto())) { %>
+                <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(r.getUtenteRichiesto().getId())) { %>
                 	<form action="ScriviRecensioneServlet" method="POST">
-                		<input type="hidden" name="idProfessionista" value="<%= r.getIdUtenteRichiesto() %>">
+                		<input type="hidden" name="idProfessionista" value="<%= r.getUtenteRichiesto().getId() %>">
                     	<input type="submit" value="Scrivi una Recensione">
                 	</form>
                 <% } %>

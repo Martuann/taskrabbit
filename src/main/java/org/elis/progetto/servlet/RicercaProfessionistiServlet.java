@@ -50,7 +50,7 @@ public class RicercaProfessionistiServlet extends HttpServlet {
 			}
 		}
 		else if (utenteLoggato != null && !"reset".equals(action)) {
-			idCittaDaFiltrare = utenteLoggato.getIdCitta();
+			idCittaDaFiltrare = utenteLoggato.getCitta().getId();
 			try {
 				Citta c = DaoFactory.getInstance().getCittaDao().selectById(idCittaDaFiltrare);
 				if (c != null) messaggioFiltro = "a " + c.getNome();
@@ -71,7 +71,7 @@ public class RicercaProfessionistiServlet extends HttpServlet {
 
 			if (idCittaDaFiltrare != -1 && listaTrovati != null) {
 				long finalId = idCittaDaFiltrare;
-				listaTrovati.removeIf(u -> u.getIdCitta() != finalId);
+				listaTrovati.removeIf(u -> u.getCitta().getId() != finalId);
 			}
 
 			request.setAttribute("listaCitta", tutteLeCitta);

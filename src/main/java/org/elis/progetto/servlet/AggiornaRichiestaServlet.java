@@ -10,6 +10,7 @@ import java.io.IOException;
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.progetto.model.Richiesta;
+import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
 
@@ -88,13 +89,13 @@ public class AggiornaRichiestaServlet extends HttpServlet {
         if(!nomeNuovoStato.trim().isEmpty() || nomeNuovoStato!=null) {
         	nuovoStato = StatoRichiesta.valueOf(nomeNuovoStato);
         }
-        System.out.println(richiesta.getIdUtenteRichiedente()+"\n"+utenteLoggato.getId());
+     //   System.out.println(richiesta.getIdUtenteRichiedente()+"\n"+utenteLoggato.getId());
         try {
 	        if(richiesta != null && nuovoStato!=null) {
 	        	//Separazione dei permessi
 	        	switch(nuovoStato) {
 	        	case completato: //solo il richiedente può segnare come "COMPLETATO" lo stato della richiesta
-	        		if(richiesta.getIdUtenteRichiedente()!=utenteLoggato.getId()) {
+	        		if(richiesta.getUtenteRichiedente().getId()!=utenteLoggato.getId()) {
 	        			response.sendRedirect(request.getContextPath() +"/HomepageServlet");
 	        			return;
 	        		}
@@ -103,7 +104,7 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	        		response.sendRedirect(request.getContextPath() +"/HomepageServlet");
 	        		return;
 	        	default: //solo il professionista può segnare come "RIFIUTATO" o "IN_CORSO" lo stato della richiesta
-	        		if(richiesta.getIdUtenteRichiesto()!=utenteLoggato.getId()) {
+	        		if(richiesta.getUtenteRichiesto().getId()!=utenteLoggato.getId()) {
 	        			response.sendRedirect(request.getContextPath() +"/HomepageServlet");
 	        			return;
 	        		}

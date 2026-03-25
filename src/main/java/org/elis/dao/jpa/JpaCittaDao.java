@@ -85,5 +85,10 @@ public class JpaCittaDao implements CittaDao {
                      .getResultStream().findFirst().orElse(null);
         }
 	}
+	@Override
+	public Citta getByName(String cittaDaPulire) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
