@@ -1,33 +1,108 @@
 <%@page import="org.elis.progetto.model.Utente"%>
+<%@page import="org.elis.progetto.model.Citta"%>
 <%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Risultati per ${query}</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/Homepage.css">
+<meta charset="UTF-8">
+<title>Risultati per ${query}</title>
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/Homepage.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/risultati.css">
 </head>
 <body>
 	<%@ include file="/WEB-INF/headerFooter/header.jsp"%>
-	<%List<Utente> professionisti = (List<Utente>)request.getAttribute("professionisti"); %>
-    <div class="services-section">
-        <h2>Professionisti trovati per: "${query}"</h2>
-        
-        <div class="services-grid">
-        <%for(Utente utente : professionisti){ %>
-                <div class="service-card">
-                    <div class="card-text">
-                        <h3><%=utente.getNome() +" "+ utente.getCognome()%></h3>
-                        <p>Email: <%=utente.getEmail()%></p>
-      
-                        <a href="<%=request.getContextPath()%>/ProfiloProfessionistaServlet?id1=<%=utente.getId() %>" class="view-more">Mostra il profilo</a>
-                        
-                        
-                    </div>
-                </div>
-        <%} %>
-<%--             <c:forEach var="pro" items="${professionisti}">
+
+	<%
+        List<Utente> professionisti = (List<Utente>) request.getAttribute("professionisti");
+        List<Citta> listaCitta = (List<Citta>) request.getAttribute("listaCitta");
+        String query = (String) request.getAttribute("query");
+        String msg = (String) request.getAttribute("messaggioFiltro");
+        if (msg == null) msg = "in tutta Italia";
+    %>
+
+	<div class="results-container">
+		<div class="results-header">
+			<h2>
+				<% if (msg.equals("in tutta Italia")) { %>
+				Trovati <strong><%= (professionisti != null) ? professionisti.size() : 0 %></strong>
+				<span><%= (query != null) ? query : "" %></span> in tutta Italia
+				<% } else { %>
+				Ci sono <strong><%= (professionisti != null) ? professionisti.size() : 0 %></strong>
+				<span><%= (query != null) ? query : "" %></span>
+				<%= msg %>
+				<% } %>
+			</h2>
+
+
+			<p class="search-context">
+				<% if (msg != null && !msg.equals("in tutta Italia")) { %>
+				Risultati in base alla tua posizione o alla zona scelta.
+				<% } else { %>
+				<% } %>
+			</p>
+		</div>
+		<div class="refinement-bar">
+			<form
+				action="<%=request.getContextPath()%>/RicercaProfessionistiServlet"
+				method="GET" class="filter-form">
+				<input type="hidden" name="professione"
+					value="<%= (query != null) ? query : "" %>"> <label
+					for="comuneScelto">Cambia zona di ricerca:</label> <input
+					type="text" name="nomeCittaCambiata" id="comuneScelto"
+					list="suggerimentiCitta" placeholder="Inserisci un comune"
+					class="input-comune">
+
+				<datalist id="suggerimentiCitta">
+					<% if(listaCitta != null) {
+        for(Citta c : listaCitta) { %>
+					<option value="<%= c.getNome() %> (<%= c.getProvincia() %>)"></option>
+					<%  }
+    } %>
+				</datalist>
+				<button type="submit" class="btn-update">Aggiorna</button>
+				<% if (msg != null && !msg.equals("in tutta Italia")) { %>
+				<a
+					href="<%=request.getContextPath()%>/RicercaProfessionistiServlet?professione=<%= (query != null) ? query : "" %>&action=reset"
+					class="btn-reset">Ricerca in Tutta Italia</a>
+				<% } %>
+			</form>
+		</div>
+		<div class="services-section">
+			<div class="services-grid">
+				<%
+                if (professionisti != null && !professionisti.isEmpty()) {
+                    for (Utente utente : professionisti) {
+                %>
+				<div class="service-card">
+					<div class="card-text">
+						<h3><%= utente.getNome() + " " + utente.getCognome() %></h3>
+
+						<% if (utente.getNomeCitta() != null && !utente.getNomeCitta().isEmpty()) { %>
+						<p class="loc-tag">
+							📍
+							<%= utente.getNomeCitta() %></p>
+						<% } %>
+
+						<p>
+							Email:
+							<%= utente.getEmail() %></p>
+						<form action="ProfiloProfessionistaServlet" method="POST">
+							<input type="hidden" name="idProfessionista" value="<%= utente.getId() %>">
+							<input type="submit" value="Mostra il profilo" class="view-more">
+						</form>
+					</div>
+				</div>
+				<%
+                    }
+                }
+                %>
+
+				<%--             <c:forEach var="pro" items="${professionisti}">
                 <div class="service-card">
                     <div class="card-text">
                         <h3>${pro.nome} ${pro.cognome}</h3>
@@ -36,12 +111,15 @@
                     </div>
                 </div>
             </c:forEach> --%>
-        </div>
-        
-     <%if(professionisti == null||professionisti.isEmpty()){ %>
+			</div>
 
-            <p style="text-align:center; margin-top:50px;">Nessun professionista trovato con questa specializzazione.</p>
-        <% } %>
-    </div>
+			<%if(professionisti == null||professionisti.isEmpty()){ %>
+
+			<p style="text-align: center; margin-top: 50px;">Nessun
+				professionista trovato con questa specializzazione.</p>
+			<% } %>
+		</div>
+	</div>
+	<%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>

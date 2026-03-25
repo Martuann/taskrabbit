@@ -206,10 +206,11 @@ public class MysqlUtenteDao implements UtenteDao {
 	public List<Utente> ricercaTramiteProfessione(String professione) throws Exception {
 		List<Utente> listaRisultato = new ArrayList<>();
 
-		String query = "SELECT u.* FROM utente u " +
-				"JOIN utente_professione up ON u.id = up.id_utente " +
-				"JOIN professione p ON p.id = up.id_professione " +
-				"WHERE p.nome = ?";
+		String query = "SELECT DISTINCT u.*, c.nome AS nome_citta FROM utente u " +
+                "JOIN utente_professione up ON u.id = up.id_utente " +
+                "JOIN professione p ON p.id = up.id_professione " +
+                "JOIN citta c ON u.id_citta = c.id " +
+                "WHERE LOWER(p.nome) = LOWER(?)";
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -227,6 +228,7 @@ public class MysqlUtenteDao implements UtenteDao {
 		}
 
 		return listaRisultato;	}
+
 	private Utente MysqlToUtente(ResultSet resultSet) throws Exception {
 		Utente utente = new Utente();
 
@@ -258,7 +260,20 @@ public class MysqlUtenteDao implements UtenteDao {
 		utente.setRuolo(ruoloEnum);
 		utente.setIdCitta(idCitta);
 
-		return utente;
+		boolean hasNomeCitta = false;
+	    int columnCount = resultSet.getMetaData().getColumnCount();
+	    for (int i = 1; i <= columnCount; i++) {
+	        if ("nome_citta".equalsIgnoreCase(resultSet.getMetaData().getColumnName(i))) {
+	            hasNomeCitta = true;
+	            break;
+	        }
+	    }
+
+	    if (hasNomeCitta) {
+	        utente.setNomeCitta(resultSet.getString("nome_citta"));
+	    }
+
+	    return utente;
 	}
 
 
@@ -311,7 +326,7 @@ public class MysqlUtenteDao implements UtenteDao {
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
 			preparedStatement.setString(1, "%" + professione + "%");
-			
+
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				while (resultSet.next()) {
 

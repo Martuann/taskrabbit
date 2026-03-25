@@ -14,7 +14,6 @@ import org.elis.dao.definition.DisponibilitaDao;
 import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.progetto.model.Disponibilita;
 import org.elis.progetto.model.OrarioBase;
-import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 
 /**

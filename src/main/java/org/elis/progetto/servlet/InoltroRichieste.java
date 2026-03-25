@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -14,12 +13,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.DisponibilitaDao;
 import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.dao.definition.ProfessioneDao;
-import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteProfessioneDao;
@@ -41,14 +38,14 @@ import org.elis.progetto.model.Veicolo;
 @WebServlet("/InoltroRichieste")
 public class InoltroRichieste extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	 private RichiestaDao richiestaDao;
-	    private UtenteDao utenteDao;
-	    private ProfessioneDao professioneDao;
-	    private VeicoloDao veicoloDao;
-       private UtenteVeicoloDao utenteVeicoloDao;
-       private UtenteProfessioneDao utenteProfessioneDao;
-       private DisponibilitaDao dispDao;
-       private OrarioBaseDao orarioDao;
+	private RichiestaDao richiestaDao;
+	private UtenteDao utenteDao;
+	private ProfessioneDao professioneDao;
+	private VeicoloDao veicoloDao;
+    private UtenteVeicoloDao utenteVeicoloDao;
+    private UtenteProfessioneDao utenteProfessioneDao;
+    private DisponibilitaDao dispDao;
+    private OrarioBaseDao orarioDao;
 	    /**
 	     * @see HttpServlet#HttpServlet()
 	     */
@@ -69,15 +66,10 @@ public class InoltroRichieste extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	    HttpSession session = request.getSession();
-    	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-
-    	   
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	    Long idProfessionista;
     	    try {
-    	        idProfessionista = Long.parseLong(request.getParameter("id_Professionista"));
+    	        idProfessionista = Long.parseLong(request.getParameter("id_professionista"));
     	    } catch (NumberFormatException | NullPointerException e) {
     	    	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
     	    	return;
@@ -187,7 +179,7 @@ public class InoltroRichieste extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
@@ -204,10 +196,11 @@ public class InoltroRichieste extends HttpServlet {
             dataValida = LocalDate.parse(request.getParameter("data_scelta"));
             oraInizio = LocalTime.parse(request.getParameter("ora_inizio"));
             oreSelezionate = Integer.parseInt(request.getParameter("durata_ore"));
-             indirizzo=request.getParameter("indirizzo");
+            indirizzo=request.getParameter("indirizzo");
 
         } catch (Exception e) {
-        	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + request.getParameter("id_professionista") + "&error=dati_non_validi");         
+        	//response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + request.getParameter("id_professionista") + "&error=dati_non_validi");
+        	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
         	return;
         }
 

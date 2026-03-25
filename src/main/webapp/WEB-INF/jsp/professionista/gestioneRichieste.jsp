@@ -25,7 +25,8 @@
 			displayValue1 = "none"; %>
 			<div class="richiesta">
 				<div class="titolo">
-    <img src="<%= request.getContextPath() %>/immagini/default-avatar.png" style="width:50px; height:50px; border-radius:50%; object-fit: cover;">
+    <img src="<%= request.getContextPath() %>/immagini/default-avatar.png" 
+    	 style="width:50px; height:50px; border-radius:50%; object-fit: cover;">
     <p class="nome-utente"><%= request.getAttribute("nomeutente"+i) %></p>
 </div>
 				<p style="color:<%= request.getAttribute("coloreStato"+i) %>">
@@ -37,8 +38,18 @@
 				<p>Veicolo richiesto: <%= request.getAttribute("veicolo"+i) %></p>
 				<p>Indirizzo: <%= request.getAttribute("indirizzo"+i) %></p>
 				<p>Retribuzione: €<%= request.getAttribute("costoeffettivo"+i) %></p>
-				<a href="AggiornaRichiesta?type=in_corso&id1=<%= request.getAttribute("idRichiesta"+i) %>&redirect=GestioneRichiesteServlet">Accetta richiesta</a>
-<a href="AggiornaRichiesta?type=rifiutato&id1=<%= request.getAttribute("idRichiesta"+i) %>&redirect=GestioneRichiesteServlet">Rifiuta richiesta</a>
+				<div class="buttons-container">
+					<form action="AggiornaRichiesta" method="POST">
+						<input type="hidden" name="idRichiesta" value="<%= richieste.get(i).getId() %>">
+						<input type="hidden" name="nuovoStato" value="in_corso">
+						<input type="submit" value="Accetta richiesta">
+					</form>
+					<form action="AggiornaRichiesta" method="POST">
+						<input type="hidden" name="idRichiesta" value="<%= richieste.get(i).getId() %>">
+						<input type="hidden" name="nuovoStato" value="rifiutato">
+						<input type="submit" value="Rifiuta richiesta">
+					</form>
+				</div>
 			</div>
 	<% }
 	} %>

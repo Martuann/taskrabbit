@@ -56,7 +56,6 @@ private DataSource dataSource;
 
 
 	}
-	@Override
 	public boolean esisteCitta(Citta citta) throws Exception {
 	    String query = "select count(*) from citta where nome = ? and provincia = ?";
 
@@ -77,7 +76,7 @@ private DataSource dataSource;
 
 
 
-@Override
+
 	public Long getOrCreateCitta(Citta citta) throws Exception {
 	    try {
 	        return getIdCitta(citta);
@@ -87,12 +86,12 @@ private DataSource dataSource;
 	}
 
 	@Override
-	public Citta selectById(Long id) throws Exception{
-		String sql = "SELECT * FROM citta WHERE id =? ";
+	public Citta selectById(Long id) {
+		String sql = "SELECT * FROM citta WHERE id = "+id;
 
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement select = connection.prepareStatement(sql)) {
-			select.setLong(1, id);
+
 			try (ResultSet rs = select.executeQuery()) {
 				if(rs.next()) {
 					return new Citta(
@@ -102,8 +101,9 @@ private DataSource dataSource;
 				}
 			}
 
-		} catch (SQLException e) {
-			throw new RuntimeException("Errore nel DB durante la ricerca della città", e);		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return null;
 	}
@@ -167,6 +167,29 @@ private DataSource dataSource;
 	        }
 	    }
 	    return lista;
+	}
+	@Override
+	public Citta getByName(String nome) {
+	    String query = "SELECT id, nome, provincia FROM citta WHERE nome = ?";
+
+	    try (Connection c = dataSource.getConnection();
+	         PreparedStatement ps = c.prepareStatement(query)) {
+
+	        ps.setString(1, nome);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                Citta citta = new Citta();
+	                citta.setId(rs.getLong("id"));
+	                citta.setNome(rs.getString("nome"));
+	                citta.setProvincia(rs.getString("provincia"));
+	                return citta;
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
 	}
 
 }

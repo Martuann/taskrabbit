@@ -48,7 +48,11 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idParam = request.getParameter("id1");
+		response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String idParam = request.getParameter("idProfessionista");
 		long idProfessionista = (idParam != null) ? Long.parseLong(idParam) : 2L;
 
 		try {
@@ -86,9 +90,5 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
 	}
 }

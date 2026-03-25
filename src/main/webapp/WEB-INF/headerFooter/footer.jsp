@@ -19,9 +19,7 @@
             <ul>
                 <li><a href="<%= request.getContextPath() %>/HomepageServlet">Chi Siamo</a></li>
                 <li><a href="<%= request.getContextPath() %>/HomepageServlet>Servizi"></a></li>
-                <li><a 					href="<%=request.getContextPath()%>/RegistrazioneProfessionistaServlet">Lavora con noi</a></li>
-                
-                
+                <li><a href="<%= request.getContextPath() %>/PagineWeb/registrazioneProfessionista.jsp">Lavora con noi</a></li>
             </ul>
         </div>
 

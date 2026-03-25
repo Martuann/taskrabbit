@@ -112,8 +112,10 @@
             <h2>Vuoi contattare questo professionista?</h2>
             
           
-            <a href="<%= request.getContextPath() %>/InoltroRichieste?id_Professionista=<%= professionista.getId() %>" class="contatta-class">Contatta</a>
-            
+            <form action="InoltroRichieste" method="POST">
+            	<input type="hidden" name="id_professionista" value="<%= professionista.getId() %>">
+            	<input type="submit" value="Contatta" class="contatta-class">
+            </form>
             
         </section>
     </main>

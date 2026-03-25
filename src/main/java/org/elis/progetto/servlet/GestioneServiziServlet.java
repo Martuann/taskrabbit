@@ -11,14 +11,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.UtenteProfessioneDao;
 import org.elis.dao.definition.UtenteVeicoloDao;
 import org.elis.dao.definition.VeicoloDao;
 import org.elis.progetto.model.Professione;
-import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 import org.elis.progetto.model.UtenteProfessione;
 import org.elis.progetto.model.UtenteVeicolo;
@@ -84,12 +82,7 @@ public class GestioneServiziServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	HttpSession session = request.getSession();
-    	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-
-    
     	
-
        String operazioneRichiesta = request.getParameter("azione");
         Utente utenteLoggatoInSessione = (Utente) request.getSession().getAttribute("utenteLoggato");
 

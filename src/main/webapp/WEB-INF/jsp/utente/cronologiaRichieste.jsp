@@ -57,18 +57,27 @@
 
             <p>Task: <%= r.getProfessione().getNome() %></p>
             
-            <p>In data: <%= r.getData() %></p>
-            <p>Orario: <%= r.getOrarioInizio() %> - <%= r.getOrarioFine() %></p>
-            <p>Indirizzo: <%= r.getIndirizzo() %></p>
-            
-             <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(pro.getId())) { %>
-                <a href="ScriviRecensioneServlet?id=<%= pro.getId() %>" class="btn-link">Scrivi una Recensione</a>
-            <% } %>
 
-            <% if(r.getStato() == StatoRichiesta.in_corso) { %>
-                <a href="AggiornaRichiesta?type=completato&id1=<%= r.getId() %>&redirect=CronologiaRichiesteServlet" class="btn-link">Segna come completata</a>
-            <% } %>
-        </div>
+                <p>Task: <%= mappaTask.get(r.getIdProfessione()) %></p>
+                <p>In data: <%= r.getData() %></p>
+                <p>Orario: <%= r.getOrarioInizio() %> - <%= r.getOrarioFine() %></p>
+                <p>Indirizzo: <%= r.getIndirizzo() %></p>
+                
+                <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(r.getIdUtenteRichiesto())) { %>
+                	<form action="ScriviRecensioneServlet" method="POST">
+                		<input type="hidden" name="idProfessionista" value="<%= r.getIdUtenteRichiesto() %>">
+                    	<input type="submit" value="Scrivi una Recensione">
+                	</form>
+                <% } %>
+
+                <% if(r.getStato() == StatoRichiesta.in_corso) { %>
+				<form action="AggiornaRichiesta" method="POST">
+					<input type="hidden" name="idRichiesta" value="<%= r.getId() %>">
+					<input type="hidden" name="nuovoStato" value="completato">
+					<input type="submit" value="Segna come completata">
+				</form>
+                <% } %>
+            </div>
         <%      } 
            } 
         %>

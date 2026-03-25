@@ -6,10 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.time.LocalDate;
-
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.UtenteDao;
@@ -34,15 +32,6 @@ private UtenteDao utenteDao;
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Long id = Long.parseLong(request.getParameter("id"));
-		request.setAttribute("idProfessionista", id);
-
-		request.getRequestDispatcher("/WEB-INF/jsp/utente/scriviRecensione.jsp").forward(request, response);	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
@@ -78,4 +67,17 @@ private UtenteDao utenteDao;
 		
 		response.sendRedirect(request.getContextPath()+"/CronologiaRichiesteServlet");
 	}
-}}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Long id = 0L;
+		if(request.getParameter("idProfessionista")!=null||!request.getParameter("idProfessionista").trim().isEmpty() ) {
+			id = Long.parseLong(request.getParameter("idProfessionista"));
+		}
+		request.setAttribute("idProfessionista", id);
+
+		request.getRequestDispatcher("/WEB-INF/jsp/utente/scriviRecensione.jsp").forward(request, response);	
+	}
+}

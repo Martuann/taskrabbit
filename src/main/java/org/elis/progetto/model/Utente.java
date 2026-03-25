@@ -81,7 +81,6 @@ public class Utente {
 	public Utente() {};
 	
 
-	
 	public Utente(Long id, String nome, String cognome, String email, String telefono, String password, LocalDate ddn,
 			String cf, Ruolo ruolo, Citta citta) {
 		super();
