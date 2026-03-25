@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -14,12 +13,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.DisponibilitaDao;
 import org.elis.dao.definition.OrarioBaseDao;
 import org.elis.dao.definition.ProfessioneDao;
-import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.dao.definition.UtenteProfessioneDao;
@@ -41,14 +38,14 @@ import org.elis.progetto.model.Veicolo;
 @WebServlet("/InoltroRichieste")
 public class InoltroRichieste extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	 private RichiestaDao richiestaDao;
-	    private UtenteDao utenteDao;
-	    private ProfessioneDao professioneDao;
-	    private VeicoloDao veicoloDao;
-       private UtenteVeicoloDao utenteVeicoloDao;
-       private UtenteProfessioneDao utenteProfessioneDao;
-       private DisponibilitaDao dispDao;
-       private OrarioBaseDao orarioDao;
+	private RichiestaDao richiestaDao;
+	private UtenteDao utenteDao;
+	private ProfessioneDao professioneDao;
+	private VeicoloDao veicoloDao;
+    private UtenteVeicoloDao utenteVeicoloDao;
+    private UtenteProfessioneDao utenteProfessioneDao;
+    private DisponibilitaDao dispDao;
+    private OrarioBaseDao orarioDao;
 	    /**
 	     * @see HttpServlet#HttpServlet()
 	     */
@@ -69,15 +66,10 @@ public class InoltroRichieste extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	    HttpSession session = request.getSession();
-    	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-
-    	   
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	    Long idProfessionista;
     	    try {
-    	        idProfessionista = Long.parseLong(request.getParameter("id_Professionista"));
+    	        idProfessionista = Long.parseLong(request.getParameter("id_professionista"));
     	    } catch (NumberFormatException | NullPointerException e) {
     	    	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
     	    	return;
@@ -187,27 +179,26 @@ public class InoltroRichieste extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-     
-
-        Long idProf, idProfess;
+        Long idProfessionista, idProfessione;
         LocalDate dataValida;
         LocalTime oraInizio;
         int oreSelezionate;
         String indirizzo;
         try {
-            idProf = Long.valueOf(request.getParameter("id_professionista"));
-            idProfess = Long.valueOf(request.getParameter("id_professione"));
+        	idProfessionista = Long.valueOf(request.getParameter("id_professionista"));
+        	idProfessione = Long.valueOf(request.getParameter("id_professione"));
             dataValida = LocalDate.parse(request.getParameter("data_scelta"));
             oraInizio = LocalTime.parse(request.getParameter("ora_inizio"));
             oreSelezionate = Integer.parseInt(request.getParameter("durata_ore"));
-             indirizzo=request.getParameter("indirizzo");
+            indirizzo=request.getParameter("indirizzo");
 
         } catch (Exception e) {
-        	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + request.getParameter("id_professionista") + "&error=dati_non_validi");         
+        	//response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + request.getParameter("id_professionista") + "&error=dati_non_validi");
+        	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
         	return;
         }
 
@@ -218,10 +209,10 @@ public class InoltroRichieste extends HttpServlet {
         UtenteProfessione up;
 
         try {
-            occupate = richiestaDao.selectByIdUtenteRichiesto(idProf);
-            dispo = dispDao.getDisponibilitaPerUtente(idProf);
-            orario = orarioDao.getOrariByUtente(idProf);
-            up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProf, idProfess);
+            occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
+            dispo = dispDao.getDisponibilitaPerUtente(idProfessionista);
+            orario = orarioDao.getOrariByUtente(idProfessionista);
+            up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProfessionista, idProfessione);
         } catch (Exception e) {
 	        response.sendError(500, "Errore nel collegamento con il db");
             return;
@@ -231,7 +222,8 @@ public class InoltroRichieste extends HttpServlet {
             Richiesta r = occupate.get(i);
             if (r.getData().equals(dataValida) && (r.getStato() == StatoRichiesta.in_corso || r.getStato() == StatoRichiesta.completato)) {
                 if (oraInizio.isBefore(r.getOrarioFine()) && oraFine.isAfter(r.getOrarioInizio())) {
-                	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProf + "&error=conflitto");
+                	//response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProfessionista + "&error=conflitto");
+                	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
                 	return;
                 }
             }
@@ -260,7 +252,8 @@ public class InoltroRichieste extends HttpServlet {
         }
 
         if (limiteInizio == null || oraInizio.isBefore(limiteInizio) || oraFine.isAfter(limiteFine)) {
-        	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProf + "&error=fuori_orario");
+        	//response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProfessionista + "&error=fuori_orario");
+        	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
         	return;
         }
 
@@ -270,7 +263,7 @@ public class InoltroRichieste extends HttpServlet {
         if (idVeicoloString != null && !idVeicoloString.isEmpty()) {
             try {
                 Long idV = Long.valueOf(idVeicoloString);
-                UtenteVeicolo uv = utenteVeicoloDao.selectByUtenteEVeicolo(idProf, idV);
+                UtenteVeicolo uv = utenteVeicoloDao.selectByUtenteEVeicolo(idProfessionista, idV);
                 if (uv != null) {
                     prezzoTotale = prezzoTotale.add(uv.getAggiuntaServizio());
                 }
@@ -283,8 +276,8 @@ public class InoltroRichieste extends HttpServlet {
         try{richiesta.setIdUtenteRichiedente(utenteLoggato.getId());}catch(Exception e){
         	response.sendError(500, "Sessione scaduta");
         }
-        richiesta.setIdUtenteRichiesto(idProf);
-        richiesta.setIdProfessione(idProfess);
+        richiesta.setIdUtenteRichiesto(idProfessionista);
+        richiesta.setIdProfessione(idProfessione);
         richiesta.setData(dataValida);
         richiesta.setOrarioInizio(oraInizio);
         richiesta.setOrarioFine(oraFine);
