@@ -27,7 +27,7 @@ public class RicercaProfessionistiServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String professioneCercata = request.getParameter("professione");
-		String idCittaCambiataStr = request.getParameter("idCittaCambiata");
+		//String idCittaCambiataStr = request.getParameter("idCittaCambiata");
 		String nomeCittaCambiata = request.getParameter("nomeCittaCambiata");
 		String action = request.getParameter("action");
 
