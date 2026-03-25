@@ -127,6 +127,7 @@
 
 .view-more {
     display: block;
+    width:100%;
     text-align: center;
     background-color: #1e293b;
     color: white;
