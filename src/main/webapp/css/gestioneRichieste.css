@@ -41,8 +41,8 @@ h1{
     height:50px;
     border-radius:50%;
 }
-.richiesta p:nth-child(2){
-    font-weight:bold;
+.description{
+	margin-left:20px;
 }
 .buttons-container{
 	display:flex;

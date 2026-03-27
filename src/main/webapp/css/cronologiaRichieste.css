@@ -42,8 +42,8 @@ h1{
     height:50px;
     border-radius:50%;
 }
-.richiesta p:nth-child(2){
-    font-weight:bold;
+.description{
+	margin-left:20px;
 }
 input[type=submit]{
     padding:10px;
