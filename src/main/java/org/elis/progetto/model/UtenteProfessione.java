@@ -23,7 +23,7 @@ public class UtenteProfessione {
 	@JoinColumn(name = "id_professione", nullable = false)
     private Professione professione;
 	@Column(name = "tariffaH", 
-	        columnDefinition = "DECIMAL(10,2) NOT NULL DEFAULT 1.0 CHECK (tariffaH > 0)")  
+	        columnDefinition = "DECIMAL(10,2) NOT NULL DEFAULT 1.0 CHECK (tariffaH >= 0)")  
 	private BigDecimal tariffaH;
 	public UtenteProfessione() {};
 	

@@ -144,12 +144,30 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     Long idCitta = Long.parseLong(idCittaStr);
 	try {
 		Citta cittaScelta = cittaDao.selectById(idCitta);
+	//	List<UtenteProfessione> utenteProfessioni=new ArrayList<UtenteProfessione>();
+
+		
+		
 	    Utente nuovoProf = new Utente(
 		    nome, cognome, email, numero, password, ddn,
 		    codiceFiscale, Ruolo.PROFESSIONISTA,cittaScelta  );
+	    
+	/*    if(listaIdProfessioni != null) {
+	 	   for(int i=0;i<listaIdProfessioni.length;i++) {
+	 		  
+	 				Professione professione=  professioneDao.selectById(Long.parseLong(listaIdProfessioni[i]));
+	 				utenteProfessioni.add(new UtenteProfessione(nuovoProf,professione, BigDecimal.ZERO));
+	 	   }
+	 	   }
+			nuovoProf.setProfessioni(utenteProfessioni);*/
 
+	    
+	    
+	    
+	    
 	   utenteDao.aggiungiUtente(nuovoProf);
-	   if(listaIdProfessioni != null) {
+	   System.out.println(nuovoProf.getId()+"ID PROFESSIONISTA");
+     if(listaIdProfessioni != null) {
 	   for(int i=0;i<listaIdProfessioni.length;i++) {
 		  
 				Professione professione=  professioneDao.selectById(Long.parseLong(listaIdProfessioni[i]));

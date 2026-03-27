@@ -19,8 +19,8 @@ public class Immagine {
 	private String nome;
 	@Column(nullable = false)
 	private String percorso;
-	@Column(nullable = false, columnDefinition="Default false" )
-	private Boolean isFotoProfilo; 
+	@Column(nullable = false )
+	private Boolean isFotoProfilo=false; 
 	@ManyToOne
 	@JoinColumn(name="id_utente", nullable = false)
 

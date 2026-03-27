@@ -5,7 +5,9 @@ import java.util.List;
 import org.elis.dao.definition.UtenteProfessioneDao;
 import org.elis.progetto.model.UtenteProfessione;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 
 public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	private EntityManagerFactory emf;
@@ -21,44 +23,89 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 
 	@Override
 	public void insert(UtenteProfessione u) {
-		// TODO Auto-generated method stub
-		
+		try (EntityManager em = emf.createEntityManager()) {
+            EntityTransaction et = em.getTransaction();
+            try {
+                et.begin();
+                em.persist(u);
+                et.commit();
+            } catch (Exception e) {
+                if (et.isActive()) et.rollback();
+                e.printStackTrace();
+            }
+        }	
 	}
 
 	@Override
 	public UtenteProfessione selectById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		try (EntityManager em = emf.createEntityManager()) {
+            return em.find(UtenteProfessione.class, id);
+        }
+    }
+	
 
 	@Override
 	public List<UtenteProfessione> selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT up FROM UtenteProfessione up", UtenteProfessione.class)
+                     .getResultList();
+        }
 	}
 
 	@Override
 	public void update(UtenteProfessione u) {
-		// TODO Auto-generated method stub
-		
+		try (EntityManager em = emf.createEntityManager()) {
+            EntityTransaction et = em.getTransaction();
+            try {
+                et.begin();
+                em.merge(u);
+                et.commit();
+            } catch (Exception e) {
+                if (et.isActive()) et.rollback();
+                e.printStackTrace();
+            }
+        }		
 	}
 
 	@Override
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		
+		try (EntityManager em = emf.createEntityManager()) {
+            EntityTransaction et = em.getTransaction();
+            try {
+                et.begin();
+                UtenteProfessione u = em.find(UtenteProfessione.class, id);
+                if (u != null) em.remove(u);
+                et.commit();
+            } catch (Exception e) {
+                if (et.isActive()) et.rollback();
+                e.printStackTrace();
+            }
+        }		
 	}
 
 	@Override
 	public UtenteProfessione selectByIdUtenteIdProfessione(Long idUtente, Long idProfessione) {
-		// TODO Auto-generated method stub
-		return null;
+		try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                "SELECT up FROM UtenteProfessione up WHERE up.utente.id = :idU AND up.professione.id = :idP", 
+                UtenteProfessione.class)
+                .setParameter("idU", idUtente)
+                .setParameter("idP", idProfessione)
+                .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
 	}
 
 	@Override
 	public List<UtenteProfessione> selectByUtente(long idUtente) {
-		// TODO Auto-generated method stub
-		return null;
+		try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                "SELECT up FROM UtenteProfessione up WHERE up.utente.id = :idU", 
+                UtenteProfessione.class)
+                .setParameter("idU", idUtente)
+                .getResultList();
+        }	
 	}
 
 }

@@ -218,4 +218,94 @@ public class Utente {
 	    return path;
 	}
 
+
+	public List<UtenteVeicolo> getVeicoli() {
+		return veicoli;
+	}
+
+
+	public void setVeicoli(List<UtenteVeicolo> veicoli) {
+		this.veicoli = veicoli;
+	}
+
+
+	public List<Immagine> getImmagini() {
+		return immagini;
+	}
+
+
+	public void setImmagini(List<Immagine> immagini) {
+		this.immagini = immagini;
+	}
+
+
+	public List<UtenteProfessione> getProfessioni() {
+		return professioni;
+	}
+
+
+	public void setProfessioni(List<UtenteProfessione> professioni) {
+		this.professioni = professioni;
+	}
+
+
+	public List<OrarioBase> getOrariBase() {
+		return orariBase;
+	}
+
+
+	public void setOrariBase(List<OrarioBase> orariBase) {
+		this.orariBase = orariBase;
+	}
+
+
+	public List<Disponibilita> getDisponibilita() {
+		return disponibilita;
+	}
+
+
+	public void setDisponibilita(List<Disponibilita> disponibilita) {
+		this.disponibilita = disponibilita;
+	}
+
+
+	public List<Richiesta> getRichiesteFatte() {
+		return richiesteFatte;
+	}
+
+
+	public void setRichiesteFatte(List<Richiesta> richiesteFatte) {
+		this.richiesteFatte = richiesteFatte;
+	}
+
+
+	public List<Richiesta> getRichiesteRicevute() {
+		return richiesteRicevute;
+	}
+
+
+	public void setRichiesteRicevute(List<Richiesta> richiesteRicevute) {
+		this.richiesteRicevute = richiesteRicevute;
+	}
+
+
+	public List<Recensione> getRecensioniScritte() {
+		return recensioniScritte;
+	}
+
+
+	public void setRecensioniScritte(List<Recensione> recensioniScritte) {
+		this.recensioniScritte = recensioniScritte;
+	}
+
+
+	public List<Recensione> getRecensioniRicevute() {
+		return recensioniRicevute;
+	}
+
+
+	public void setRecensioniRicevute(List<Recensione> recensioniRicevute) {
+		this.recensioniRicevute = recensioniRicevute;
+	}
+
 }

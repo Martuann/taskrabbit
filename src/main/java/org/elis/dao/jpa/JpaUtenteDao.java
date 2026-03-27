@@ -33,6 +33,7 @@ try(EntityManager em=emf.createEntityManager()){
 	EntityTransaction transaction =em.getTransaction();
 	transaction.begin();
     em.persist(utente);
+    //utente.getProfessioni().forEach(t->em.persist(t));
     transaction.commit();
 }		return utente.getId();
 	}
