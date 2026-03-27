@@ -6,18 +6,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.elis.dao.definition.DaoFactory;
-import org.elis.dao.definition.ImmagineDao;
-import org.elis.dao.definition.ProfessioneDao;
 import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.RichiestaDao;
-import org.elis.dao.definition.UtenteDao;
-import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Recensione;
 import org.elis.progetto.model.Richiesta;
 import org.elis.progetto.model.Utente;
@@ -29,20 +23,14 @@ import org.elis.progetto.model.Utente;
 public class CronologiaRichiesteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private RichiestaDao richiestaDao;
-    private UtenteDao utenteDao;
-    private ProfessioneDao professioneDao;
     private RecensioneDao recensioneDao;
-    private ImmagineDao immagineDao;   
     /**
      * @see HttpServlet#HttpServlet()
      */
     public CronologiaRichiesteServlet() {
         super();
         richiestaDao = DaoFactory.getInstance().getRichiestaDao();
-        utenteDao = DaoFactory.getInstance().getUtenteDao();
-        professioneDao = DaoFactory.getInstance().getProfessioneDao();
         recensioneDao = DaoFactory.getInstance().getRecensioneDao();
-        immagineDao=DaoFactory.getInstance().getImmagineDao();
     }
 
 	/**
