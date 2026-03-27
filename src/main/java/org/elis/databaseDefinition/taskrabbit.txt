@@ -1,6 +1,6 @@
-create database taskrabbit;
+create database jpa_taskly;
 
-use taskrabbit;
+use jpa_taskly;
 
 create table citta(
 id bigint unsigned primary key auto_increment,	
@@ -130,7 +130,7 @@ create table orario_base (
 
 
 
-USE taskrabbit;
+USE jpa_taskly;
 
 -- 1. Popolamento Città
 INSERT INTO citta (nome, provincia) VALUES 
@@ -172,7 +172,7 @@ INSERT INTO utente_professione (tariffaH, id_utente, id_professione) VALUES
 (15.00, 3, 4); -- Giulia fa pulizie a 15.00€/h
 
 -- 6. Relazione Utente-Veicolo (I mezzi a disposizione dei professionisti)
-INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiuntaServizio) VALUES 
+INSERT INTO utente_veicolo (id_utente, id_veicolo, aggiunta_servizio) VALUES 
 (2, 4, 15.00), -- Luca ha un Furgone Piccolo (+15€ al servizio)
 (3, 2, 5.00);  -- Giulia ha un'Auto (+5€ al servizio)
 
@@ -196,7 +196,7 @@ INSERT INTO orario_base (giorno_settimana, ora_inizio, ora_fine, id_utente) VALU
 
 -- 10. Richieste di Servizio
 -- Marco (id 4) richiede a Luca (id 2) un lavoro di idraulica (id 1)
-INSERT INTO richiesta (descrizione, data, orario_inizio, orario_fine, costoeffettivo, indirizzo, stato, id_utenteRichiedente, id_utenteRichiesto, id_professione, id_veicolo) VALUES 
+INSERT INTO richiesta (descrizione, data, orarioInizio, orarioFine, costo_effettivo, indirizzo, stato, id_utenteRichiedente, id_utenteRichiesto, id_professione, id_veicolo) VALUES 
 ('Riparazione perdita lavandino cucina', '2024-06-05', '10:00:00', '12:00:00', 86.00, 'Via Roma 10, Milano', 2, 4, 2, 1, 4),
 ('Montaggio armadio camera da letto', '2024-06-06', '15:00:00', '18:00:00', 65.00, 'Corso Vittorio 5, Torino', 0, 5, 3, 3, 2);
 

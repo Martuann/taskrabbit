@@ -91,12 +91,13 @@ public class JpaRichiestaDao implements RichiestaDao{
 	public List<Richiesta> selectByIdUtenteRichiedente(Long idUtenteRichiedente) {
 		  try (EntityManager em = emf.createEntityManager()) {
 		       
-		        String jpql = "SELECT r FROM Richiesta r " +
-		                      "JOIN FETCH r.utenteRichiesto u " + 
-		                      "JOIN FETCH r.professione p " +
-		                      "LEFT JOIN FETCH u.immagini i ON i.isFotoProfilo = true " +
-		                      "WHERE r.utenteRichiedente.id = :id " +
-		                      "ORDER BY r.data DESC";
+		        String jpql = "SELECT DISTINCT r FROM Richiesta r " +
+			        		  "JOIN FETCH r.utenteRichiesto u " + 
+			        		  "JOIN FETCH r.professione p " +
+			        		  "LEFT JOIN FETCH u.immagini i " +
+			        		  "WHERE r.utenteRichiedente.id = :id " +
+			        		  "AND (i IS NULL OR i.isFotoProfilo = true) " +
+			        		  "ORDER BY r.data DESC";
 
 		        return em.createQuery(jpql, Richiesta.class)
 		                 .setParameter("id", idUtenteRichiedente)
@@ -111,12 +112,13 @@ public class JpaRichiestaDao implements RichiestaDao{
 	public List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto) {
 		try (EntityManager em = emf.createEntityManager()) {
 	        
-	        String jpql = "SELECT r FROM Richiesta r " +
-	                      "JOIN FETCH r.utenteRichiedente ur " + 
-	                      "JOIN FETCH r.professione p " +
-	                      "LEFT JOIN FETCH ur.immagini i ON i.isFotoProfilo = true " +
-	                      "WHERE r.utenteRichiesto.id = :id " +
-	                      "ORDER BY r.data DESC";
+	        String jpql = "SELECT DISTINCT r FROM Richiesta r " +
+				          "JOIN FETCH r.utenteRichiesto u " + 
+				          "JOIN FETCH r.professione p " +
+				          "LEFT JOIN FETCH u.immagini i " +
+				          "WHERE r.utenteRichiesto.id = :id " +
+				          "AND (i IS NULL OR i.isFotoProfilo = true) " +
+				          "ORDER BY r.data DESC";
 
 	        return em.createQuery(jpql, Richiesta.class)
 	                 .setParameter("id", idUtenteRichiesto)
