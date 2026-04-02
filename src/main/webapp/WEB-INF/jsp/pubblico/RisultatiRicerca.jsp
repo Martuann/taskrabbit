@@ -91,7 +91,7 @@
 						<p>
 							Email:
 							<%= utente.getEmail() %></p>
-						<form action="ProfiloProfessionistaServlet" method="POST">
+						<form action="<%=request.getContextPath()%>/ProfiloProfessionistaServlet" method="POST">
 							<input type="hidden" name="idProfessionista" value="<%= utente.getId() %>">
 							<input type="submit" value="Mostra il profilo" class="view-more">
 						</form>

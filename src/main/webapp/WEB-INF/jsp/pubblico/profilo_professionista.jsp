@@ -4,29 +4,34 @@
 <%@ page import="org.elis.progetto.model.*" %>
 <!DOCTYPE html>
 <html>
+<%
+    Utente professionista = (Utente) request.getAttribute("professionista");
+    List<Veicolo> veicoli = (List<Veicolo>) request.getAttribute("veicoli");
+    List<Professione> professioni = (List<Professione>) request.getAttribute("profeUtente");
+    List<UtenteProfessione> utenteProf = (List<UtenteProfessione>) request.getAttribute("utenteProf");
+    List<Immagine> galleria = (List<Immagine>) request.getAttribute("galleria");
+    String proPic = (String) request.getAttribute("proPicProfilo");
+    
+    if(professionista == null) {
+        response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+        return;
+    }
+%>
 <head>
     <meta charset="UTF-8">
     <title>Profilo di <%= ((Utente)request.getAttribute("professionista")).getNome() %></title>
-    <link rel="stylesheet" href="css/profilo_professionista.css">
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/profilo_professionista.css">
 </head>
 <body>
     
     <%@ include file="/WEB-INF/headerFooter/header.jsp"%>
 
     <main class="container-profilo">
-        <%
-            Utente professionista = (Utente) request.getAttribute("professionista");
-            List<Veicolo> veicoli = (List<Veicolo>) request.getAttribute("veicoli");
-            List<Professione> professioni = (List<Professione>) request.getAttribute("profeUtente");
-            List<UtenteProfessione> utenteProf = (List<UtenteProfessione>) request.getAttribute("utenteProf");
-            List<Immagine> galleria = (List<Immagine>) request.getAttribute("galleria");
-            String proPic = (String) request.getAttribute("proPicProfilo");
-        %>
+   
 
         <section class="user-info-section">
             <div class="profile-main-data">
-                <img id='propicprofilo' src='<%= proPic %>' alt="Foto Profilo">
-                <div id="infoprofilo">
+<img id='propicprofilo' src='<%= request.getContextPath() + "/" + proPic %>' alt="Foto Profilo" onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">                <div id="infoprofilo">
                     <h1 id="nomeprofilo"><%= professionista.getNome() + " " + professionista.getCognome() %></h1>
                     
                     <p id="p-veicoli"><strong>Veicoli disponibili:</strong> 
@@ -71,8 +76,7 @@
             <div id="imgs">
                 <% if(galleria != null && !galleria.isEmpty()) { 
                     for(int i=0; i < galleria.size(); i++) { %>
-                        <img id="img_lavoro_<%= i %>" class="imglavoro" src="<%= galleria.get(i).getPercorso() %>">
-                <%  } 
+<img id="img_lavoro_<%= i %>" class="imglavoro" src="<%= request.getContextPath() + "/" + galleria.get(i).getPercorso() %>">                <%  } 
                    } else { %> <p>Nessuna foto di lavoro disponibile.</p> <% } %>
             </div>
         </section>
@@ -86,16 +90,17 @@
                 List<Utente> listaRecensori = (List<Utente>) request.getAttribute("listaRecensori"); 
                 Map<Utente, String> mappaRecensori = (Map<Utente, String>) request.getAttribute("mappaRecensori");
 
-                if(recensioni != null && !recensioni.isEmpty()) {
+         
+            
+            if(recensioni != null && listaRecensori != null && !recensioni.isEmpty() && recensioni.size() == listaRecensori.size()) {
                     for(int i=0; i < recensioni.size(); i++) { 
                         Recensione r = recensioni.get(i);
                         Utente autore = listaRecensori.get(i);
-                        String fotoAutore = mappaRecensori.get(autore);
+                        String fotoAutore = (mappaRecensori != null) ? mappaRecensori.get(autore) : proPic;
             %>
             <div class="recensione-card">
                 <div class="recensione-header">
-                    <img class="propic-recensore" src="<%= fotoAutore %>">
-                    <div class="recensore-meta">
+<img class="propic-recensore" src="<%= request.getContextPath() + "/" + fotoAutore %>" style="width:50px; height:50px; border-radius:50%; object-fit: cover;" onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">               <div class="recensore-meta">
                         <strong class="nomeutente"><%= autore.getNome() + " " + autore.getCognome() %></strong>
                         <p class="rating">Voto: <%= r.getVoto() %>/5 ⭐</p>
                     </div>
@@ -106,13 +111,13 @@
                 </div>
             </div>
             <%      } 
-                } else { %> <p>Non ci sono ancora recensioni per questo professionista.</p> <% } %>
-                
-            <section class="contact-section">
+                }
+            else { %> <p>Non ci sono ancora recensioni per questo professionista.</p> <% } %>
+	</section>               <section class="contact-section">
             <h2>Vuoi contattare questo professionista?</h2>
             
           
-            <form action="InoltroRichieste" method="POST">
+			<form action="<%= request.getContextPath() %>/InoltroRichieste" method="POST">
             	<input type="hidden" name="id_professionista" value="<%= professionista.getId() %>">
             	<input type="submit" value="Contatta" class="contatta-class">
             </form>
@@ -120,8 +125,8 @@
         </section>
     </main>
 
-    <%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
     
+    <%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 
 </body>
 </html>
