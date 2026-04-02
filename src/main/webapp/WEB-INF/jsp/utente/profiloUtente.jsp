@@ -25,9 +25,7 @@
 	}
 	%>
 
-	<form id="profileForm"
-		action="<%=request.getContextPath()%>/AggiornaProfilo" method="post"
-		class="profilo-container">
+	<div class="containter">
 
 		<div class="back-navigation">
 			<a href="javascript:void(0);" onclick="window.history.back();"
@@ -35,14 +33,25 @@
 			</a>
 		</div>
 
-		<div class="profile-header">
-			<div class="avatar-circle">
-				<%=(utenteProfilo.getNome() != null && !utenteProfilo.getNome().isEmpty())
-		? utenteProfilo.getNome().substring(0, 1).toUpperCase()
-		: "?"%>
-			</div>
+	<div class="profile-header">
+			<div class="avatar-wrapper">
+				<img id="avatarImg" class="avatar-circle-img" 
+					 src="<%= request.getContextPath() %>/recuperaFotoProfilo" 
+					 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"
+					 onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';"
+					 alt="Avatar">
+				
+				<form action="<%=request.getContextPath()%>/CaricaFotoProfilo" method="post" enctype="multipart/form-data" class="upload-avatar-form">
+					<label for="fileFoto" class="btn-cambia-foto">Cambia Foto</label>
+					<input type="file" id="fileFoto" name="foto" accept="image/*" style="display:none;" onchange="this.form.submit()">
+				</form>
+				</div>
+				</div>
+				<form id="profileForm"
+		action="<%=request.getContextPath()%>/AggiornaProfilo" method="post"
+		class="profilo-container">
+			
 			<h1>I miei Dati</h1>
-		</div>
 
 		<div class="info-grid">
 			<div class="info-box">
@@ -126,7 +135,7 @@
 					onclick="window.location.reload()">Annulla</button>
 			</div>
 		</div>
-	</form>
+	</form> </div>
 
 	<script>
 	function togglePasswordSection() {

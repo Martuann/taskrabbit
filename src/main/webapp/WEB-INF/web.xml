@@ -6,4 +6,7 @@
     <welcome-file>index.jsp</welcome-file>
   
   </welcome-file-list>
+  <session-config>
+    <session-timeout>300000000000000</session-timeout>
+</session-config>
 </web-app>
