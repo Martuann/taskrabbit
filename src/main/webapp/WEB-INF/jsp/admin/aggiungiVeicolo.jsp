@@ -38,5 +38,3 @@
     <%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 </body>
 </html>
-</body>
-</html>

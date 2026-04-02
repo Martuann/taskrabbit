@@ -27,12 +27,17 @@
 			</div>
 			<% } %>
 
-			<form action="<%= request.getContextPath() %>/AggiungiCitta"
+			<form action="<%= request.getContextPath() %>/AggiungiCittaServlet"
 				method="POST">
 				<div class="input-dati">
 					<input type="text" name="nomeCitta"
 						placeholder="es. Roma, Milano, Napoli..." required>
 				</div>
+				
+				<div class="input-dati">
+					<input type="text" name="provincia" placeholder="Provincia (es. RM, MI, NA)" maxlength="2" style="text-transform: uppercase;" required>
+				</div>
+				
 				<button type="submit" class="btn-submit">Salva nel Sistema</button>
 			</form>
 		</div>

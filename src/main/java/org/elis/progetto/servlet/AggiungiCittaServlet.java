@@ -32,39 +32,38 @@ public class AggiungiCittaServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nomeCitta = request.getParameter("nomeCitta");
-
+        String provincia = request.getParameter("provincia");
        
-        if (nomeCitta != null && !nomeCitta.trim().isEmpty()) {
-            try {
-             
-                if (nomeCitta.length() > 30) {
-                    request.setAttribute("messaggio", "Errore: nome città troppo lungo.");
-                } else {
-                   
-                    Citta nuovaCitta = new Citta();
-                    nuovaCitta.setNome(nomeCitta.trim());
+        	if (nomeCitta != null && !nomeCitta.trim().isEmpty() && provincia != null && !provincia.trim().isEmpty()) {
+                try {
                     
-                    cittaDao.aggiungiCitta(nuovaCitta);
-                    
-                    request.setAttribute("messaggio", "Città aggiunta con successo!");
+                    if (nomeCitta.length() > 30) {
+                        request.setAttribute("messaggio", "Errore: nome città troppo lungo.");
+                    } else if (provincia.trim().length() != 2) {
+                        request.setAttribute("messaggio", "Errore: la provincia deve essere di esattamente 2 caratteri.");
+                    } else {
+                        Citta nuovaCitta = new Citta();
+                        nuovaCitta.setNome(nomeCitta.trim());
+                        nuovaCitta.setProvincia(provincia.trim().toUpperCase()); 
+                        
+                        cittaDao.aggiungiCitta(nuovaCitta);
+                        
+                        request.setAttribute("messaggio", "Città aggiunta con successo!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    request.setAttribute("messaggio", "Errore nel salvataggio della città.");
                 }
-            } catch (Exception e) {
-               
-                e.printStackTrace();
-                request.setAttribute("messaggio", "Errore nel salvataggio della città.");
+            } else {
+                request.setAttribute("messaggio", "Errore: compila tutti i campi richiesti.");
             }
-        } else {
-            request.setAttribute("messaggio", "Inserisci un nome città valido.");
-        }
-        
 
-        request.getRequestDispatcher("/WEB-INF/jsp/admin/aggiungiCitta.jsp").forward(request, response);
     
+ 
+        
+        request.getRequestDispatcher("/WEB-INF/jsp/admin/aggiungiCitta.jsp").forward(request, response);
 
-    response.sendRedirect("aggiungiCitta.jsp?error=1");
-            return; 
-        }
-	}
+    }}
 
 	
 

@@ -92,7 +92,7 @@
 									<% List<Citta> listaCitta = (List<Citta>) request.getAttribute("listaCitta");%>
 				
 								<div class="input-citta-select">
-    <label for="id_citta">Seleziona la tua città:</label>
+    <label for="id_citta"></label>
     <select name="id_citta" id="id_citta" required>
         <option value="" disabled selected>Scegli una città...</option>
         

@@ -79,9 +79,11 @@
 
 			<div class="input-dati">
 
-				<select class="selettoreprofessioni" name="professione"
-					multiple="multiple" style="width: 100%;">
-
+				<div class="input-dati">
+    <label style="font-size: 12px; color: #666; margin-left: 5px; margin-bottom: 5px;"></label>
+    <select class="selettoreprofessioni" name="professione" multiple="multiple" style="width: 100%;">
+        </select>
+</div>
 					<%
 					List<Professione> listaProfessioni = (List<Professione>) request.getAttribute("listaProfessioni");
 					List<Citta> listaCitta = (List<Citta>) request.getAttribute("listaCitta");
@@ -126,7 +128,7 @@
 
 			<div class="input-row">
 			<div class="input-citta-select">
-    <label for="id_citta">Seleziona la tua città:</label>
+    <label for="id_citta"></label>
     <select name="id_citta" id="id_citta" required>
         <option value="" disabled selected>Scegli una città...</option>
         
