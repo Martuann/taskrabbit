@@ -31,8 +31,11 @@
 
         <section class="user-info-section">
             <div class="profile-main-data">
-<img id='propicprofilo' src='<%= request.getContextPath() + "/" + proPic %>' alt="Foto Profilo" onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">                <div id="infoprofilo">
-                    <h1 id="nomeprofilo"><%= professionista.getNome() + " " + professionista.getCognome() %></h1>
+<img id='propicprofilo' 
+     src="<%= request.getContextPath() %>/recuperaFoto?idUtenteRichiesto=<%= professionista.getId() %>" 
+     alt="Foto Profilo" 
+     onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">                  
+       <h1 id="nomeprofilo"><%= professionista.getNome() + " " + professionista.getCognome() %></h1>
                     
                     <p id="p-veicoli"><strong>Veicoli disponibili:</strong> 
                         <% if(veicoli != null && !veicoli.isEmpty()) { 
@@ -76,8 +79,11 @@
             <div id="imgs">
                 <% if(galleria != null && !galleria.isEmpty()) { 
                     for(int i=0; i < galleria.size(); i++) { %>
-<img id="img_lavoro_<%= i %>" class="imglavoro" src="<%= request.getContextPath() + "/" + galleria.get(i).getPercorso() %>">                <%  } 
-                   } else { %> <p>Nessuna foto di lavoro disponibile.</p> <% } %>
+<img id="img_lavoro_<%= i %>" 
+     class="imglavoro" 
+     src="<%= request.getContextPath() %>/recuperaFoto?id=<%= galleria.get(i).getId() %>">
+     <%  }
+                        } else { %> <p>Nessuna foto di lavoro disponibile.</p> <% } %>
             </div>
         </section>
 
@@ -100,8 +106,11 @@
             %>
             <div class="recensione-card">
                 <div class="recensione-header">
-<img class="propic-recensore" src="<%= request.getContextPath() + "/" + fotoAutore %>" style="width:50px; height:50px; border-radius:50%; object-fit: cover;" onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">               <div class="recensore-meta">
-                        <strong class="nomeutente"><%= autore.getNome() + " " + autore.getCognome() %></strong>
+<img class="propic-recensore" 
+     src="<%= request.getContextPath() %>/recuperaFoto?idUtenteRichiesto=<%= autore.getId() %>" 
+     style="width:50px; height:50px; border-radius:50%; object-fit: cover;" 
+     onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">
+                             <strong class="nomeutente"><%= autore.getNome() + " " + autore.getCognome() %></strong>
                         <p class="rating">Voto: <%= r.getVoto() %>/5 ⭐</p>
                     </div>
                     <p class="data-recensione"><%= r.getData().toString() %></p>

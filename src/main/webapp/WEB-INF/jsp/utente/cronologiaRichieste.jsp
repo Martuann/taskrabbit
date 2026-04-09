@@ -39,9 +39,9 @@
 	  	%>
 		<div class="richiesta">
 			<div class="titolo">
-				<img src="<%= pro.getFotoProfiloPath(request.getContextPath()) %>" 
-	          		 style="width:50px; height:50px; border-radius:50%; object-fit: cover;" 
-	          		 onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">
+				<img src="<%= request.getContextPath() %>/recuperaFoto?idUtenteRichiesto=<%= pro.getId() %>" 
+     style="width:50px; height:50px; border-radius:50%; object-fit: cover;" 
+     onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">
 	          	<p><%= pro.getNome() + " " + pro.getCognome() %></p>
 			</div>
 			<p style="font-weight:bold; color: <%= colore %>">

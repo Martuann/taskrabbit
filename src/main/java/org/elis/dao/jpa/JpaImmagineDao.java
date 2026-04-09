@@ -11,6 +11,7 @@ import org.elis.progetto.model.Utente;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 
 public class JpaImmagineDao implements ImmagineDao{
 	private EntityManagerFactory emf;
@@ -25,7 +26,7 @@ public class JpaImmagineDao implements ImmagineDao{
 	}
 
 	@Override
-	public void insert(Immagine i) {
+	public void insert(Immagine i)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
 	        EntityTransaction t = em.getTransaction();
 	        t.begin();
@@ -54,21 +55,21 @@ public class JpaImmagineDao implements ImmagineDao{
 	    }}
 
 	@Override
-	public Immagine selectById(Long id) {
+	public Immagine selectById(Long id) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             return em.find(Immagine.class, id);
         }
 	}
 
 	@Override
-	public List<Immagine> selectAll() {
+	public List<Immagine> selectAll() throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT i FROM Immagine i", Immagine.class).getResultList();
         }
 	}
 
 	@Override
-	public void update(Immagine i) {
+	public void update(Immagine i) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -78,7 +79,7 @@ public class JpaImmagineDao implements ImmagineDao{
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(Long id) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -90,7 +91,7 @@ public class JpaImmagineDao implements ImmagineDao{
 	}
 
 	@Override
-	public List<Immagine> selectByIdUtente(Long idUtente) {
+	public List<Immagine> selectByIdUtente(Long idUtente) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT i FROM Immagine i WHERE i.utente.id = :uId", Immagine.class)
                      .setParameter("uId", idUtente)
@@ -117,7 +118,20 @@ public class JpaImmagineDao implements ImmagineDao{
     }
 	
 	
-	
+	@Override
+	public Immagine selectFotoProfiloByUtente(Long idUtente) throws Exception {
+	    try (EntityManager em = emf.createEntityManager()) {
+	        String jpql = "SELECT i FROM Immagine i WHERE i.utente.id = :idUtente AND i.isFotoProfilo = true";
+	        
+	        try {
+	            return em.createQuery(jpql, Immagine.class)
+	                     .setParameter("idUtente", idUtente)
+	                     .getSingleResult();
+	        } catch (NoResultException e) {
+	            return null;
+	        }
+	    }
+	}
 	
 	}
 

@@ -36,7 +36,8 @@
 	<div class="profile-header">
 			<div class="avatar-wrapper">
 				<img id="avatarImg" class="avatar-circle-img" 
-					 src="<%= request.getContextPath() %>/recuperaFotoProfilo" 
+			
+					 src="<%= request.getContextPath() %>/recuperaFoto" 
 					 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"
 					 onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';"
 					 alt="Avatar">

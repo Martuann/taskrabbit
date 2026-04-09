@@ -25,8 +25,10 @@
 			displayValue1 = "none"; %>
 		<div class="richiesta">
 			<div class="titolo">
-			    <img src="<%= request.getContextPath() %>/immagini/default-avatar.png" 
-			    	 style="width:50px; height:50px; border-radius:50%; object-fit: cover;">
+			    <img src="<%= request.getContextPath() %>/recuperaFoto?idUtenteRichiesto=<%= richieste.get(i).getUtenteRichiedente().getId() %>" 
+     style="width:50px; height:50px; border-radius:50%; object-fit: cover;"
+     onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';"
+     alt="Avatar">
 			    <p class="nome-utente"><%= request.getAttribute("nomeutente"+i) %></p>
 			</div>
 			<p style="font-weight:bold; color:<%= request.getAttribute("coloreStato"+i) %>">
@@ -69,7 +71,10 @@
 				displayValue2 = "none"; %>
 				<div class="richiesta">
 					<div class="titolo">
-					    <img src="<%= request.getContextPath() %>/immagini/default-avatar.png" style="width:50px; height:50px; border-radius:50%; object-fit: cover;">
+					<img src="<%= request.getContextPath() %>/recuperaFoto?idUtenteRichiesto=<%= richieste.get(i).getUtenteRichiedente().getId() %>" 
+     style="width:50px; height:50px; border-radius:50%; object-fit: cover;"
+     onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';"
+     alt="Avatar">
 					    <p class="nome-utente"><%= request.getAttribute("nomeutente"+i) %></p>
 					</div>
 					<p style="font-weight:bold; color:<%= request.getAttribute("coloreStato"+i) %>">
