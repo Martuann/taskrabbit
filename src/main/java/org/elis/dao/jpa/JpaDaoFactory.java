@@ -30,7 +30,7 @@ public class JpaDaoFactory extends DaoFactory {
 	private RecensioneDao recensioneDao;
 	private RichiestaDao richiestaDao;
 	private UtenteProfessioneDao utenteProfessioneDao;
-	private UtenteVeicoloDao UtenteVeicoloDao;
+	private UtenteVeicoloDao utenteVeicoloDao;
 	private VeicoloDao veicoloDao;
 	public JpaDaoFactory() {
 		
@@ -57,7 +57,7 @@ this.professioneDao=new JpaProfessioneDao(emf);
 this.recensioneDao=new JpaRecensioneDao(emf);		
 this.richiestaDao=new JpaRichiestaDao(emf);		
 this.utenteProfessioneDao=new JpaUtenteProfessioneDao(emf);		
-this.UtenteVeicoloDao=new JpaUtenteVeicoloDao(emf);		
+this.utenteVeicoloDao=new JpaUtenteVeicoloDao(emf);		
 this.veicoloDao=new JpaVeicoloDao(emf);		
 
 
@@ -90,7 +90,7 @@ this.veicoloDao=new JpaVeicoloDao(emf);
 		return utenteProfessioneDao;
 	}
 	public UtenteVeicoloDao getUtenteVeicoloDao() {
-		return UtenteVeicoloDao;
+		return utenteVeicoloDao;
 	}
 	public VeicoloDao getVeicoloDao() {
 		return veicoloDao;
