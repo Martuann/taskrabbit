@@ -65,8 +65,8 @@
 			<% } %>
 			<% if(r.getStato() == StatoRichiesta.in_corso) { %>
 				<form action="AggiornaRichiesta" method="POST">
-					<input type="hidden" name="idRichiesta" value="<%= r.getId() %>">
-					<input type="hidden" name="nuovoStato" value="completato">
+					<input type="hidden" name="id1" value="<%= r.getId() %>">
+					<input type="hidden" name="type" value="completato">
 					<input type="submit" value="Segna come completata">
 				</form>
 			<% } %>

@@ -51,8 +51,8 @@ public class InoltroRichieste extends HttpServlet {
 	     */
 	    
 	        
-    public InoltroRichieste() {
-        super();
+    @Override
+    public void init() throws ServletException {
         
         richiestaDao = DaoFactory.getInstance().getRichiestaDao();
         utenteDao = DaoFactory.getInstance().getUtenteDao();
@@ -113,7 +113,8 @@ public class InoltroRichieste extends HttpServlet {
     	        Disponibilita eccezione = null;
 
     	        for (int i = 0; i < dispo.size(); i++) {
-    	            if (dispo.get(i).getData().equals(dataOggi)) {
+    	        	   if (dispo.get(i) != null && dispo.get(i).getData() != null && 
+    	        		        dispo.get(i).getData().equals(dataOggi)) {
     	                eccezione = dispo.get(i);
     	                break;
     	            }

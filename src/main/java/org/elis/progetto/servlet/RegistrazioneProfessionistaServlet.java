@@ -74,10 +74,11 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	String provincia = request.getParameter("provincia");
 	String codiceFiscale = request.getParameter("codiceFiscale");
 	String idCittaStr = request.getParameter("id_citta");
-	String listaIdProfessioni[] = request.getParameterValues("professione");
-
+	String[] listaIdProfessioni = request.getParameterValues("professione");
+	
 	List<String> errori = new ArrayList<>();
 	LocalDate ddn=null;
+	
 	if (nome == null || nome.trim().length() < 2) {
         errori.add("Il nome deve contenere almeno 2 caratteri.");
     }
@@ -124,7 +125,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 
     if (!errori.isEmpty()) {
         
-   
+   try {
         List<Professione> tutteLeProfessioni =professioneDao.selectAll();
     	caricaCitta(request);
 
@@ -136,6 +137,15 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
       
         request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
         return; 
+    
+    
+    } catch (Exception e) {
+    e.printStackTrace();		
+   request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
+    							
+    }
+    
+    
     }
 
 	
@@ -179,16 +189,26 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	   response.sendRedirect(request.getContextPath() + "/Login?success=prof");
 	} catch (RegisterException e) {
     	caricaCitta(request);
-        List<Professione> tutteLeProfessioni =professioneDao.selectAll();
+        List<Professione> tutteLeProfessioni;
+		try {
+			tutteLeProfessioni = professioneDao.selectAll();
+		
 
     	 request.setAttribute("listaProfessioni", tutteLeProfessioni);
 	    request.setAttribute("listaErrori", List.of(e.getMessage()));
 	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
+		} catch (Exception e1) {
+			 response.sendRedirect(request.getContextPath() + "/RegistrazioneProfessionistaServlet?error=tecnico");
+				e1.printStackTrace();
+			}
 	    } catch (Exception e) {
 	    	caricaCitta(request);
+	    	try {
 	        List<Professione> tutteLeProfessioni =professioneDao.selectAll();
 
 	    	 request.setAttribute("listaProfessioni", tutteLeProfessioni);
+	    	}catch(Exception e1) {
+	    		 response.sendRedirect(request.getContextPath() + "/RegistrazioneProfessionistaServlet?error=tecnico");}
 	    e.printStackTrace();
 	    request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
 	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);

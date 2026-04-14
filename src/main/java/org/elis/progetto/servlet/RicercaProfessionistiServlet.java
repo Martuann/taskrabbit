@@ -18,11 +18,11 @@ import org.elis.dao.definition.UtenteDao;
 public class RicercaProfessionistiServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UtenteDao utenteDao;
-
-	public RicercaProfessionistiServlet() {
-		super();
-		utenteDao = DaoFactory.getInstance().getUtenteDao();
+	public void init() throws ServletException {
+	    utenteDao = DaoFactory.getInstance().getUtenteDao();  
 	}
+	
+	
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,8 +38,12 @@ public class RicercaProfessionistiServlet extends HttpServlet {
 
 		if (nomeCittaCambiata != null && !nomeCittaCambiata.trim().isEmpty()) {
 			try {
-
-				String cittaDaPulire = nomeCittaCambiata.split(" \\(")[0].trim();
+				
+				
+				String cittaDaPulire=null;
+				if (nomeCittaCambiata != null && !nomeCittaCambiata.trim().isEmpty()) {
+				    cittaDaPulire = nomeCittaCambiata.split(" \\(")[0].trim();  // ✅ Sicuro
+				}
 		        Citta c = DaoFactory.getInstance().getCittaDao().getByName(cittaDaPulire);
 		        if (c != null) {
 		            idCittaDaFiltrare = c.getId();
@@ -50,7 +54,9 @@ public class RicercaProfessionistiServlet extends HttpServlet {
 			}
 		}
 		else if (utenteLoggato != null && !"reset".equals(action)) {
-			idCittaDaFiltrare = utenteLoggato.getCitta().getId();
+			if (utenteLoggato != null && utenteLoggato.getCitta() != null) {
+			    idCittaDaFiltrare = utenteLoggato.getCitta().getId();
+			}
 			try {
 				Citta c = DaoFactory.getInstance().getCittaDao().selectById(idCittaDaFiltrare);
 				if (c != null) messaggioFiltro = "a " + c.getNome();

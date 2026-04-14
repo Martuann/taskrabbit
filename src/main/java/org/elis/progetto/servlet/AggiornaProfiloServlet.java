@@ -39,10 +39,10 @@ public class AggiornaProfiloServlet extends HttpServlet {
 			String idCittaStr = request.getParameter("idCitta");
 			String nuovaPw = request.getParameter("nuovaPassword");
 			
-			if(nome != null) {
-				nome = nome.substring(0,1).toUpperCase() + nome.substring(1);
+			if(nome != null && nome.length() > 0) {
+			    nome = nome.substring(0, 1).toUpperCase() + (nome.length() > 1 ? nome.substring(1) : "");
 			}
-			if(cognome != null) {
+			if(cognome != null && cognome.length() > 0) {
 				cognome = cognome.substring(0,1).toUpperCase() + cognome.substring(1);
 			}
 			

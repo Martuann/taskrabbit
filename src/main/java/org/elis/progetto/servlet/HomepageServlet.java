@@ -18,9 +18,8 @@ public class HomepageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	ProfessioneDao professioneDao;
 
-	public HomepageServlet() {
-		super();
-		professioneDao = DaoFactory.getInstance().getProfessioneDao();
+	public void init() throws ServletException {
+	    professioneDao = DaoFactory.getInstance().getProfessioneDao();  
 	}
 
 	@Override

@@ -4,11 +4,11 @@ import java.util.List;
 import org.elis.progetto.model.Richiesta;
 
 public interface RichiestaDao {
-	void insert(Richiesta r);
-	Richiesta selectById(Long id);
-	List<Richiesta> selectAll();
-	void update(Richiesta r);
-	void delete(Long id);
-	List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto);
-	List<Richiesta> selectByIdUtenteRichiedente(Long idUtenteRichiedente);
+	void insert(Richiesta r) throws Exception;
+	Richiesta selectById(Long id) throws Exception;
+	List<Richiesta> selectAll()throws Exception;
+	void update(Richiesta r)throws Exception;
+	void delete(Long id)throws Exception;
+	List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto)throws Exception;
+	List<Richiesta> selectByIdUtenteRichiedente(Long idUtenteRichiedente)throws Exception;
 }

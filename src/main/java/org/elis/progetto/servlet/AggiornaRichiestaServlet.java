@@ -47,8 +47,8 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	        Richiesta richiesta = richiestaDao.selectById(idRichiesta);
 	        
 	        if (richiesta != null) {
-	        	if (richiesta.getUtenteRichiesto().equals(utenteLoggato.getId()) || 
-	        		    richiesta.getUtenteRichiedente().equals(utenteLoggato.getId())) {
+	        	if (richiesta.getUtenteRichiesto().getId().equals(utenteLoggato.getId()) || 
+	        		    richiesta.getUtenteRichiedente().getId().equals(utenteLoggato.getId())) {
 	                richiesta.setStato(nuovoStato);
 	                richiestaDao.update(richiesta);
 	            }
@@ -79,23 +79,29 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
         long idRichiesta = 0;
-	    if(!request.getParameter("idRichiesta").trim().isEmpty() || request.getParameter("idRichiesta")!=null) {
-	    	idRichiesta = Long.parseLong(request.getParameter("idRichiesta"));
+        String idRichiestaStr = request.getParameter("id1");
+        if(idRichiestaStr != null && !idRichiestaStr.trim().isEmpty()) { 
+	    	idRichiesta = Long.parseLong(idRichiestaStr);
 	    }
-        Richiesta richiesta = richiestaDao.selectById(idRichiesta);
+	    
 
-        String nomeNuovoStato = request.getParameter("nuovoStato");
+        String nomeNuovoStato = request.getParameter("type");
         StatoRichiesta nuovoStato = null;
-        if(!nomeNuovoStato.trim().isEmpty() || nomeNuovoStato!=null) {
+        
+        
+        if(nomeNuovoStato != null && !nomeNuovoStato.trim().isEmpty()) {
+
         	nuovoStato = StatoRichiesta.valueOf(nomeNuovoStato);
         }
      //   System.out.println(richiesta.getIdUtenteRichiedente()+"\n"+utenteLoggato.getId());
         try {
+            Richiesta richiesta = richiestaDao.selectById(idRichiesta);
+
 	        if(richiesta != null && nuovoStato!=null) {
 	        	//Separazione dei permessi
 	        	switch(nuovoStato) {
 	        	case completato: //solo il richiedente può segnare come "COMPLETATO" lo stato della richiesta
-	        		if(richiesta.getUtenteRichiedente().getId()!=utenteLoggato.getId()) {
+	        		if(!richiesta.getUtenteRichiedente().getId().equals(utenteLoggato.getId())) {
 	        			response.sendRedirect(request.getContextPath() +"/HomepageServlet");
 	        			return;
 	        		}
@@ -104,7 +110,8 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	        		response.sendRedirect(request.getContextPath() +"/HomepageServlet");
 	        		return;
 	        	default: //solo il professionista può segnare come "RIFIUTATO" o "IN_CORSO" lo stato della richiesta
-	        		if(richiesta.getUtenteRichiesto().getId()!=utenteLoggato.getId()) {
+	        		if(!richiesta.getUtenteRichiesto().getId().equals(utenteLoggato.getId()))
+ {
 	        			response.sendRedirect(request.getContextPath() +"/HomepageServlet");
 	        			return;
 	        		}
@@ -116,17 +123,7 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	        e.printStackTrace();
 	    }
 
-	    //String redirectParam = request.getParameter("redirect");
-	    
-	    //if (redirectParam != null && !redirectParam.isEmpty()) {
-	    	//response.sendRedirect(request.getContextPath() + "/" + redirectParam);
-	    	//} else {
-	        //if (utenteLoggato.getRuolo() == Ruolo.PROFESSIONISTA) { 
-	        //    response.sendRedirect(request.getContextPath() +"/GestioneRichiesteServlet");
-	        //} else {
-	        //    response.sendRedirect(request.getContextPath() +"/CronologiaRichiesteServlet");
-	        //}
-	    //}
+	 
 	    
 	    switch(utenteLoggato.getRuolo()) {
 	    case UTENTE_BASE: 

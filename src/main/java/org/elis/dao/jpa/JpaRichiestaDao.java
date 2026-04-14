@@ -23,7 +23,7 @@ public class JpaRichiestaDao implements RichiestaDao{
 	}
 
 	@Override
-	public void insert(Richiesta r) {
+	public void insert(Richiesta r) throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -40,7 +40,7 @@ public class JpaRichiestaDao implements RichiestaDao{
 	}
 
 	@Override
-	public Richiesta selectById(Long id) {
+	public Richiesta selectById(Long id)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             String jpql = "SELECT r FROM Richiesta r " +
                           "JOIN FETCH r.utenteRichiedente " +
@@ -57,14 +57,14 @@ public class JpaRichiestaDao implements RichiestaDao{
 	}
 
 	@Override
-	public List<Richiesta> selectAll() {
+	public List<Richiesta> selectAll() throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT r FROM Richiesta r", Richiesta.class).getResultList();
         }
 	}
 
 	@Override
-	public void update(Richiesta r) {
+	public void update(Richiesta r)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -74,7 +74,7 @@ public class JpaRichiestaDao implements RichiestaDao{
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(Long id)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -88,7 +88,7 @@ public class JpaRichiestaDao implements RichiestaDao{
 	
 
 	@Override
-	public List<Richiesta> selectByIdUtenteRichiedente(Long idUtenteRichiedente) {
+	public List<Richiesta> selectByIdUtenteRichiedente(Long idUtenteRichiedente) throws Exception{
 		  try (EntityManager em = emf.createEntityManager()) {
 		       
 		        String jpql = "SELECT DISTINCT r FROM Richiesta r " +
@@ -109,7 +109,7 @@ public class JpaRichiestaDao implements RichiestaDao{
 	}
 
 	@Override
-	public List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto) {
+	public List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
 	        
 	        String jpql = "SELECT DISTINCT r FROM Richiesta r " +

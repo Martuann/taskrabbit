@@ -39,7 +39,7 @@ public class AggiungiCittaServlet extends HttpServlet {
                     
                     if (nomeCitta.length() > 30) {
                         request.setAttribute("messaggio", "Errore: nome città troppo lungo.");
-                    } else if (provincia.trim().length() != 2) {
+                    }  else if (provincia == null || provincia.trim().length() != 2) {
                         request.setAttribute("messaggio", "Errore: la provincia deve essere di esattamente 2 caratteri.");
                     } else {
                         Citta nuovaCitta = new Citta();

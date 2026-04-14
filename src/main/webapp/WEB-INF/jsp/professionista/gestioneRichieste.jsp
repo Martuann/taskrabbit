@@ -9,8 +9,14 @@
 <head>
 <meta charset="UTF-8">
 <% Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato"); %>
-<title>Richieste di <%= utenteLoggato.getNome() %></title>
-<link rel="stylesheet" href="css/gestioneRichieste.css">
+<title>
+    <% if (utenteLoggato != null) { %>
+        Richieste di <%= utenteLoggato.getNome() %>
+    <% } else { %>
+        Richieste
+    <% } %>
+</title>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/gestioneRichieste.css">
 </head>
 <body>
 <%@ include file="/WEB-INF/headerFooter/header.jsp" %>
@@ -20,8 +26,13 @@
 	String displayValue1 = "block";
 	String displayValue2 = "block"; %>
 	<div class="container-richieste">
-	<% for(int i=0;i<richieste.size();i++) { 
+	<% if (richieste != null) { 
+		boolean hasRichieste = false;
+
+	for(int i=0;i<richieste.size();i++) { 
 		if(richieste.get(i).getStato()==StatoRichiesta.in_attesa) { 
+	        hasRichieste = true;
+
 			displayValue1 = "none"; %>
 		<div class="richiesta">
 			<div class="titolo">
@@ -47,26 +58,30 @@
 				</p>
 			</div>
 			<div class="buttons-container">
-				<form action="AggiornaRichiesta" method="POST">
-					<input type="hidden" name="idRichiesta" value="<%= richieste.get(i).getId() %>">
-					<input type="hidden" name="nuovoStato" value="in_corso">
+				<form action="<%=request.getContextPath()%>/AggiornaRichiesta" method="POST">
+					<input type="hidden" name="id1" value="<%= richieste.get(i).getId() %>">
+					<input type="hidden" name="type" value="in_corso">
 					<input type="submit" value="Accetta richiesta">
 				</form>
-				<form action="AggiornaRichiesta" method="POST">
-					<input type="hidden" name="idRichiesta" value="<%= richieste.get(i).getId() %>">
-					<input type="hidden" name="nuovoStato" value="rifiutato">
+				<form action="<%=request.getContextPath()%>/AggiornaRichiesta" method="POST">
+					<input type="hidden" name="id1" value="<%= richieste.get(i).getId() %>">
+					<input type="hidden" name="type" value="rifiutato">
 					<input type="submit" value="Rifiuta richiesta">
 				</form>
 			</div>
 	</div>
-	<% } } %>
+	<% } }
+    } else { %>
+    <p>Nessuna richiesta ricevuta.</p>
+	<% } %>
+	
 		<div style="display:<%= displayValue1 %>">
-			<p>Nessuna richiesta ricevuta.</p>
 		</div>
 	</div>
 	<h1>Cronologia Richieste:</h1>
 	<div class="container-richieste">
-		<% for(int i=0;i<richieste.size();i++) { 
+ <% if (richieste != null) { 
+		for(int i=0;i<richieste.size();i++) { 
 			if(richieste.get(i).getStato()!=StatoRichiesta.in_attesa) {
 				displayValue2 = "none"; %>
 				<div class="richiesta">
@@ -94,7 +109,8 @@
 					</div>
 				</div>
 			<% }
-			} %>
+			}} %>
+			
 		<div style="display:<%= displayValue2 %>">
 			<p>Nessuna richiesta completata.</p>
 		</div>

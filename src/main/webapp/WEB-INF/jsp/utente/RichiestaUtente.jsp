@@ -30,17 +30,20 @@
         <div class="request-card">
             <h2>Nuova Richiesta</h2>
             <form action="<%=request.getContextPath()%>/InoltroRichieste" method="GET">
-                <input type="hidden" name="id_professionista" value="<%= (professionista != null) ? professionista.getId() : "" %>">
+<% if (professionista != null) { %>
+    <input type="hidden" name="id_professionista" value="<%= professionista.getId() %>">
+<% } %>
                 
         <div class="input-group">
                     <label>Professione</label>
                     <select name="id_professione" required>
                         <option value="" data-prezzo="0" disabled selected>Seleziona professione</option>
-                        <% for(Professione p : professioni){ 
+                        <%if (professioni != null && utenteProfessioni != null) { 
+                        for(Professione p : professioni){ 
                              for(UtenteProfessione up : utenteProfessioni){
                                 if(up.getProfessione().getId().equals(p.getId())){ %>
                                     <option value="<%=p.getId()%>" data-prezzo="<%=up.getTariffaH()%>"><%=p.getNome()%> - <%=up.getTariffaH()%>&euro;/H</option>
-                        <% break; } } } %>
+                        <% break; } } }} %>
                     </select>
                 </div>
 

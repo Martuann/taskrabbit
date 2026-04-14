@@ -63,9 +63,10 @@ public class CaricaFotoProfiloServlet extends HttpServlet {
 			if (filePart != null && filePart.getSize() > 0) {
 				String contentDisposition = filePart.getHeader("content-disposition");
 				String estensione = ".png"; 
-				if (contentDisposition.contains(".jpg") || contentDisposition.contains(".jpeg")) {
-					estensione = ".jpg";
-				}
+				if (contentDisposition != null && 
+					    (contentDisposition.contains(".jpg") || contentDisposition.contains(".jpeg"))) {
+					    estensione = ".jpg";
+					}
 
 				String nomeFile = "avatar_" + utente.getId() + "_" + UUID.randomUUID().toString().substring(0, 8) + estensione;
 				

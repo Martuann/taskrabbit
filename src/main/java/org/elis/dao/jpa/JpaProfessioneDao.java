@@ -22,7 +22,7 @@ public class JpaProfessioneDao implements ProfessioneDao{
 	}
 
 	@Override
-	public void insert(Professione p) {
+	public void insert(Professione p) throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -32,14 +32,14 @@ public class JpaProfessioneDao implements ProfessioneDao{
 	}
 
 	@Override
-	public Professione selectById(Long id) {
+	public Professione selectById(Long id) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             return em.find(Professione.class, id);
         }
 	}
 
 	@Override
-	public List<Professione> selectAll() {
+	public List<Professione> selectAll()throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT p FROM Professione p", Professione.class).getResultList();
         }
@@ -57,7 +57,7 @@ public class JpaProfessioneDao implements ProfessioneDao{
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(Long id)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();

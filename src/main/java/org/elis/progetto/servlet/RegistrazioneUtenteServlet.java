@@ -67,7 +67,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     	    errori.add("Il cognome deve contenere almeno 2 caratteri.");
     	}
 
-    	if (email.isEmpty() || !email.contains("@")) {
+    	if (email == null || email.isEmpty() || !email.contains("@")) {
     	    errori.add("Per favore, inserisci un indirizzo email valido.");
     	} else {
     	    try {
@@ -81,7 +81,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     	    }
     	}
 
-    	if (codiceFiscale.length() != 16) {
+    	if (codiceFiscale == null ||codiceFiscale.length() != 16) {
     	    errori.add("Il Codice Fiscale deve essere di 16 caratteri.");
     	} else {
     	    try {
@@ -95,7 +95,7 @@ public class RegistrazioneUtenteServlet extends HttpServlet {
     	    }
     	}
 
-    	if (numero.isEmpty()) {
+    	if (numero==null||numero.isEmpty()) {
     	    errori.add("Il numero di telefono è obbligatorio.");
     	} else if (!numero.matches("[0-9]{8,15}")) {
     	    errori.add("Il numero di telefono non è valido (inserire solo numeri, tra 8 e 15 cifre).");

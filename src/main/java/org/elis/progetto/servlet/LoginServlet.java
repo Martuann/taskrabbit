@@ -38,17 +38,23 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		request.getRequestDispatcher("/WEB-INF/jsp/pubblico/login.jsp").forward(request, response);		}
+		request.getRequestDispatcher("/WEB-INF/jsp/pubblico/login.jsp").forward(request, response);	
+		
+	}
 
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email = request.getParameter("email");
-	    String password = request.getParameter("password");
+		String email = request.getParameter("email").trim();
+		String password = request.getParameter("password").trim();
 
-
+	    if (email == null || email.trim().isEmpty() || 
+	    	    password == null || password.trim().isEmpty()) {
+	    	    response.sendRedirect(request.getContextPath() + "/Login?errore=campi_obbligatori");
+	    	    return;
+	    	}
 
 	    try {
 
@@ -63,7 +69,8 @@ public class LoginServlet extends HttpServlet {
 	            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
 	        } else {
 
-	        	response.sendRedirect(request.getContextPath() + "/Login?errore=1");        }
+	        	response.sendRedirect(request.getContextPath() + "/Login?errore=1");   
+	        	}
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        response.sendRedirect(request.getContextPath() + "/Login?errore=tecnico");

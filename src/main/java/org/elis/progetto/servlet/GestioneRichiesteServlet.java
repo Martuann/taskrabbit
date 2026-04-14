@@ -47,21 +47,24 @@ public class GestioneRichiesteServlet extends HttpServlet {
 
 		try {
 			List<Richiesta> query = richiestaDao.selectByIdUtenteRichiesto(utenteLoggato.getId());
-			List<Richiesta> richieste = new ArrayList<>();
-			int counter=0;
+			List<Richiesta> richieste_attesa = new ArrayList<>();
+			List<Richiesta> richieste_altre = new ArrayList<>();
+
 			for(Richiesta r : query) {
-				if(r.getStato()!=StatoRichiesta.in_attesa) {
-					richieste.add(r);
-				}
-				else {
-					richieste.add(counter++,r);
-				}
+			    if(r.getStato().equals(StatoRichiesta.in_attesa)) {
+			        richieste_attesa.add(r);
+			    } else {
+			        richieste_altre.add(r);
+			    }
 			}
+
+			richieste_attesa.addAll(richieste_altre);  
+			request.setAttribute("richieste", richieste_attesa);
 			
-			request.setAttribute("richieste", richieste);
 			
-			counter=0;
-			for(Richiesta r : richieste) {
+			
+			int counter=0;
+			for(Richiesta r : richieste_attesa) {
 				Utente richiedente = utenteDao.ricercaPerId(r.getUtenteRichiedente().getId());
 				request.setAttribute("nomeutente"+counter,richiedente.getNome()+" "+richiedente.getCognome());
 				

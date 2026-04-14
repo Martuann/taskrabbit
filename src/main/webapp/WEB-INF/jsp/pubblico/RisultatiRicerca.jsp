@@ -82,7 +82,8 @@
 					<div class="card-text">
 						<h3><%= utente.getNome() + " " + utente.getCognome() %></h3>
 
-						<% if (utente.getCitta().getNome() != null && !utente.getCitta().getNome().isEmpty()) { %>
+						<% if (utente.getCitta() != null && utente.getCitta().getNome() != null && 
+							       !utente.getCitta().getNome().isEmpty()) { %>
 						<p class="loc-tag">
 							📍
 							<%= utente.getCitta().getNome() %></p>
