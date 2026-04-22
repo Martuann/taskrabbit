@@ -162,35 +162,54 @@
 	}
 
 	function enableEdit() {
-		document.querySelector('.back-navigation').style.visibility = 'hidden';
-		document.querySelector('.password-wrapper').style.display = 'none';
+	    document.getElementById('nuovaPw').value = '';
+	    document.getElementById('confermaPw').value = '';
+	    document.getElementById('pwError').style.display = 'none'; 
+	    
+	    document.querySelector('.back-navigation').style.visibility = 'hidden';
+	    document.querySelector('.password-wrapper').style.display = 'none';
 
-		const selectCitta = document.getElementById('cittaSelect');
+	    const selectCitta = document.getElementById('cittaSelect');
 	    selectCitta.removeAttribute('disabled');
 	    selectCitta.classList.remove('view-mode');
 	    selectCitta.classList.add('edit-mode');
 
-		const inputs = document.querySelectorAll('#profileForm input:not([type="hidden"]):not([type="password"])');
-		inputs.forEach(input => {
-			input.removeAttribute('readonly');
-			input.classList.remove('view-mode');
-			input.classList.add('edit-mode');
-		});
-		document.getElementById('editBtn').style.display = 'none';
-		document.getElementById('saveActions').style.display = 'block';
+	    const inputs = document.querySelectorAll('#profileForm input:not([type="hidden"]):not([type="password"])');
+	    inputs.forEach(input => {
+	        input.removeAttribute('readonly');
+	        input.classList.remove('view-mode');
+	        input.classList.add('edit-mode');
+	    });
+	    
+	    document.getElementById('editBtn').style.display = 'none';
+	    document.getElementById('saveActions').style.display = 'block';
 	}
 
 	document.getElementById('profileForm').onsubmit = function(e) {
-		const pass = document.getElementById('nuovaPw').value;
-		const conf = document.getElementById('confermaPw').value;
+	    console.log("Form in invio...");
+	    
+	    const passInput = document.getElementById('nuovaPw');
+	    const confInput = document.getElementById('confermaPw');
 
-		if (pass !== "" || conf !== "") {
-			if (pass !== conf) {
-				e.preventDefault();
-				document.getElementById('pwError').style.display = 'block';
-				return false;
-			}
-		}
+	    if (!passInput || !confInput) {
+	        console.error("Errore: Campi password non trovati!");
+	        return; 
+	    }
+
+	    const pass = passInput.value;
+	    const conf = confInput.value;
+
+	    console.log("Password:", pass, "Conferma:", conf);
+
+	    if (pass !== "" || conf !== "") {
+	        if (pass !== conf) {
+	            console.warn("Le password non coincidono!");
+	            e.preventDefault();
+	            document.getElementById('pwError').style.display = 'block';
+	            return false;
+	        }
+	    }
+	    console.log("Validazione superata, invio al server...");
 	};
 	</script>
 </body>
