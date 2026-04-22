@@ -47,8 +47,8 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email = request.getParameter("email").trim();
-		String password = request.getParameter("password").trim();
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
 
 	    if (email == null || email.trim().isEmpty() || 
 	    	    password == null || password.trim().isEmpty()) {
@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
 
 	    try {
 
-	        Utente utente = utenteDao.login(email, password);
+	        Utente utente = utenteDao.login(email.trim(), password.trim());
 
 	        if (utente != null) {
 

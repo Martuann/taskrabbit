@@ -38,7 +38,7 @@ public class Richiesta {
 
     private String indirizzo;
 	@Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false, columnDefinition = "TINYINT DEFAULT 0 CHECK (stato BETWEEN 0 AND 3)")
+    @Column(nullable = false, columnDefinition = "TINYINT DEFAULT 0 CHECK (stato BETWEEN 0 AND 4)")
 
     private StatoRichiesta stato;
 	@ManyToOne	

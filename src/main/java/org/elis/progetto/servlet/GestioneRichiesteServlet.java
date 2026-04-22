@@ -84,6 +84,11 @@ public class GestioneRichiesteServlet extends HttpServlet {
 				case rifiutato:
 					request.setAttribute("statoRichiesta"+counter, "Rifiutato");
 					request.setAttribute("coloreStato"+counter, "#DC4C64");
+					break;
+				case scaduta:
+					request.setAttribute("statoRichiesta"+counter, "Scaduta");
+					request.setAttribute("coloreStato"+counter, "#4A5568");
+					break;
 				}
 				
 				String professione = professioneDao.selectById(r.getProfessione().getId()).getNome();

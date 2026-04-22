@@ -36,6 +36,8 @@
 	        String colore = "#E4A11B"; 
 	        if(r.getStato() == StatoRichiesta.completato) colore = "#14A44D";
 	        if(r.getStato() == StatoRichiesta.rifiutato) colore = "#DC4C64";
+	        if(r.getStato() == StatoRichiesta.scaduta) colore = "#4A5568";
+
 	  	%>
 		<div class="richiesta">
 			<div class="titolo">

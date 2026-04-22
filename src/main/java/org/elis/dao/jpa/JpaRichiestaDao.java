@@ -1,10 +1,13 @@
 package org.elis.dao.jpa;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.elis.dao.definition.RichiestaDao;
 import org.elis.progetto.model.Richiesta;
+import org.elis.progetto.model.StatoRichiesta;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -48,18 +51,27 @@ public class JpaRichiestaDao implements RichiestaDao{
                           "JOIN FETCH r.professione " +
                           "LEFT JOIN FETCH r.veicolo " +
                           "WHERE r.id = :id";
-            return em.createQuery(jpql, Richiesta.class)
+           Richiesta richiesta= em.createQuery(jpql, Richiesta.class)
                      .setParameter("id", id)
                      .getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
+           gestisciScadenza(richiesta);
+           return richiesta;
+           
+           
+        } 
 	}
 
 	@Override
 	public List<Richiesta> selectAll() throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT r FROM Richiesta r", Richiesta.class).getResultList();
+            List<Richiesta> richieste= em.createQuery("SELECT r FROM Richiesta r", Richiesta.class).getResultList();
+           
+            richieste.forEach(this::gestisciScadenza);
+            
+            
+            return richieste;
+            
+            
         }
 	}
 
@@ -99,12 +111,15 @@ public class JpaRichiestaDao implements RichiestaDao{
 			        		  "AND (i IS NULL OR i.isFotoProfilo = true) " +
 			        		  "ORDER BY r.data DESC";
 
-		        return em.createQuery(jpql, Richiesta.class)
+		        
+		        
+		     
+		        List<Richiesta> richieste= em.createQuery(jpql, Richiesta.class)
 		                 .setParameter("id", idUtenteRichiedente)
 		                 .getResultList();
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		        return new ArrayList<>();
+		        
+		        richieste.forEach(this::gestisciScadenza);
+		        return richieste;
 		    }
 	}
 
@@ -120,15 +135,26 @@ public class JpaRichiestaDao implements RichiestaDao{
 				          "AND (i IS NULL OR i.isFotoProfilo = true) " +
 				          "ORDER BY r.data DESC";
 
-	        return em.createQuery(jpql, Richiesta.class)
+	        List<Richiesta> richieste= em.createQuery(jpql, Richiesta.class)
 	                 .setParameter("id", idUtenteRichiesto)
 	                 .getResultList();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return new ArrayList<>();
-	    }
+	        richieste.forEach(this::gestisciScadenza);
+	        return richieste;
+	    } 
 	}
+	private void gestisciScadenza(Richiesta r) {
+	    if (r != null && r.getStato() == StatoRichiesta.in_attesa) {
+	        
+	        LocalDateTime momentoInizio = LocalDateTime.of(r.getData(), r.getOrarioInizio());
+	        
+	        LocalDateTime limiteScadenza = momentoInizio.minusHours(2);
+	        
+	        if (LocalDateTime.now().isAfter(limiteScadenza)) {
+	            r.setStato(StatoRichiesta.scaduta);
+	        }
+	    }
 	
+}
 	
-	
+
 }

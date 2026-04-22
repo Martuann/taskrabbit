@@ -57,18 +57,14 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	        e.printStackTrace();
 	    }
 
-	    String redirectParam = request.getParameter("redirect");
-	    
-	    if (redirectParam != null && !redirectParam.isEmpty()) {
-	    	response.sendRedirect(request.getContextPath() + "/" + redirectParam);
-	    	} else {
+	 
 	        if (utenteLoggato.getRuolo() == Ruolo.PROFESSIONISTA) { 
 	            response.sendRedirect(request.getContextPath() +"/GestioneRichiesteServlet");
 	        } else {
 	            response.sendRedirect(request.getContextPath() +"/CronologiaRichiesteServlet");
 	        }
 	    }
-	}
+	
 
  
 	/**

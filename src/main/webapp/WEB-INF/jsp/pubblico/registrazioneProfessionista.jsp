@@ -82,8 +82,6 @@
 				<div class="input-dati">
     <label style="font-size: 12px; color: #666; margin-left: 5px; margin-bottom: 5px;"></label>
     <select class="selettoreprofessioni" name="professione" multiple="multiple" style="width: 100%;">
-        </select>
-</div>
 					<%
 					List<Professione> listaProfessioni = (List<Professione>) request.getAttribute("listaProfessioni");
 					List<Citta> listaCitta = (List<Citta>) request.getAttribute("listaCitta");
@@ -91,6 +89,7 @@
 					if (listaProfessioni != null && listaProfessioni.size() > 0) {
 						for (int i = 0; i < listaProfessioni.size(); i++) {
 					%>
+					
 					<option value="<%=listaProfessioni.get(i).getId()%>">
 						<%=listaProfessioni.get(i).getNome()%></option>
 
@@ -103,7 +102,7 @@
 					%>
 				</select>
 
-
+</div>
 
 
 

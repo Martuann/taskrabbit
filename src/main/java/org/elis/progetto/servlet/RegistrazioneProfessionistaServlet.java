@@ -70,8 +70,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 	String password = request.getParameter("password");
 	String dataDiNascita = request.getParameter("dataNascita");
 	String numero = request.getParameter("telefono");
-	String nomeCitta = request.getParameter("citta");
-	String provincia = request.getParameter("provincia");
+
 	String codiceFiscale = request.getParameter("codiceFiscale");
 	String idCittaStr = request.getParameter("id_citta");
 	String[] listaIdProfessioni = request.getParameterValues("professione");
@@ -182,7 +181,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 		  
 				Professione professione=  professioneDao.selectById(Long.parseLong(listaIdProfessioni[i]));
 			
-		   utenteProfessioneDao.insert( new UtenteProfessione(nuovoProf,professione, BigDecimal.ZERO));
+		   utenteProfessioneDao.insert( new UtenteProfessione(nuovoProf,professione, BigDecimal.valueOf(20.0)));
 	   }
 	   }
 	   
