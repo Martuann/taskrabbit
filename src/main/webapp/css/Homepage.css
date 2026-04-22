@@ -127,6 +127,19 @@ body {
     object-fit: cover;
 }
 
+.service-card .card-text form button {
+    background: none;
+    border: none;
+    color: #0047FF;
+    font-weight: bolder;
+    cursor: pointer;
+    padding: 0;
+}
+
+.service-card .card-text form button:hover {
+    transform: scale(1.05);
+}
+
 /* CORREZIONE PITTURA */
 .pittura-card img {
     object-position: center 22%; 
