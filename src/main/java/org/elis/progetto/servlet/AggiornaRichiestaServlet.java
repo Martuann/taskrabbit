@@ -34,37 +34,9 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
-	    
-	
+        doPost(request, response);
 
-	    try {
-	        String type = request.getParameter("type");
-	        long idRichiesta = Long.parseLong(request.getParameter("id1"));
-	        StatoRichiesta nuovoStato = StatoRichiesta.valueOf(type);
-	        
-	        Richiesta richiesta = richiestaDao.selectById(idRichiesta);
-	        
-	        if (richiesta != null) {
-	        	if (richiesta.getUtenteRichiesto().getId().equals(utenteLoggato.getId()) || 
-	        		    richiesta.getUtenteRichiedente().getId().equals(utenteLoggato.getId())) {
-	                richiesta.setStato(nuovoStato);
-	                richiestaDao.update(richiesta);
-	            }
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-
-	 
-	        if (utenteLoggato.getRuolo() == Ruolo.PROFESSIONISTA) { 
-	            response.sendRedirect(request.getContextPath() +"/GestioneRichiesteServlet");
-	        } else {
-	            response.sendRedirect(request.getContextPath() +"/CronologiaRichiesteServlet");
-	        }
-	    }
-	
+	}
 
  
 	/**
@@ -74,27 +46,37 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-        long idRichiesta = 0;
-        String idRichiestaStr = request.getParameter("id1");
-        if(idRichiestaStr != null && !idRichiestaStr.trim().isEmpty()) { 
-	    	idRichiesta = Long.parseLong(idRichiestaStr);
-	    }
-	    
-
         String nomeNuovoStato = request.getParameter("type");
-        StatoRichiesta nuovoStato = null;
+        String idRichiestaStr = request.getParameter("id1");
         
-        
-        if(nomeNuovoStato != null && !nomeNuovoStato.trim().isEmpty()) {
-
-        	nuovoStato = StatoRichiesta.valueOf(nomeNuovoStato);
+        if (idRichiestaStr == null || idRichiestaStr.trim().isEmpty()
+                || nomeNuovoStato == null || nomeNuovoStato.trim().isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+            return;
         }
-     //   System.out.println(richiesta.getIdUtenteRichiedente()+"\n"+utenteLoggato.getId());
+        long idRichiesta;
+        StatoRichiesta nuovoStato;
+
+        try {
+            idRichiesta  = Long.parseLong(idRichiestaStr.trim());
+            nuovoStato   = StatoRichiesta.valueOf(nomeNuovoStato.trim());
+        } catch ( IllegalArgumentException e) {
+            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+            return;
+        }
+        if (nuovoStato == StatoRichiesta.in_attesa) {
+            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+            return;
+        }
+    
         try {
             Richiesta richiesta = richiestaDao.selectById(idRichiesta);
-
-	        if(richiesta != null && nuovoStato!=null) {
-	        	//Separazione dei permessi
+           
+            if (richiesta == null) {
+                response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+                return;
+            }
+            
 	        	switch(nuovoStato) {
 	        	case completato: //solo il richiedente può segnare come "COMPLETATO" lo stato della richiesta
 	        		if(!richiesta.getUtenteRichiedente().getId().equals(utenteLoggato.getId())) {
@@ -102,21 +84,22 @@ public class AggiornaRichiestaServlet extends HttpServlet {
 	        			return;
 	        		}
 	        		break;
-	        	case in_attesa: //AggiornaRichiestaServlet non può cambiare lo stato in: "IN_ATTESA"
-	        		response.sendRedirect(request.getContextPath() +"/HomepageServlet");
-	        		return;
-	        	default: //solo il professionista può segnare come "RIFIUTATO" o "IN_CORSO" lo stato della richiesta
-	        		if(!richiesta.getUtenteRichiesto().getId().equals(utenteLoggato.getId()))
- {
-	        			response.sendRedirect(request.getContextPath() +"/HomepageServlet");
-	        			return;
-	        		}
+	        	
+	            default:
+                    // in_corso e rifiutato: solo il professionista (utenteRichiesto)
+                    if (!richiesta.getUtenteRichiesto().getId().equals(utenteLoggato.getId())) {
+                        response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+                        return;
+                    }
+                    break;
 	        	}
 	        	richiesta.setStato(nuovoStato);
                 richiestaDao.update(richiesta);
-	        }
+	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	        response.sendError(500, "Errore durante l'aggiornamento della richiesta");
+            return;
 	    }
 
 	 

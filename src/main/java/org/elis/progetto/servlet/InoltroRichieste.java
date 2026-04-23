@@ -26,6 +26,7 @@ import org.elis.progetto.model.Disponibilita;
 import org.elis.progetto.model.OrarioBase;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Richiesta;
+import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.StatoRichiesta;
 import org.elis.progetto.model.Utente;
 import org.elis.progetto.model.UtenteProfessione;
@@ -66,7 +67,7 @@ public class InoltroRichieste extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	    Long idProfessionista;
     	    try {
     	        idProfessionista = Long.parseLong(request.getParameter("id_professionista"));
@@ -75,20 +76,20 @@ public class InoltroRichieste extends HttpServlet {
     	    	return;
     	    }
 
-    	    Utente professionista = null;
-    	    List<Veicolo> veicolo = null;
-    	    List<Disponibilita> dispo = null;
-    	    List<OrarioBase> orario = null;
-    	    List<UtenteVeicolo> utenteVeicolo = null;
-    	    List<Professione> professioni = null;
-    	    List<UtenteProfessione> utenteProfessioni = null;
-    	    List<Richiesta> occupate = null;
+    	    Utente professionista;
+    	    List<Veicolo> veicolo ;
+    	    List<Disponibilita> dispo ;
+    	    List<OrarioBase> orario;
+    	    List<UtenteVeicolo> utenteVeicolo;
+    	    List<Professione> professioni;
+    	    List<UtenteProfessione> utenteProfessioni;
+    	    List<Richiesta> occupate;
 
     	    try {
     	        professionista = utenteDao.ricercaPerId(idProfessionista);
-    	        if (professionista == null) {
-    	        	response.sendError(500, "Errore Imprevisto");    	 
-    	        	return;
+    	        if (professionista == null || !professionista.getRuolo().equals(Ruolo.PROFESSIONISTA)) {
+    	            response.sendError(404, "Professionista non trovato o profilo non valido.");
+    	            return;
     	        }
     	        veicolo = veicoloDao.getVeicolibyUtente(idProfessionista);
     	        dispo = dispDao.getDisponibilitaPerUtente(idProfessionista);
@@ -180,7 +181,7 @@ public class InoltroRichieste extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
@@ -205,92 +206,115 @@ public class InoltroRichieste extends HttpServlet {
         	return;
         }
 
+        if (dataValida.isBefore(LocalDate.now())) {
+            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+            return;
+        }
+      
+        
         LocalTime oraFine = oraInizio.plusHours(oreSelezionate);
+
         List<Richiesta> occupate;
         List<Disponibilita> dispo;
         List<OrarioBase> orario;
         UtenteProfessione up;
         Utente professionista;
         Professione professione;
+        
+     
+        
         try {
+            
+            up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProfessionista, idProfess);
             occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
             dispo = dispDao.getDisponibilitaPerUtente(idProfessionista);
             orario = orarioDao.getOrariByUtente(idProfessionista);
-            up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProfessionista, idProfess);
-            professionista=utenteDao.ricercaPerId(idProfessionista);
-            professione=professioneDao.selectById(idProfess);
+            professionista = utenteDao.ricercaPerId(idProfessionista);
+        
+            professione = professioneDao.selectById(idProfess);
         } catch (Exception e) {
-	        response.sendError(500, "Errore nel collegamento con il db");
+            e.printStackTrace();
+            response.sendError(500, "Errore nel collegamento con il db");
             return;
         }
-
-        for (int i = 0; i < occupate.size(); i++) {
-            Richiesta r = occupate.get(i);
-            if (r.getData().equals(dataValida) && (r.getStato() == StatoRichiesta.in_corso || r.getStato() == StatoRichiesta.completato)) {
-                if (oraInizio.isBefore(r.getOrarioFine()) && oraFine.isAfter(r.getOrarioInizio())) {
-                	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProfessionista + "&error=conflitto");
-                	return;
-                }
+        
+        if (up == null || professionista == null || professione == null) {
+            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+            return;
+        }
+        if (!professionista.getRuolo().equals(Ruolo.PROFESSIONISTA)) {
+        	response.sendError(404, "Il profilo richiesto non è un professionista valido.");
+        	return;
+        }
+        for (Richiesta r : occupate) {
+            if (r.getData().equals(dataValida)
+                    && (r.getStato() == StatoRichiesta.in_corso
+                            || r.getStato() == StatoRichiesta.completato)
+                    && oraInizio.isBefore(r.getOrarioFine())
+                    && oraFine.isAfter(r.getOrarioInizio())) {
+                response.sendRedirect(request.getContextPath()
+                        + "/InoltroRichieste?id_professionista=" + idProfessionista
+                        + "&error=conflitto");
+                return;
             }
         }
-
+        
         LocalTime limiteInizio = null;
-        LocalTime limiteFine = null;
+        LocalTime limiteFine   = null;
 
-        for (int i = 0; i < dispo.size(); i++) {
-            if (dispo.get(i).getData().equals(dataValida)) {
-                limiteInizio = dispo.get(i).getInizio();
-                limiteFine = dispo.get(i).getFine();
+        for (Disponibilita d : dispo) {
+            if (d.getData().equals(dataValida)) {
+                limiteInizio = d.getInizio();
+                limiteFine   = d.getFine();
                 break;
             }
         }
-
         if (limiteInizio == null) {
             DayOfWeek giorno = dataValida.getDayOfWeek();
-            for (int i = 0; i < orario.size(); i++) {
-                if (orario.get(i).getGiornoSettimana().equals(giorno)) {
-                    limiteInizio = orario.get(i).getOraInizio();
-                    limiteFine = orario.get(i).getOraFine();
+            for (OrarioBase ob : orario) {
+                if (ob.getGiornoSettimana().equals(giorno)) {
+                    limiteInizio = ob.getOraInizio();
+                    limiteFine   = ob.getOraFine();
                     break;
                 }
             }
         }
-
-        if (limiteInizio == null || oraInizio.isBefore(limiteInizio) || oraFine.isAfter(limiteFine)) {
-        	response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + idProfessionista + "&error=fuori_orario");
-        	return;
+        if (limiteInizio == null
+                || oraInizio.isBefore(limiteInizio)
+                || oraFine.isAfter(limiteFine)) {
+            response.sendRedirect(request.getContextPath()
+                    + "/InoltroRichieste?id_professionista=" + idProfessionista
+                    + "&error=fuori_orario");
+            return;
         }
 
-        BigDecimal prezzoTotale = up.getTariffaH().multiply(new BigDecimal(request.getParameter("durata_ore")));
-        String idVeicoloString = request.getParameter("id_veicolo");
+        
+        
 
+
+        BigDecimal prezzoTotale = up.getTariffaH().multiply(new BigDecimal(oreSelezionate));
+        
+        
+        
+        Veicolo veicoloScelto = null;
+        String idVeicoloString = request.getParameter("id_veicolo");
         if (idVeicoloString != null && !idVeicoloString.isEmpty()) {
             try {
                 Long idV = Long.valueOf(idVeicoloString);
                 UtenteVeicolo uv = utenteVeicoloDao.selectByUtenteEVeicolo(idProfessionista, idV);
                 if (uv != null) {
-                    prezzoTotale = prezzoTotale.add(uv.getAggiuntaServizio());
+                    prezzoTotale  = prezzoTotale.add(uv.getAggiuntaServizio());
+                    veicoloScelto = veicoloDao.ricercaPerId(idV);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+
             }
         }
-
-        Richiesta richiesta = new Richiesta();
         
-        if (idVeicoloString != null && !idVeicoloString.isEmpty()) {
-            Veicolo v=null;
-			try {
-				v = veicoloDao.ricercaPerId(Long.valueOf(idVeicoloString));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            richiesta.setVeicolo(v);
-        }
-        try{richiesta.setUtenteRichiedente(utenteLoggato);}catch(Exception e){
-        	response.sendError(500, "Sessione scaduta");
-        }
+ 
+        Richiesta richiesta = new Richiesta();
+        richiesta.setUtenteRichiedente(utenteLoggato);
         richiesta.setUtenteRichiesto(professionista);
         richiesta.setProfessione(professione);
         richiesta.setData(dataValida);
@@ -300,12 +324,16 @@ public class InoltroRichieste extends HttpServlet {
         richiesta.setStato(StatoRichiesta.in_attesa);
         richiesta.setDescrizione(request.getParameter("descrizione"));
         richiesta.setIndirizzo(indirizzo);
+        richiesta.setVeicolo(veicoloScelto); 
+
         try {
             richiestaDao.insert(richiesta);
         } catch (Exception e) {
-        	response.sendError(500, "Errore durante il collegamento con il db");
+            e.printStackTrace();
+            response.sendError(500, "Errore durante il salvataggio della richiesta");
             return;
         }
 
-        response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?success=true");   }}
-
+        response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?success=true");
+    	}
+    }

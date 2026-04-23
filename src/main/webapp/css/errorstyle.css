@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+/* Reset aggressivo per evitare che i CSS degli altri file influenzino questa pagina */
+body.error-page-body {
+    display: block !important; /* Annulla il display flex di profiloUtente.css */
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                url('../immagini/sfondo.png') no-repeat center center fixed !important;
+    background-size: cover !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Container principale per centrare la card */
+.error-overlay {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: calc(100vh - 150px); /* Sottrae spazio approssimativo per header e footer */
+    padding: 40px 20px;
+    box-sizing: border-box !important;
+}
+
+/* Card in stile Glassmorphism come i tuoi file CalendarioRichiestaUtente.css */
+.error-card-new {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 60px 40px !important;
+    border-radius: 30px !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
+    width: 100% !important;
+    max-width: 500px !important;
+    text-align: center !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+}
+
+.error-status {
+    font-size: 100px !important;
+    font-weight: 800 !important;
+    color: #3357d6 !important; /* Il blu dei tuoi pulsanti */
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+
+.error-card-new h2 {
+    font-size: 24px !important;
+    color: #333 !important;
+    margin: 10px 0 !important;
+}
+
+.error-card-new p {
+    font-size: 16px !important;
+    color: #666 !important;
+    line-height: 1.5 !important;
+    margin-bottom: 20px !important;
+}
+
+/* Bottone coerente con .btn-primary */
+.btn-home-error {
+    display: inline-block !important;
+    padding: 15px 35px !important;
+    background-color: #3357d6 !important;
+    color: white !important;
+    text-decoration: none !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-home-error:hover {
+    background-color: #1a3ab1 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 15px rgba(51, 87, 214, 0.3) !important;
+}

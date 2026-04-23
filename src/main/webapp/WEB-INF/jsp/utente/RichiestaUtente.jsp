@@ -29,7 +29,7 @@
     <div class="request-container">
         <div class="request-card">
             <h2>Nuova Richiesta</h2>
-            <form action="<%=request.getContextPath()%>/InoltroRichieste" method="GET">
+            <form action="<%=request.getContextPath()%>/InoltroRichieste" method="POST">
 <% if (professionista != null) { %>
     <input type="hidden" name="id_professionista" value="<%= professionista.getId() %>">
 <% } %>

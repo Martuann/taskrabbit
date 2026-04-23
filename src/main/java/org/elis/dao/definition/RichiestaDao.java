@@ -11,4 +11,5 @@ public interface RichiestaDao {
 	void delete(Long id)throws Exception;
 	List<Richiesta> selectByIdUtenteRichiesto(Long idUtenteRichiesto)throws Exception;
 	List<Richiesta> selectByIdUtenteRichiedente(Long idUtenteRichiedente)throws Exception;
+	Boolean haLavorato(Long idUtenteRichiedente, Long idUtenteRichiesto) throws Exception;
 }

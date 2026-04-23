@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.RecensioneDao;
+import org.elis.dao.definition.RichiestaDao;
 import org.elis.dao.definition.UtenteDao;
 import org.elis.progetto.model.Recensione;
 import org.elis.progetto.model.Utente;
@@ -21,9 +22,11 @@ import org.elis.progetto.model.Utente;
 public class ScriviRecensioneServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private RecensioneDao recensioneDao;
+	private RichiestaDao richiestaDao;
 private UtenteDao utenteDao;
     public ScriviRecensioneServlet() {
         super();
+        richiestaDao = DaoFactory.getInstance().getRichiestaDao();
         recensioneDao = DaoFactory.getInstance().getRecensioneDao();
         utenteDao=DaoFactory.getInstance().getUtenteDao();
     }
@@ -56,8 +59,13 @@ private UtenteDao utenteDao;
 	                r.setData(LocalDate.now());
 	                r.setUtenteScrittore(utenteLoggato);
 	                r.setUtenteRicevente(utenteRecensito);
-	                
-	                recensioneDao.insert(r);
+	                if(richiestaDao.haLavorato(utenteLoggato.getId(), utenteRecensito.getId())) {
+		                recensioneDao.insert(r);
+
+	                }else {
+		                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Non puoi scrivere una recensione per un professionista che non ha lavorato con te");
+		                return;
+	                }
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
@@ -73,7 +81,7 @@ private UtenteDao utenteDao;
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long id = 0L;
-		if(request.getParameter("idProfessionista")!=null||!request.getParameter("idProfessionista").trim().isEmpty() ) {
+		if(request.getParameter("idProfessionista")!=null&&!request.getParameter("idProfessionista").trim().isEmpty() ) {
 			id = Long.parseLong(request.getParameter("idProfessionista"));
 		}
 		request.setAttribute("idProfessionista", id);

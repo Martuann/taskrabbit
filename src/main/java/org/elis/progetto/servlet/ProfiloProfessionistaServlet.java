@@ -22,6 +22,7 @@ import org.elis.dao.definition.UtenteProfessioneDao;
 import org.elis.progetto.model.Immagine;
 import org.elis.progetto.model.Professione;
 import org.elis.progetto.model.Recensione;
+import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 import org.elis.progetto.model.UtenteProfessione;
 import org.elis.progetto.model.Veicolo;
@@ -55,10 +56,33 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String idParam = request.getParameter("idProfessionista");
-		long idProfessionista = (idParam != null) ? Long.parseLong(idParam) : 2L;
-
+		long idProfessionista;
+		if(idParam == null) {
+			response.sendError(404, "Profilo non trovato");
+			return;
+		}
+		try {
+			idProfessionista = Long.parseLong(idParam);
+		} catch (NumberFormatException e) {
+			response.sendError(404, "Profilo non trovato");
+			return;
+		}
+		
+		
+		
+		
 		try {
 			Utente professionista = utenteDao.ricercaPerId(idProfessionista);
+			
+			if (professionista == null|| !professionista.getRuolo().equals(Ruolo.PROFESSIONISTA)) {
+				response.sendError(404, "Profilo non trovato");
+				return;
+			}
+			
+			
+			
+			
+			
 			List<Professione> professioniUtente = professioneDao.selectbyUtente(idProfessionista);
 			List<UtenteProfessione> utenteProf = utenteProfessioneDao.selectByUtente(idProfessionista);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);

@@ -155,6 +155,19 @@ public class JpaRichiestaDao implements RichiestaDao{
 	    }
 	
 }
+
+	@Override
+	public Boolean haLavorato(Long idUtenteRichiedente, Long idUtenteRichiesto) throws Exception {
+		try (EntityManager em = emf.createEntityManager()) {
+			String jpql = "SELECT COUNT(r) FROM Richiesta r WHERE r.utenteRichiedente.id = :idUtenteRichiedente AND r.utenteRichiesto.id = :idUtenteRichiesto AND r.stato = :statoRichiesta";
+			Long count= em.createQuery(jpql, Long.class)
+					.setParameter("idUtenteRichiedente", idUtenteRichiedente)
+					.setParameter("idUtenteRichiesto", idUtenteRichiesto)
+					.setParameter("statoRichiesta", StatoRichiesta.completato)
+					.getSingleResult();
+			return count>0;
+		}
+	}
 	
 
 }
