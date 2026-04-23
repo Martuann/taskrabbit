@@ -217,3 +217,163 @@ margin: 8px 0;
 color: #d32f2f !important;
 font-weight: 700;
 }
+.notification-wrapper {
+  position: relative; /* Indispensabile per il posizionamento del menu */
+  display: inline-block;
+}
+
+.noti-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Il cerchietto rosso */
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+/* Il menu a tendina */
+.dropdown-content {
+  display: none; /* Nascosto di default */
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 300px;
+  background: white;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+/* Classe per mostrare il menu */
+.dropdown-content.show {
+  display: block;
+}
+
+/* Stile interno */
+.dropdown-header { padding: 10px; font-weight: bold; border-bottom: 1px solid #eee; }
+.noti-list { list-style: none; margin: 0; padding: 0; }
+.noti-list li { padding: 12px; border-bottom: 1px solid #f9f9f9; font-size: 14px; }
+.noti-list li:hover { background: #f0f0f0; }
+
+
+/* Assicuriamoci che la sezione link mantenga tutto sulla stessa riga */
+.links-section {
+    display: flex;
+    align-items: center; /* Fondamentale per allineare icone e testi */
+    gap: 20px;
+}
+
+/* Sistema il wrapper delle notifiche */
+.notification-wrapper {
+    position: relative;
+    display: flex; /* Cambiato da inline-block a flex */
+    align-items: center;
+}
+
+/* Sistema il bottone notifiche */
+.noti-button {
+    background: none;
+    border: none;
+    font-size: 1.4rem; /* Leggermente ridotto per non eccedere i 75px di altezza header */
+    cursor: pointer;
+    position: relative;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.noti-button:hover {
+    transform: scale(1.1);
+}
+
+/* Sistema il badge per non farlo sparire fuori dall'header */
+.badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ff3b30; /* Rosso più moderno */
+    color: white;
+    border-radius: 10px;
+    padding: 2px 5px;
+    font-size: 10px;
+    min-width: 15px;
+    text-align: center;
+    font-weight: bold;
+    border: 2px solid white; /* Lo stacca dall'icona */
+}
+
+/* Modifica il dropdown per non sovrapporsi all'header fisso */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 15px); /* Si posiziona esattamente sotto l'header */
+    width: 280px;
+    background: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    border: 1px solid #eee;
+    overflow: hidden;
+    z-index: 10001;
+
+    /* Assicura che i link e le notifiche siano sulla stessa linea */
+.links-section {
+    display: flex;
+    align-items: center; 
+    gap: 20px;
+}
+
+/* Rimuovi tutto ciò che riguarda il .badge se non lo usi più */
+
+.noti-button {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.2s;
+}
+
+.noti-button:hover {
+    transform: scale(1.2);
+}
+
+.notification-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+/* Posizionamento del dropdown sotto l'header */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 20px); /* Distanza corretta dal fondo dell'header */
+    width: 260px;
+    background: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    z-index: 1000;
+    border: 1px solid #eee;
+}
+
+.dropdown-content.show {
+    display: block !important;
+}

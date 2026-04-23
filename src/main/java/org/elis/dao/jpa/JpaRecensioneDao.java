@@ -23,7 +23,7 @@ public class JpaRecensioneDao implements RecensioneDao{
 	}
 
 	@Override
-	public void insert(Recensione r) {
+	public void insert(Recensione r) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -36,21 +36,21 @@ public class JpaRecensioneDao implements RecensioneDao{
 	}
 
 	@Override
-	public Recensione selectById(Long id) {
+	public Recensione selectById(Long id) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             return em.find(Recensione.class, id);
         }
     }
 
 	@Override
-	public List<Recensione> selectAll() {
+	public List<Recensione> selectAll() throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT r FROM Recensione r", Recensione.class).getResultList();
         }
     }
 
 	@Override
-	public void update(Recensione r) {
+	public void update(Recensione r) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -60,7 +60,7 @@ public class JpaRecensioneDao implements RecensioneDao{
     }
 
 	@Override
-	public void delete(Long id) {
+	public void delete(Long id)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction t = em.getTransaction();
             t.begin();
@@ -71,7 +71,7 @@ public class JpaRecensioneDao implements RecensioneDao{
     }
 
 	@Override
-	public List<Recensione> selectByIdUtenteRicevente(Long idUtenteRicevente) {
+	public List<Recensione> selectByIdUtenteRicevente(Long idUtenteRicevente)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT r FROM Recensione r WHERE r.utenteRicevente.id = :uId", Recensione.class)
                      .setParameter("uId", idUtenteRicevente)
@@ -80,7 +80,7 @@ public class JpaRecensioneDao implements RecensioneDao{
     }
 
 	@Override
-	public Boolean esisteRecensionePerRichiesta(Long idScrittore, Long idRicevente) {
+	public Boolean esisteRecensionePerRichiesta(Long idScrittore, Long idRicevente) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             Long count = em.createQuery(
                 "SELECT COUNT(r) FROM Recensione r WHERE r.utenteScrittore.id = :sId AND r.utenteRicevente.id = :rId", Long.class)
@@ -94,7 +94,7 @@ public class JpaRecensioneDao implements RecensioneDao{
 	
 
 	@Override
-	public List<Recensione> selectByIdUtenteScrittore(Long idUtenteScrittore) {
+	public List<Recensione> selectByIdUtenteScrittore(Long idUtenteScrittore)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT r FROM Recensione r WHERE r.utenteScrittore.id = :uId", Recensione.class)
                      .setParameter("uId", idUtenteScrittore)

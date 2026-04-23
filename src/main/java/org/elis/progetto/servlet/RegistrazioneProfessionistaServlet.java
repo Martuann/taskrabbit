@@ -181,7 +181,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 		  
 				Professione professione=  professioneDao.selectById(Long.parseLong(listaIdProfessioni[i]));
 			
-		   utenteProfessioneDao.insert( new UtenteProfessione(nuovoProf,professione, BigDecimal.valueOf(20.0)));
+		   utenteProfessioneDao.insert( new UtenteProfessione(nuovoProf,professione, BigDecimal.ZERO));
 	   }
 	   }
 	   

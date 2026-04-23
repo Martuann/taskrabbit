@@ -3,9 +3,12 @@
 <%@ page import="org.elis.progetto.model.Utente"%>
 <%@ page import="org.elis.progetto.model.Ruolo"%>
 
+
+<head>
+
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/header.css?v=<%=System.currentTimeMillis()%>">
-
+</head>
 <header class="admin-header">
 	<div class="header-inner">
 		<div class="logo">
@@ -37,9 +40,27 @@
                     <a href="<%= request.getContextPath() %>/AggiungiVeicolo">Gestione Veicoli</a>
                 <% } %>
                 
-                <% if (u.getRuolo() == Ruolo.PROFESSIONISTA) { %>
-                    <a href="<%= request.getContextPath() %>/GestioneServiziServlet">Gestione Servizi</a>
-                <% } %>
+<% if (u.getRuolo() == Ruolo.PROFESSIONISTA) { 
+    Boolean notifica = (Boolean)session.getAttribute("alertTariffa");
+%>
+<% if (notifica != null && notifica) { %>
+        <div class="notification-wrapper">
+            <button id="noti-btn" class="noti-button" title="Ci sono avvisi">
+                ⚠️
+            </button>
+
+            <div id="noti-dropdown" class="dropdown-content">
+                <div class="dropdown-header">Notifiche</div>
+                <ul class="noti-list">
+                    <li>Attenzione: non hai impostato la tariffa per le tue professioni.</li> 
+                </ul>
+            </div>
+        </div>
+    <% } %>
+    <a href="<%= request.getContextPath() %>/GestioneServiziServlet">Gestione Servizi</a>
+<% } %>
+
+
                 
                 <% 
                 if (u.getRuolo() != Ruolo.ADMIN) { 
@@ -99,4 +120,39 @@
 			});
 		}
 	});
+	
+	
+	
+	
+	
+	
+	const nnbtn = document.getElementById('noti-btn');
+	const dropdown = document.getElementById('noti-dropdown');
+
+	// 1. Mostra/Nascondi al click sul bottone
+	nnbtn.addEventListener('click', (e) => {
+	  e.stopPropagation(); // Evita che il click arrivi alla window
+	  dropdown.classList.toggle('show');
+	});
+
+	// 2. Chiudi se l'utente clicca ovunque fuori dal menu
+	window.addEventListener('click', () => {
+	  if (dropdown.classList.contains('show')) {
+	    dropdown.classList.remove('show');
+	  }
+	});
+
+	// 3. Evita che il click dentro il menu lo chiuda per errore
+	dropdown.addEventListener('click', (e) => {
+	  e.stopPropagation();
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </script>

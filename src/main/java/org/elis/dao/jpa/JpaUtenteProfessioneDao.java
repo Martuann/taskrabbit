@@ -1,5 +1,6 @@
 package org.elis.dao.jpa;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.elis.dao.definition.UtenteProfessioneDao;
@@ -22,7 +23,7 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	}
 
 	@Override
-	public void insert(UtenteProfessione u) {
+	public void insert(UtenteProfessione u)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction et = em.getTransaction();
             try {
@@ -37,7 +38,7 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	}
 
 	@Override
-	public UtenteProfessione selectById(Long id) {
+	public UtenteProfessione selectById(Long id)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             return em.find(UtenteProfessione.class, id);
         }
@@ -45,7 +46,7 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	
 
 	@Override
-	public List<UtenteProfessione> selectAll() {
+	public List<UtenteProfessione> selectAll()throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery("SELECT up FROM UtenteProfessione up", UtenteProfessione.class)
                      .getResultList();
@@ -53,7 +54,7 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	}
 
 	@Override
-	public void update(UtenteProfessione u) {
+	public void update(UtenteProfessione u)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction et = em.getTransaction();
             try {
@@ -68,7 +69,7 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(Long id) throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             EntityTransaction et = em.getTransaction();
             try {
@@ -84,7 +85,7 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	}
 
 	@Override
-	public UtenteProfessione selectByIdUtenteIdProfessione(Long idUtente, Long idProfessione) {
+	public UtenteProfessione selectByIdUtenteIdProfessione(Long idUtente, Long idProfessione)throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery(
                 "SELECT up FROM UtenteProfessione up WHERE up.utente.id = :idU AND up.professione.id = :idP", 
@@ -98,7 +99,7 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	}
 
 	@Override
-	public List<UtenteProfessione> selectByUtente(long idUtente) {
+	public List<UtenteProfessione> selectByUtente(long idUtente)throws Exception{
 		try (EntityManager em = emf.createEntityManager()) {
             return em.createQuery(
                 "SELECT up FROM UtenteProfessione up WHERE up.utente.id = :idU", 
@@ -108,4 +109,21 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
         }	
 	}
 
+	@Override
+	public Boolean checkTariffeCritiche(Long utenteId)throws Exception{ 
+		try (EntityManager em = emf.createEntityManager()) {
+
+		 return em.createQuery("SELECT COUNT(up) FROM UtenteProfessione up " +
+                 "WHERE up.utente.id = :idU " +
+                 "AND up.tariffaH = 0 ", Long.class).setParameter("idU", utenteId).getSingleResult() > 0;
+	   
+	}
+	}
+	
+	
+	
+	
+	
+	
+	
 }

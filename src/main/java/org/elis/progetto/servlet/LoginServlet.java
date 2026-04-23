@@ -8,7 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.elis.dao.definition.DaoFactory;
 import org.elis.dao.definition.UtenteDao;
+import org.elis.dao.definition.UtenteProfessioneDao;
+
 import java.io.IOException;
+
+import org.elis.progetto.model.Ruolo;
 import org.elis.progetto.model.Utente;
 
 /**
@@ -18,11 +22,11 @@ import org.elis.progetto.model.Utente;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private  UtenteDao utenteDao;
-
+    private UtenteProfessioneDao utenteProfessioneDao;
 	@Override
 	public void init() throws ServletException {
 		utenteDao=DaoFactory.getInstance().getUtenteDao();
-
+        utenteProfessioneDao=DaoFactory.getInstance().getUtenteProfessioneDao();
 
 	}
     /**
@@ -61,8 +65,19 @@ public class LoginServlet extends HttpServlet {
 	        Utente utente = utenteDao.login(email.trim(), password.trim());
 
 	        if (utente != null) {
-
 	            HttpSession session = request.getSession();
+
+	        	if (Ruolo.PROFESSIONISTA.equals(utente.getRuolo())) {
+	        	  try {
+	        	    boolean haTariffeSballate = utenteProfessioneDao.checkTariffeCritiche(utente.getId());
+	        	    
+	        	    session.setAttribute("alertTariffa", haTariffeSballate);
+	        		System.out.println("ciao mamma"+haTariffeSballate);
+}catch (Exception e) {
+		        	session.setAttribute("alertTariffa", false);
+	        		System.out.println("ciao mamma"+"ERRORE");
+
+	        	}}
 	            session.setAttribute("utenteLoggato", utente);
 
 
