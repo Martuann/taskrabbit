@@ -56,7 +56,9 @@
 				<div class="card-text">
 					<h3>Riparazioni</h3>
 					<p>Montaggio mobili e riparazioni elettriche.</p>
-					<a href="#" class="view-more">Vedi Tasker</a>
+					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
+						<button type="submit" class="view-more" name="professione" value="Riparazioni">Vedi Tasker</button>
+					</form>
 				</div>
 			</div>
 
@@ -66,7 +68,9 @@
 				<div class="card-text">
 					<h3>Pittura</h3>
 					<p>Rinfresca le pareti della tua casa.</p>
-					<a href="#" class="view-more">Vedi Tasker</a>
+					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
+						<button type="submit" class="view-more" name="professione" value="Pittura">Vedi Tasker</button>
+					</form>
 				</div>
 			</div>
 
@@ -76,7 +80,9 @@
 				<div class="card-text">
 					<h3>Pulizia</h3>
 					<p>Servizi di pulizia profonda per ogni ambiente.</p>
-					<a href="#" class="view-more">Vedi Tasker</a>
+					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
+						<button type="submit" class="view-more" name="professione" value="Pulizia">Vedi Tasker</button>
+					</form>
 				</div>
 			</div>
 
@@ -87,7 +93,9 @@
 				<div class="card-text">
 					<h3>Aiuto Informatico</h3>
 					<p>Riparazione PC e installazione software.</p>
-					<a href="#" class="view-more">Vedi Tasker</a>
+					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
+						<button type="submit" class="view-more" name="professione" value="Aiuto Informatico">Vedi Tasker</button>
+					</form>
 				</div>
 			</div>
 		</div>
