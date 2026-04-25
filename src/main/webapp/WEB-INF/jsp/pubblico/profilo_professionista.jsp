@@ -69,23 +69,49 @@
                         </ul>
                     </div>
                 </div>
-            </div>
         </section>
 
         <hr>
 
-        <section class="gallery-section">
-            <h2>Portfolio Lavori</h2>
-            <div id="imgs">
-                <% if(galleria != null && !galleria.isEmpty()) { 
-                    for(int i=0; i < galleria.size(); i++) { %>
-<img id="img_lavoro_<%= i %>" 
-     class="imglavoro" 
-     src="<%= request.getContextPath() %>/recuperaFoto?id=<%= galleria.get(i).getId() %>">
-     <%  }
-                        } else { %> <p>Nessuna foto di lavoro disponibile.</p> <% } %>
-            </div>
-        </section>
+<%
+    // Recuperiamo l'utente loggato dalla sessione
+    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+    
+    // Verifichiamo se l'utente loggato è il proprietario del profilo
+    boolean isProprietario = false;
+    if (utenteLoggato != null && professionista != null) {
+        if (utenteLoggato.getId() == professionista.getId()) {
+            isProprietario = true;
+        }
+    }
+%>
+
+<section class="gallery-section">
+    <h2>Portfolio Lavori</h2>
+    
+    <%-- Form di caricamento: visibile SOLO al proprietario --%>
+    <% if(isProprietario) { %>
+        <div class="upload-box" style="margin-bottom: 20px; padding: 15px; border: 1px dashed #ccc;">
+            <h3>Aggiungi una foto ai tuoi lavori</h3>
+            <form action="<%= request.getContextPath() %>/CaricaFotoGalleria" method="post" enctype="multipart/form-data">
+                <input type="file" name="fotoLavoro" accept="image/*" required>
+                <button type="submit" class="contatta-class">Carica Foto</button>
+            </form>
+        </div>
+    <% } %>
+
+    <div id="imgs">
+        <% if(galleria != null && !galleria.isEmpty()) { 
+            for(int i=0; i < galleria.size(); i++) { %>
+                <img id="img_lavoro_<%= i %>" 
+                     class="imglavoro" 
+                     src="<%= request.getContextPath() %>/recuperaFoto?id=<%= galleria.get(i).getId() %>">
+            <%  }
+        } else { %> 
+            <p>Nessuna foto di lavoro disponibile.</p> 
+        <% } %>
+    </div>
+</section>
 
         <hr>
 
@@ -118,20 +144,20 @@
                 <div class="recensione-body">
                     <p class="descrizione"><%= r.getDescrizione() %></p>
                 </div>
-            </div>
+         
             <%      } 
                 }
             else { %> <p>Non ci sono ancora recensioni per questo professionista.</p> <% } %>
-	</section>               <section class="contact-section">
-            <h2>Vuoi contattare questo professionista?</h2>
-            
-          
-			<form action="<%= request.getContextPath() %>/InoltroRichieste" method="Get">
-            	<input type="hidden" name="id_professionista" value="<%= professionista.getId() %>">
-            	<input type="submit" value="Contatta" class="contatta-class">
-            </form>
-            
-        </section>
+	</section>         
+	  <% if(!isProprietario) { %>
+    <section class="contact-section">
+        <h2>Vuoi contattare questo professionista?</h2>
+        <form action="<%= request.getContextPath() %>/InoltroRichieste" method="Get">
+            <input type="hidden" name="id_professionista" value="<%= professionista.getId() %>">
+            <input type="submit" value="Contatta" class="contatta-class">
+        </form>
+    </section>
+<% } %>
     </main>
 
     

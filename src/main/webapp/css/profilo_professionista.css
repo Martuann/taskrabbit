@@ -106,6 +106,31 @@ section h2{
   transform: translateY(-1px);
 }
 
+.imglavoro {
+    width: 300px;    
+    height: 250px;    
+    
+ 
+    object-fit: contain; 
+    
+    /* Aggiungi uno sfondo neutro per riempire gli spazi vuoti 
+       se l'immagine è più stretta o più bassa del riquadro */
+    background-color: #f0f0f0; 
+    
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px;
+    display: inline-block;
+}
 
+#imgs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.imglavoro:hover {
+    transform: scale(1.05);
+}
 
 
