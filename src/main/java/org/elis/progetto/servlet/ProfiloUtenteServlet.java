@@ -38,4 +38,8 @@ public class ProfiloUtenteServlet extends HttpServlet {
 			response.sendError(500, "Errore nel caricamento dei dati del profilo.");
 		}
 	}
+
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    doGet(request, response);
+}
 }

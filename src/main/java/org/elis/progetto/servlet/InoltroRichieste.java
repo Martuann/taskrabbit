@@ -334,6 +334,6 @@ public class InoltroRichieste extends HttpServlet {
             return;
         }
 
-        response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?success=true");
+        response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet");
     	}
     }

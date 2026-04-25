@@ -40,56 +40,56 @@ public class RecuperaFotoServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Immagine img = null;
+		Immagine img = null;
+	    String idImmagineParam = request.getParameter("id"); 
+	    String idUtenteParam = request.getParameter("idUtenteRichiesto"); 
 
-        String idImmagineParam = request.getParameter("id"); 
-        String idUtenteParam = request.getParameter("idUtenteRichiesto"); 
-        
-        
+	    try {
+	        if (idImmagineParam != null && !idImmagineParam.isEmpty()) {
+	            long idImmagine = Long.parseLong(idImmagineParam);
+	            img = immagineDao.selectById(idImmagine); 
+	        } else if (idUtenteParam != null && !idUtenteParam.isEmpty()) {
+	            long idUtente = Long.parseLong(idUtenteParam);
+	            img = immagineDao.selectFotoProfiloByUtente(idUtente);
+	        } else {
+	            HttpSession session = request.getSession(false);
+	            if (session != null && session.getAttribute("utenteLoggato") != null) {
+	                Utente utente = (Utente) session.getAttribute("utenteLoggato");
+	                img = immagineDao.selectFotoProfiloByUtente(utente.getId());
+	            }
+	        }
 
-        try {
-            if (idImmagineParam != null && !idImmagineParam.isEmpty()) {
-                long idImmagine = Long.parseLong(idImmagineParam);
-                img = immagineDao.selectById(idImmagine); 
-                
-            } else if (idUtenteParam != null && !idUtenteParam.isEmpty()) {
-                long idUtente = Long.parseLong(idUtenteParam);
-                img = immagineDao.selectFotoProfiloByUtente(idUtente);
-                
-            } else {
-                HttpSession session = request.getSession(false);
-                if (session != null && session.getAttribute("utenteLoggato") != null) {
-                    Utente utente = (Utente) session.getAttribute("utenteLoggato");
-                    img = immagineDao.selectFotoProfiloByUtente(utente.getId());
-                }
-            }
+	        if (img != null && img.getPercorso() != null) {
+	            String rootPath = getServletContext().getRealPath("/");
+	            File directoryBase = new File(rootPath).getCanonicalFile();
 
-            if (img != null && img.getPercorso() != null) {
-                String percorsoAssoluto = getServletContext().getRealPath("/") + img.getPercorso();
-                File fileFoto = new File(percorsoAssoluto);
+	            File fileFoto = new File(directoryBase, img.getPercorso()).getCanonicalFile();
 
-                if (fileFoto.exists()) {
-                    String mimeType = getServletContext().getMimeType(percorsoAssoluto);
-                    response.setContentType(mimeType != null ? mimeType : "image/jpeg");
-                    
-                    try (FileInputStream in = new FileInputStream(fileFoto);
-                         OutputStream out = response.getOutputStream()) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = in.read(buffer)) != -1) {
-                            out.write(buffer, 0, bytesRead);
-                        }
-                        return; 
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	            if (fileFoto.exists() && fileFoto.getPath().startsWith(directoryBase.getPath()) && fileFoto.isFile()) {
+	                
+	                String mimeType = getServletContext().getMimeType(fileFoto.getAbsolutePath());
+	                response.setContentType(mimeType != null ? mimeType : "image/jpeg");
+	                response.setContentLength((int) fileFoto.length());
 
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-    }
-	
+	                try (FileInputStream in = new FileInputStream(fileFoto);
+	                     OutputStream out = response.getOutputStream()) {
+	                    byte[] buffer = new byte[4096];
+	                    int bytesRead;
+	                    while ((bytesRead = in.read(buffer)) != -1) {
+	                        out.write(buffer, 0, bytesRead);
+	                    }
+	                    return; 
+	                }
+	            } else {
+	                System.err.println("Accesso negato o file non trovato: " + fileFoto.getPath());
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

@@ -82,10 +82,15 @@
 					boolean isPassato = dataCorrente.isBefore(oggi);
 					
 					Disponibilita dispTrovata = null;
+					boolean chiusoEsplicito = false;
 					if (orariSettimana != null) {
 						for (Disponibilita d : orariSettimana) {
 							if (d.getData() != null && d.getData().equals(dataCorrente)) {
-								dispTrovata = d;
+								if (d.getInizio().equals(d.getFine())) {
+									chiusoEsplicito = true; 
+								} else {
+									dispTrovata = d;
+								}
 								break;
 							}
 						}

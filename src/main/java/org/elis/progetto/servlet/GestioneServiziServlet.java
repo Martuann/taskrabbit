@@ -52,7 +52,8 @@ public class GestioneServiziServlet extends HttpServlet {
     
     	
         try {
-          
+        	boolean alertNecessario = utenteProfessioneDao.checkTariffeCritiche(utenteLoggato.getId());
+            session.setAttribute("alertTariffa", alertNecessario);
 
             List<Professione> catalogoTutteLeProfessioni = professioneDao.selectAll();
             List<Veicolo> catalogoTuttiIVeicoli = veicoloDao.getAllVeicoli();
@@ -84,7 +85,8 @@ public class GestioneServiziServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
        String operazioneRichiesta = request.getParameter("azione");
-        Utente utenteLoggatoInSessione = (Utente) request.getSession().getAttribute("utenteLoggato");
+       HttpSession session = request.getSession();
+        Utente utenteLoggatoInSessione = (Utente) session.getAttribute("utenteLoggato");
 
   
         
@@ -144,6 +146,10 @@ public class GestioneServiziServlet extends HttpServlet {
                 BigDecimal nuovoPrezzo = validaEConvertiPrezzo(request.getParameter("nuovoPrezzo"));
                 utenteVeicoloDao.aggiornaPrezzoServizio(utenteLoggatoInSessione.getId(), idVeicolo, nuovoPrezzo);
             }
+           
+
+            boolean alertNecessario = utenteProfessioneDao.checkTariffeCritiche(utenteLoggatoInSessione.getId());
+            session.setAttribute("alertTariffa", alertNecessario);
 
         } 
         catch (NumberFormatException e) {

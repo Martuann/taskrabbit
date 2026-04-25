@@ -31,8 +31,7 @@ public class GestioneRichiesteServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GestioneRichiesteServlet() {
-        super();
+    public  void init() throws ServletException {
         richiestaDao = DaoFactory.getInstance().getRichiestaDao();
     	utenteDao = DaoFactory.getInstance().getUtenteDao();
     	veicoloDao = DaoFactory.getInstance().getVeicoloDao();

@@ -99,7 +99,6 @@
 		</div>
 	</div>
 </header>
-
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
 		const btn = document.getElementById('areaRiservataBtn');

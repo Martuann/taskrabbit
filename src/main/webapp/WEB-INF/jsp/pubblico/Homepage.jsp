@@ -51,50 +51,50 @@
 		<div class="services-grid">
 
 			<div class="service-card">
-				<img src="<%=request.getContextPath()%>/immagini/Riparazioni.jpg"
-					alt="Riparazioni">
+				<img src="<%=request.getContextPath()%>/immagini/Elettricista.png"
+					alt="Elettronica">
 				<div class="card-text">
-					<h3>Riparazioni</h3>
-					<p>Montaggio mobili e riparazioni elettriche.</p>
+					<h3>Elettronica</h3>
+					<p>La tua casa, alla massima potenza.</p>
 					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
-						<button type="submit" class="view-more" name="professione" value="Riparazioni">Vedi Tasker</button>
+						<button type="submit" class="view-more" name="professione" value="Elettricista">Vedi Tasker</button>
 					</form>
 				</div>
 			</div>
 
 			<div class="service-card pittura-card">
-				<img src="<%=request.getContextPath()%>/immagini/Imbiancatura.jpg"
-					alt="Pittura">
+				<img src="<%=request.getContextPath()%>/immagini/Idraulico.png"
+					alt="Idraulica">
 				<div class="card-text">
-					<h3>Pittura</h3>
-					<p>Rinfresca le pareti della tua casa.</p>
+					<h3>Idraulica</h3>
+					<p>Idraulica perfetta, zero pensieri.</p>
 					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
-						<button type="submit" class="view-more" name="professione" value="Pittura">Vedi Tasker</button>
+						<button type="submit" class="view-more" name="professione" value="Idraulico">Vedi Tasker</button>
 					</form>
 				</div>
 			</div>
 
 			<div class="service-card">
-				<img src="<%=request.getContextPath()%>/immagini/Pulizia.jpg"
-					alt="Pulizia">
+				<img src="<%=request.getContextPath()%>/immagini/Imbianchino.png"
+					alt="imbianchino">
 				<div class="card-text">
-					<h3>Pulizia</h3>
-					<p>Servizi di pulizia profonda per ogni ambiente.</p>
+					<h3>Pittura</h3>
+					<p>Rinfresca le pareti della tua casa.</p>
 					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
-						<button type="submit" class="view-more" name="professione" value="Pulizia">Vedi Tasker</button>
+						<button type="submit" class="view-more" name="professione" value="imbianchino">Vedi Tasker</button>
 					</form>
 				</div>
 			</div>
 
 			<div class="service-card">
 				<img
-					src="<%=request.getContextPath()%>/immagini/Aiuto informatico.jpg"
-					alt="Informatica">
+					src="<%=request.getContextPath()%>/immagini/AssemblaggioPc.png"
+					alt="AssemblaggioPc">
 				<div class="card-text">
 					<h3>Aiuto Informatico</h3>
 					<p>Riparazione PC e installazione software.</p>
 					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
-						<button type="submit" class="view-more" name="professione" value="Aiuto Informatico">Vedi Tasker</button>
+						<button type="submit" class="view-more" name="professione" value="Assemblaggio PC"   >Vedi Tasker</button>
 					</form>
 				</div>
 			</div>

@@ -24,8 +24,7 @@ public class ScriviRecensioneServlet extends HttpServlet {
 	private RecensioneDao recensioneDao;
 	private RichiestaDao richiestaDao;
 private UtenteDao utenteDao;
-    public ScriviRecensioneServlet() {
-        super();
+	public void init() throws ServletException {
         richiestaDao = DaoFactory.getInstance().getRichiestaDao();
         recensioneDao = DaoFactory.getInstance().getRecensioneDao();
         utenteDao=DaoFactory.getInstance().getUtenteDao();
@@ -34,7 +33,9 @@ private UtenteDao utenteDao;
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@Override
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 	    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
@@ -44,48 +45,75 @@ private UtenteDao utenteDao;
 		
 		
 		
+		if (votoStr == null || idRecensitoStr == null || utenteLoggato == null) {
+	        response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?error=missing_data");
+	        return;
+	    }
 		
-		if (votoStr != null && idRecensitoStr != null) {
-	        try {
-	            int voto = Integer.parseInt(votoStr);
-	            long idRecensito = Long.parseLong(idRecensitoStr);
-	            
-	            Utente utenteRecensito = utenteDao.ricercaPerId(idRecensito);
-	            
-	            if (utenteRecensito != null && utenteLoggato != null) {
-	                Recensione r = new Recensione();
-	                r.setVoto(voto);
-	                r.setDescrizione(descrizione);
-	                r.setData(LocalDate.now());
-	                r.setUtenteScrittore(utenteLoggato);
-	                r.setUtenteRicevente(utenteRecensito);
-	                if(richiestaDao.haLavorato(utenteLoggato.getId(), utenteRecensito.getId())) {
-		                recensioneDao.insert(r);
-
-	                }else {
-		                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Non puoi scrivere una recensione per un professionista che non ha lavorato con te");
-		                return;
-	                }
-	            }
+		
+		
+		try {
+            int voto = Integer.parseInt(votoStr);
+            long idRecensito = Long.parseLong(idRecensitoStr);
+            if (voto < 1 || voto > 5) {
+                response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?error=invalid_vote");
+                return;
+            }
+            Utente utenteRecensito = utenteDao.ricercaPerId(idRecensito);
+		
+		if (utenteRecensito != null) {
+            if (richiestaDao.haLavorato(utenteLoggato.getId(), utenteRecensito.getId())) {
+            	if (!recensioneDao.esisteRecensionePerRichiesta(utenteLoggato.getId(), utenteRecensito.getId())) {
+                    
+                    Recensione r = new Recensione();
+                    r.setVoto(voto);
+                    r.setDescrizione(descrizione);
+                    r.setData(LocalDate.now());
+                    r.setUtenteScrittore(utenteLoggato);
+                    r.setUtenteRicevente(utenteRecensito);
+                    
+                    recensioneDao.insert(r);
+                    
+                    response.sendRedirect(request.getContextPath()+"/CronologiaRichiesteServlet?success=true");
+                    return;
+                } else {
+                	response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?error=already_reviewed");
+                	return;
+                }
+            } else {
+            	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Non autorizzato a recensire questo utente.");
+            	return;
+            }
+          
+        }else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Professionista non trovato.");
+            return;
+        }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	            response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet?error=true");
 	            return;
 	        }
 		
-		response.sendRedirect(request.getContextPath()+"/CronologiaRichiesteServlet");
-	}}
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Long id = 0L;
-		if(request.getParameter("idProfessionista")!=null&&!request.getParameter("idProfessionista").trim().isEmpty() ) {
-			id = Long.parseLong(request.getParameter("idProfessionista"));
-		}
-		request.setAttribute("idProfessionista", id);
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String idProfStr = request.getParameter("idProfessionista");
+		if (idProfStr == null || idProfStr.trim().isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Id Professionista mancante.");
+            return;
+        }
 
-		request.getRequestDispatcher("/WEB-INF/jsp/utente/scriviRecensione.jsp").forward(request, response);	
+        try {
+            long id = Long.parseLong(idProfStr);
+            request.setAttribute("idProfessionista", id);
+            request.getRequestDispatcher("/WEB-INF/jsp/utente/scriviRecensione.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Id Professionista non valido.");
+        }
 	}
 }

@@ -27,8 +27,7 @@ public class CronologiaRichiesteServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CronologiaRichiesteServlet() {
-        super();
+    public void init() throws ServletException {
         richiestaDao = DaoFactory.getInstance().getRichiestaDao();
         recensioneDao = DaoFactory.getInstance().getRecensioneDao();
     }

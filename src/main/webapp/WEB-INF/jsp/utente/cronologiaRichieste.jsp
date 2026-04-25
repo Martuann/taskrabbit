@@ -15,8 +15,40 @@
 <link rel="stylesheet" href="css/cronologiaRichieste.css">
 </head>
 <body>
+<%
+    String error = request.getParameter("error");
+    String success = request.getParameter("success");
+    String messaggio = "";
+    String alertClass = "";
+
+    if (error != null) {
+        alertClass = "alert-error"; 
+        
+        if (error.equals("already_reviewed")) {
+            messaggio = "Hai già lasciato una recensione per questo professionista.";
+        } else if (error.equals("invalid_vote")) {
+            messaggio = "Errore: il voto deve essere compreso tra 1 e 5 stelle.";
+        } else if (error.equals("missing_data") || error.equals("invalid_format")) {
+            messaggio = "Errore nei dati inviati (formato non valido o dati mancanti).";
+        } else {
+            messaggio = "Si è verificato un errore imprevisto durante il salvataggio.";
+        }
+        
+    } else if ("true".equals(success)) {
+        alertClass = "alert-success"; // Imposta la classe per il CSS verde
+        messaggio = "Recensione inviata con successo!";
+    }
+%>
+
 <%@ include file="/WEB-INF/headerFooter/header.jsp" %>
 <div id="main-container">
+<% if (!messaggio.isEmpty()) { %>
+    <div class="alert <%= alertClass %>" id="status-alert">
+        <p><%= messaggio %></p>
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+<% } %>
+
     <h1>Cronologia Richieste:</h1>
    <% 
         List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste"); 
@@ -60,7 +92,7 @@
 				</p>
 			</div>
 		    <% if(r.getStato() == StatoRichiesta.completato && !giaRecensiti.contains(r.getUtenteRichiesto().getId())) { %>
-			    <form action="ScriviRecensioneServlet" method="POST">
+			    <form action="ScriviRecensioneServlet" method="GET">
 					<input type="hidden" name="idProfessionista" value="<%= r.getUtenteRichiesto().getId() %>">
 					<input type="submit" value="Scrivi una Recensione">
 			    </form>

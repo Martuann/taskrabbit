@@ -22,16 +22,18 @@
 	if (utenteProfilo == null) {
 		response.sendRedirect(request.getContextPath() + "/Login");
 		return;
+		
 	}
+
+    List<String> errori = (List<String>) request.getAttribute("listaErrori");
+    String erroreGenerico = (String) request.getAttribute("erroreGenerico");
+    String updateStatus = request.getParameter("update");
+
 	%>
+	
 
-	<div class="containter">
-
-		<div class="back-navigation">
-			<a href="javascript:void(0);" onclick="window.history.back();"
-				class="back-link"> <span class="arrow">&larr;</span> Indietro
-			</a>
-		</div>
+	<div class="container">
+	
 
 	<div class="profile-header">
 			<div class="avatar-wrapper">

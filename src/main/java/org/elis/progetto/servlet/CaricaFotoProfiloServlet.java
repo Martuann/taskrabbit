@@ -58,41 +58,58 @@ public class CaricaFotoProfiloServlet extends HttpServlet {
 		Utente utente = (Utente) session.getAttribute("utenteLoggato");
 
 		try {
-			Part filePart = request.getPart("foto");
-			
-			if (filePart != null && filePart.getSize() > 0) {
-				String contentDisposition = filePart.getHeader("content-disposition");
-				String estensione = ".png"; 
-				if (contentDisposition != null && 
-					    (contentDisposition.contains(".jpg") || contentDisposition.contains(".jpeg"))) {
-					    estensione = ".jpg";
-					}
+            Part filePart = request.getPart("foto");
+            
+            if (filePart != null && filePart.getSize() > 0) {
+                
+                String contentType = filePart.getContentType();
+                String estensione = ".png"; 
+                if (contentType != null) {
+                    if (contentType.equals("image/jpeg")) {
+                        estensione = ".jpg";
+                    } else if (contentType.equals("image/gif")) {
+                        estensione = ".gif";
+                    }
+                }
 
-				String nomeFile = "avatar_" + utente.getId() + "_" + UUID.randomUUID().toString().substring(0, 8) + estensione;
-				
-		
-				String cartellaSalvataggio = getServletContext().getRealPath("/") + "CaricamentiUtente/" + File.separator;
-				File directory = new File(cartellaSalvataggio);
-				if (!directory.exists()) {
-					directory.mkdirs();
-				}
+         
+                String nomeCartella = "CaricamentiUtente";
+                String rootPath = getServletContext().getRealPath("/");
+                
+                File directoryBase = new File(rootPath, nomeCartella).getCanonicalFile();
 
-				String percorsoFinale = cartellaSalvataggio + nomeFile;
-				filePart.write(percorsoFinale);
+                if (!directoryBase.exists()) {
+                    directoryBase.mkdirs();
+                }
 
-				Immagine nuovaFoto = new Immagine();
-				nuovaFoto.setNome(nomeFile); 
-				nuovaFoto.setPercorso("CaricamentiUtente/" + nomeFile);
-				nuovaFoto.setIsFotoProfilo(true);
-				nuovaFoto.setUtente(utente);
-				immagineDao.insert(nuovaFoto);
-			}
-			
-			response.sendRedirect(request.getContextPath() + "/Profilo");
-	} catch (Exception e) {
-		e.printStackTrace();
-		response.sendError(500, "Errore durante l'upload della foto.");
-	}
+                String nomeFile = "avatar_" + utente.getId() + "_" + UUID.randomUUID().toString().substring(0, 8) + estensione;
+                
+                File fileFinale = new File(directoryBase, nomeFile).getCanonicalFile();
+
+                if (fileFinale.getPath().startsWith(directoryBase.getPath())) {
+                    
+                    filePart.write(fileFinale.getAbsolutePath());
+
+                    Immagine nuovaFoto = new Immagine();
+                    nuovaFoto.setNome(nomeFile); 
+                    nuovaFoto.setPercorso(nomeCartella + "/" + nomeFile);
+                    nuovaFoto.setIsFotoProfilo(true);
+                    nuovaFoto.setUtente(utente);
+                    
+                    immagineDao.insert(nuovaFoto);
+                    
+                } else {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Tentativo di violazione del percorso file.");
+                    return;
+                }
+            }
+            
+            response.sendRedirect(request.getContextPath() + "/Profilo?success=true");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/Profilo?error=upload_failed");
+        }
 	}
 
 }

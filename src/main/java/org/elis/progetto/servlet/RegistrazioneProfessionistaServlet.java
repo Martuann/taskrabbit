@@ -85,19 +85,24 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     if (email == null || !email.contains("@")) {
         errori.add("Per favore, inserisci un indirizzo email valido.");
     }
-    try {
-        if (utenteDao.presenzaUtente(email)) {
-            errori.add("Questa email è già registrata. Usa un'altra email o fai il login.");
+    else {
+        try {
+            if (utenteDao.presenzaUtente(email))
+                errori.add("Email già registrata.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            errori.add("Errore tecnico nel controllo email.");
         }
-    } catch (Exception e) {
-        e.printStackTrace(); 
-        errori.add("Si è verificato un problema tecnico durante il controllo dell'email. Riprova più tardi.");
     }
+    if (codiceFiscale == null || codiceFiscale.length() != 16)
+        errori.add("Il Codice Fiscale deve essere di 16 caratteri.");
     
     
     if (password == null || password.length() < 8) {
         errori.add("La password deve essere lunga almeno 8 caratteri.");
     }
+    if (numero == null || !numero.matches("[0-9]{8,15}"))
+        errori.add("Il numero di telefono non è valido.");
     
     if (listaIdProfessioni == null || listaIdProfessioni.length == 0) {
         errori.add("Devi selezionare almeno una specializzazione.");
@@ -123,106 +128,57 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
     
 
     if (!errori.isEmpty()) {
-        
-   try {
-        List<Professione> tutteLeProfessioni =professioneDao.selectAll();
-    	caricaCitta(request);
-
-        request.setAttribute("listaProfessioni", tutteLeProfessioni);
-        
-      
-        request.setAttribute("listaErrori", errori); 
-        
-      
-        request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
-        return; 
-    
-    
-    } catch (Exception e) {
-    e.printStackTrace();		
-   request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
-    							
+        caricaDatiForm(request);
+        request.setAttribute("listaErrori", errori);
+        request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp")
+               .forward(request, response);
+        return;
     }
     
     
-    }
 
-	
-	
-	
-    Long idCitta = Long.parseLong(idCittaStr);
+
 	try {
-		Citta cittaScelta = cittaDao.selectById(idCitta);
-	//	List<UtenteProfessione> utenteProfessioni=new ArrayList<UtenteProfessione>();
+		Citta cittaScelta = cittaDao.selectById(Long.parseLong(idCittaStr));
 
-		
-		
 	    Utente nuovoProf = new Utente(
 		    nome, cognome, email, numero, password, ddn,
 		    codiceFiscale, Ruolo.PROFESSIONISTA,cittaScelta  );
-	    
-	/*    if(listaIdProfessioni != null) {
-	 	   for(int i=0;i<listaIdProfessioni.length;i++) {
-	 		  
-	 				Professione professione=  professioneDao.selectById(Long.parseLong(listaIdProfessioni[i]));
-	 				utenteProfessioni.add(new UtenteProfessione(nuovoProf,professione, BigDecimal.ZERO));
-	 	   }
-	 	   }
-			nuovoProf.setProfessioni(utenteProfessioni);*/
 
 	    
-	    
-	    
-	    
 	   utenteDao.aggiungiUtente(nuovoProf);
-	   System.out.println(nuovoProf.getId()+"ID PROFESSIONISTA");
-     if(listaIdProfessioni != null) {
 	   for(int i=0;i<listaIdProfessioni.length;i++) {
 		  
-				Professione professione=  professioneDao.selectById(Long.parseLong(listaIdProfessioni[i]));
+		Professione professione=  professioneDao.selectById(Long.parseLong(listaIdProfessioni[i]));
 			
 		   utenteProfessioneDao.insert( new UtenteProfessione(nuovoProf,professione, BigDecimal.ZERO));
 	   }
-	   }
+	   
 	   
 	   response.sendRedirect(request.getContextPath() + "/Login?success=prof");
 	} catch (RegisterException e) {
-    	caricaCitta(request);
-        List<Professione> tutteLeProfessioni;
-		try {
-			tutteLeProfessioni = professioneDao.selectAll();
-		
-
-    	 request.setAttribute("listaProfessioni", tutteLeProfessioni);
-	    request.setAttribute("listaErrori", List.of(e.getMessage()));
-	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
-		} catch (Exception e1) {
-			 response.sendRedirect(request.getContextPath() + "/RegistrazioneProfessionistaServlet?error=tecnico");
-				e1.printStackTrace();
-			}
-	    } catch (Exception e) {
-	    	caricaCitta(request);
-	    	try {
-	        List<Professione> tutteLeProfessioni =professioneDao.selectAll();
-
-	    	 request.setAttribute("listaProfessioni", tutteLeProfessioni);
-	    	}catch(Exception e1) {
-	    		 response.sendRedirect(request.getContextPath() + "/RegistrazioneProfessionistaServlet?error=tecnico");}
-	    e.printStackTrace();
-	    request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
-	    request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp").forward(request, response);
-
-	    }
-    
-    
-    
+        caricaDatiForm(request);
+        request.setAttribute("listaErrori", List.of(e.getMessage()));
+        request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp")
+               .forward(request, response);
+    } catch (Exception e) {
+        e.printStackTrace();
+        caricaDatiForm(request);
+        request.setAttribute("listaErrori", List.of("Errore tecnico: riprova più tardi."));
+        request.getRequestDispatcher("/WEB-INF/jsp/pubblico/registrazioneProfessionista.jsp")
+               .forward(request, response);
     }
+}
     
     
-    private void caricaCitta(HttpServletRequest request) {
+    
+    
+    
+    
+    private void caricaDatiForm(HttpServletRequest request) {
         try {
-            List<Citta> tutteLeCitta = cittaDao.getAllCitta();
-            request.setAttribute("listaCitta", tutteLeCitta);
+            request.setAttribute("listaCitta", cittaDao.getAllCitta());
+            request.setAttribute("listaProfessioni", professioneDao.selectAll());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%
+    Long idAttr = (Long)request.getAttribute("idProfessionista");
+    String idVal = (idAttr != null) ? idAttr.toString() : "";
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +13,7 @@
 </head>
 <body>
 	<h1>Lascia una recensione:</h1>
-	<form action="ScriviRecensioneServlet" method="GET">
+	<form action="ScriviRecensioneServlet" method="POST">
 		<label for="voto">Voto:</label>
 		<select name="voto">
 			<option value="1">1 stella</option>
@@ -21,7 +25,7 @@
 		<label for="descrizione">Descrizione</label><br>
 		<textarea name="descrizione" required></textarea><br>
 		
-		<input type="hidden" name="id" value="<%= request.getAttribute("idProfessionista") %>">    	
+		<input type="hidden" name="id" value="<%= idVal %>">    	
 		<input type="submit" value="Conferma">
 	</form>
 </body>

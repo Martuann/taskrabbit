@@ -19,7 +19,7 @@ public class OrarioBase {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@Column(name="giornoSettimana", columnDefinition = "TINYINT CHECK (giornoSettimana between 1 and 7 )", nullable = false)
+	@Column(name="giornoSettimana", columnDefinition = "TINYINT CHECK (giornoSettimana between 0 and 6 )", nullable = false)
     private DayOfWeek giornoSettimana;
 	@Column(name="ora_inizio", nullable = false)
     private LocalTime oraInizio;

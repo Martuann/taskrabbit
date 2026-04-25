@@ -37,6 +37,8 @@ public class GestioneOrariDefault extends HttpServlet {
     		request.setAttribute("orarioDefault", orarioProfessionistaDao.getOrariByUtente(utenteLoggato.getId()));
     		request.getRequestDispatcher("/WEB-INF/jsp/professionista/GestioneDisponibilitaBase.jsp").forward(request, response);;    	}
     	catch(Exception e){
+			e.printStackTrace();
+
     		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=loading");    	}
 	}
 
@@ -44,8 +46,11 @@ public class GestioneOrariDefault extends HttpServlet {
 		HttpSession session = request.getSession();
     	Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
+    	
+    	
     	try {
-    		for(int i=0; i<DayOfWeek.values().length; i++) {
+    		DayOfWeek[] giorniSettimana = DayOfWeek.values();
+    		for(int i=0; i<giorniSettimana.length; i++) {
     	    	String booleanSeLavoraoNoString = request.getParameter("lavora_"+i);
     	    	String inizio = request.getParameter("oraInizio_" + i);
     	    	String fine = request.getParameter("oraFine_" + i);
@@ -55,10 +60,15 @@ public class GestioneOrariDefault extends HttpServlet {
     	    		int idGiorno = Integer.parseInt(giornoStr);
     	    		DayOfWeek giornata = DayOfWeek.of(idGiorno);
     	    		
-    		    	if(booleanSeLavoraoNoString != null) {
+    		    	if(booleanSeLavoraoNoString != null&& "true".equals(booleanSeLavoraoNoString)) {
     		    		LocalTime orarioInizio = LocalTime.parse(inizio);
     		    	    LocalTime orarioFine = LocalTime.parse(fine);
-    		    	    orarioProfessionistaDao.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato));
+
+    		    	    if (orarioInizio.isBefore(orarioFine)) {
+                            orarioProfessionistaDao.salvaOrario(new OrarioBase(giornata, orarioInizio, orarioFine, utenteLoggato));
+                        } else {
+                            System.out.println("Orario non valido per " + giornata);
+                        }
     		    	} else {
     		    		orarioProfessionistaDao.eliminaOrario(utenteLoggato.getId(), idGiorno);
     				}
@@ -66,6 +76,7 @@ public class GestioneOrariDefault extends HttpServlet {
     		}
     		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?success=true");
     	} catch (Exception e) {
+			e.printStackTrace();
     		response.sendRedirect(request.getContextPath() + "/GestioneOrariDefault?error=save");
     	}
 	}
