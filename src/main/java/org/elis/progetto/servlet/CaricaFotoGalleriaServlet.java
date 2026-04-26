@@ -80,11 +80,11 @@ public class CaricaFotoGalleriaServlet extends HttpServlet {
             }
             
 
-            response.sendRedirect(request.getContextPath() + "/ProfiloProfessionistaServlet?uploadSuccess=true");
+            response.sendRedirect(request.getContextPath() + "/ProfiloProfessionistaServlet?idProfessionista=" + utente.getId() + "&success=true");
             
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/ProfiloProfessionistaServlet?error=upload_failed");
+            response.sendRedirect(request.getContextPath() + "/ProfiloProfessionistaServlet?idProfessionista=" + utente.getId() + "&success=failed");
         }
     }
 }

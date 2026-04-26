@@ -100,56 +100,43 @@
 	</div>
 </header>
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
-		const btn = document.getElementById('areaRiservataBtn');
-		const menu = document.getElementById('areaRiservataMenu');
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('areaRiservataBtn');
+    const menu = document.getElementById('areaRiservataMenu');
 
-		if (btn && menu) {
-			btn.addEventListener('click', function(e) {
-				e.stopPropagation();
-				menu.classList.toggle('show');
-			});
+    if (btn && menu) {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            menu.classList.toggle('show');
+        });
 
+        document.addEventListener('click', function(e) {
+            if (!btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    }
 
-			document.addEventListener('click', function(e) {
+    const nnbtn = document.getElementById('noti-btn');
+    const dropdown = document.getElementById('noti-dropdown');
 
-				if (!btn.contains(e.target) && !menu.contains(e.target)) {
-					menu.classList.remove('show');
-				}
-			});
-		}
-	});
-	
-	
-	
-	
-	
-	
-	const nnbtn = document.getElementById('noti-btn');
-	const dropdown = document.getElementById('noti-dropdown');
+    if (nnbtn && dropdown) { 
+        nnbtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+        });
 
-	// 1. Mostra/Nascondi al click sul bottone
-	nnbtn.addEventListener('click', (e) => {
-	  e.stopPropagation(); // Evita che il click arrivi alla window
-	  dropdown.classList.toggle('show');
-	});
+        window.addEventListener('click', () => {
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
+        });
 
-	// 2. Chiudi se l'utente clicca ovunque fuori dal menu
-	window.addEventListener('click', () => {
-	  if (dropdown.classList.contains('show')) {
-	    dropdown.classList.remove('show');
-	  }
-	});
-
-	// 3. Evita che il click dentro il menu lo chiuda per errore
-	dropdown.addEventListener('click', (e) => {
-	  e.stopPropagation();
-	});
-	
-	
-	
-	
-	
+        dropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    }
+});
 	
 	
 	

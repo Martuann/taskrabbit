@@ -8,14 +8,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+
+import org.elis.dao.definition.CittaDao;
 import org.elis.dao.definition.DaoFactory;
+
 import org.elis.progetto.model.Citta;
 import org.elis.progetto.model.Utente;
 
 @WebServlet("/Profilo")
 public class ProfiloUtenteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+    private CittaDao cittaDao;
+    
+ 
+    public void init() throws ServletException {
+    	cittaDao = DaoFactory.getInstance().getCittaDao();
+    }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		
@@ -24,11 +32,11 @@ public class ProfiloUtenteServlet extends HttpServlet {
 
 		try {
 
-			Citta cittaUtente = DaoFactory.getInstance().getCittaDao().selectById( utenteProfilo.getCitta().getId());
+			Citta cittaUtente = cittaDao.selectById( utenteProfilo.getCitta().getId());
 			request.setAttribute("cittaDati", cittaUtente);
 
 
-			List<Citta> listaCitta = DaoFactory.getInstance().getCittaDao().getAllCitta();
+			List<Citta> listaCitta = cittaDao.getAllCitta();
 			request.setAttribute("listaCitta", listaCitta);
 
 

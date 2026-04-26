@@ -74,10 +74,8 @@
         <hr>
 
 <%
-    // Recuperiamo l'utente loggato dalla sessione
     Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
     
-    // Verifichiamo se l'utente loggato è il proprietario del profilo
     boolean isProprietario = false;
     if (utenteLoggato != null && professionista != null) {
         if (utenteLoggato.getId() == professionista.getId()) {
@@ -89,7 +87,6 @@
 <section class="gallery-section">
     <h2>Portfolio Lavori</h2>
     
-    <%-- Form di caricamento: visibile SOLO al proprietario --%>
     <% if(isProprietario) { %>
         <div class="upload-box" style="margin-bottom: 20px; padding: 15px; border: 1px dashed #ccc;">
             <h3>Aggiungi una foto ai tuoi lavori</h3>
@@ -100,17 +97,36 @@
         </div>
     <% } %>
 
-    <div id="imgs">
-        <% if(galleria != null && !galleria.isEmpty()) { 
-            for(int i=0; i < galleria.size(); i++) { %>
-                <img id="img_lavoro_<%= i %>" 
-                     class="imglavoro" 
-                     src="<%= request.getContextPath() %>/recuperaFoto?id=<%= galleria.get(i).getId() %>">
-            <%  }
-        } else { %> 
-            <p>Nessuna foto di lavoro disponibile.</p> 
-        <% } %>
-    </div>
+    <% if(galleria != null && !galleria.isEmpty()) { %>
+        <div class="carousel-container">
+<button type="button" class="carousel-btn prev" onclick="moveCarousel(-1)">&#10094;</button>
+            <div class="carousel-track-container">
+                <div id="carousel-track">
+                    <% for(int i=0; i < galleria.size(); i++) { 
+                        Immagine imgCorrente = galleria.get(i);
+                    %>
+                        <div class="carousel-item">
+                            <img class="imglavoro" 
+                                 src="<%= request.getContextPath() %>/recuperaFoto?id=<%= imgCorrente.getId() %>"
+                                 alt="Lavoro del professionista">
+                            
+                            <% if(isProprietario) { %>
+                                <a href="<%= request.getContextPath() %>/EliminaFoto?id=<%= imgCorrente.getId() %>" 
+                                   class="btn-elimina-carousel" 
+                                   onclick="return confirm('Eliminare questa foto?');">
+                                   &times;
+                                </a>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+<button type="button" class="carousel-btn next" onclick="moveCarousel(1)">&#10095;</button>
+        </div>
+    <% } else { %> 
+        <p>Nessuna foto di lavoro disponibile.</p> 
+    <% } %>
 </section>
 
         <hr>
@@ -120,7 +136,6 @@
             <% 
                 List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni"); 
                 List<Utente> listaRecensori = (List<Utente>) request.getAttribute("listaRecensori"); 
-                Map<Utente, String> mappaRecensori = (Map<Utente, String>) request.getAttribute("mappaRecensori");
 
          
             
@@ -128,7 +143,6 @@
                     for(int i=0; i < recensioni.size(); i++) { 
                         Recensione r = recensioni.get(i);
                         Utente autore = listaRecensori.get(i);
-                        String fotoAutore = (mappaRecensori != null) ? mappaRecensori.get(autore) : proPic;
             %>
             <div class="recensione-card">
                 <div class="recensione-header">
@@ -136,20 +150,21 @@
      src="<%= request.getContextPath() %>/recuperaFoto?idUtenteRichiesto=<%= autore.getId() %>" 
      style="width:50px; height:50px; border-radius:50%; object-fit: cover;" 
      onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">
+     <div>
                              <strong class="nomeutente"><%= autore.getNome() + " " + autore.getCognome() %></strong>
                         <p class="rating">Voto: <%= r.getVoto() %>/5 ⭐</p>
+                        </div>
                     </div>
-                    <p class="data-recensione"><%= r.getData().toString() %></p>
-                </div>
-                <div class="recensione-body">
-                    <p class="descrizione"><%= r.getDescrizione() %></p>
-                </div>
-         
+             <div class="recensione-body" style="margin-top: 10px;">
+            <p class="data-recensione" style="font-size: 0.8em; color: #666;"><%= r.getData().toString() %></p>
+            <p class="descrizione"><%= r.getDescrizione() %></p>
+        </div>
+         </div>
             <%      } 
                 }
             else { %> <p>Non ci sono ancora recensioni per questo professionista.</p> <% } %>
 	</section>         
-	  <% if(!isProprietario) { %>
+	  <% if(!isProprietario && utenteLoggato != null) { %>
     <section class="contact-section">
         <h2>Vuoi contattare questo professionista?</h2>
         <form action="<%= request.getContextPath() %>/InoltroRichieste" method="Get">
@@ -162,6 +177,45 @@
 
     
     <%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
+<script>
+let currentIndex = 0;
+
+//Forza gli stili necessari appena la pagina è pronta
+document.addEventListener("DOMContentLoaded", function() {
+ const track = document.getElementById('carousel-track');
+ if (track) {
+     track.style.display = "flex";
+     track.style.flexDirection = "row";
+     track.style.flexWrap = "nowrap";
+     track.style.width = "max-content";
+     track.style.transition = "margin-left 0.5s ease"; 
+ }
+});
+
+function moveCarousel(direction) {
+ const track = document.getElementById('carousel-track');
+ const items = document.querySelectorAll('.carousel-item');
+ 
+ if (!track || items.length === 0) {
+     console.error("ERRORE");
+     return;
+ }
+
+ const itemWidth = 315; 
+ const maxIndex = items.length - 1;
+
+ currentIndex += direction;
+
+ if (currentIndex < 0) currentIndex = 0;
+ if (currentIndex > maxIndex) currentIndex = maxIndex;
+
+ const offset = currentIndex * itemWidth;
+
+
+ console.log("Tentativo di spostamento a:", -offset);
+ track.style.setProperty("margin-left", "-" + offset + "px", "important");
+}
+</script>
 
 </body>
 </html>
