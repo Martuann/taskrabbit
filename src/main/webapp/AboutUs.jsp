@@ -35,7 +35,7 @@
         <h2>Elis</h2>
         <p>Il progetto Taskly è stato ideato e sviluppato durante il master dell'ELIS. Dal 1965, l'ELIS rappresenta un punto di riferimento per la formazione tecnologica, ponendo al centro la crescita della persona e il servizio alla società attraverso il lavoro professionale</p>
         <p>
-        <a class="cta" href="https://www.elis.org/">Learn more »</a>
+        <a target="_blank" class="cta" href="https://www.elis.org/">Learn more »</a>
       </div>
     </div>
   </section>
@@ -54,11 +54,11 @@
   <section class="four">
     <div class="container">
       <div class="member">
-        <img src="<%=request.getContextPath()%>/immagini/Martin.png" alt="photo">
+        <img src="<%=request.getContextPath()%>/immagini/Martin.jpg" alt="photo">
         <h3>Martin Ilardi</h3>
         <p>Addetto al testing e al debugging. Si è assicurato che ogni funzionalità rispondesse correttamente ai requisiti del progetto.</p>
         <div class="social">
-          <a title="LinkedIn" href="https://www.linkedin.com/in/martin-ilardi-272338386/"><img src="<%=request.getContextPath()%>/immagini/linkedin.png" alt="linkedin"></a>
+          <a target="_blank" title="LinkedIn" href="https://www.linkedin.com/in/martin-ilardi-272338386/"><img src="<%=request.getContextPath()%>/immagini/linkedin.png" alt="linkedin"></a>
         
         </div>
       </div>  <!-- .member -->
@@ -67,7 +67,7 @@
         <h3>Giacomo Rizzo</h3>
         <p>Frontend Specialist e UX Designer. Si è occupato della resa visiva e dell'usabilità delle pagine JSP.</p>
         <div class="social">
-          <a title="LinkedIn" href="https://www.linkedin.com/in/giacomo-rizzo-20a451159/"><img src="<%=request.getContextPath()%>/immagini/linkedin.png" alt="linkedin"></a>
+          <a target="_blank" title="LinkedIn" href="https://www.linkedin.com/in/giacomo-rizzo-20a451159/"><img src="<%=request.getContextPath()%>/immagini/linkedin.png" alt="linkedin"></a>
       
         </div> <!-- .social -->
       </div>  <!-- .member -->
@@ -76,7 +76,7 @@
         <h3>Gabriele Satta</h3>
         <p>Responsabile dell'architettura Backend e della gestione dei dati. Ha curato l'integrazione delle Servlet e la logica core dell'applicazione.</p>
         <div class="social">
-          <a title="LinkedIn" href="https://www.linkedin.com/in/gabrielesatta99/"><img src="<%=request.getContextPath()%>/immagini/linkedin.png" alt="linkedin"></a>
+          <a target="_blank" title="LinkedIn" href="https://www.linkedin.com/in/gabrielesatta99/"><img src="<%=request.getContextPath()%>/immagini/linkedin.png" alt="linkedin"></a>
          
         </div> <!-- .social -->
       </div>  <!-- .member -->
@@ -85,7 +85,7 @@
         <h3>Vincenzo Cammarella</h3>
         <p>Responsabile della documentazione tecnica e della gestione dei contenuti, garantendo coerenza tra codice e interfaccia.</p>
         <div class="social">
-          <a title="LinkedIn" href="https://www.linkedin.com/in/vincenzo-cammarella/"><img src="<%=request.getContextPath()%>/immagini/linkedin.png" alt="linkedin"></a>
+          <a target="_blank" title="LinkedIn" href="https://www.linkedin.com/in/vincenzo-cammarella/"><img src="<%=request.getContextPath()%>/immagini/linkedin.png" alt="linkedin"></a>
        
         </div> <!-- .social -->
       </div>  <!-- .member -->
