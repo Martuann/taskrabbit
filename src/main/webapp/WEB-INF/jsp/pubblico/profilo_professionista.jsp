@@ -108,7 +108,7 @@
                         <div class="carousel-item">
                             <img class="imglavoro" 
                                  src="<%= request.getContextPath() %>/recuperaFoto?id=<%= imgCorrente.getId() %>"
-                                 alt="Lavoro del professionista">
+                                 alt="Lavoro del professionista" onclick="openModal(this.src)">
                             
                             <% if(isProprietario) { %>
                                 <a href="<%= request.getContextPath() %>/EliminaFoto?id=<%= imgCorrente.getId() %>" 
@@ -174,47 +174,90 @@
     </section>
 <% } %>
     </main>
-
+<div id="imageModal" class="modal-zoom" onclick="this.style.display='none'">
+    <span class="close-zoom">&times;</span>
+    <img class="modal-content" id="imgZoom">
+</div>
     
     <%@ include file="/WEB-INF/headerFooter/footer.jsp"%>
 <script>
 let currentIndex = 0;
 
-//Forza gli stili necessari appena la pagina è pronta
 document.addEventListener("DOMContentLoaded", function() {
- const track = document.getElementById('carousel-track');
- if (track) {
-     track.style.display = "flex";
-     track.style.flexDirection = "row";
-     track.style.flexWrap = "nowrap";
-     track.style.width = "max-content";
-     track.style.transition = "margin-left 0.5s ease"; 
- }
+    setupCarousel();
+    checkButtonsVisibility();
 });
 
-function moveCarousel(direction) {
- const track = document.getElementById('carousel-track');
- const items = document.querySelectorAll('.carousel-item');
- 
- if (!track || items.length === 0) {
-     console.error("ERRORE");
-     return;
- }
-
- const itemWidth = 315; 
- const maxIndex = items.length - 1;
-
- currentIndex += direction;
-
- if (currentIndex < 0) currentIndex = 0;
- if (currentIndex > maxIndex) currentIndex = maxIndex;
-
- const offset = currentIndex * itemWidth;
-
-
- console.log("Tentativo di spostamento a:", -offset);
- track.style.setProperty("margin-left", "-" + offset + "px", "important");
+// 1. Configurazione iniziale del binario
+function setupCarousel() {
+    const track = document.getElementById('carousel-track');
+    if (track) {
+        track.style.display = "flex";
+        track.style.flexDirection = "row";
+        track.style.flexWrap = "nowrap";
+        track.style.width = "max-content";
+        track.style.transition = "margin-left 0.5s ease";
+    }
 }
+
+// 2. Nasconde i bottoni se non c'è abbastanza contenuto da scorrere
+function checkButtonsVisibility() {
+    const container = document.querySelector('.carousel-track-container');
+    const track = document.getElementById('carousel-track');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+
+    if (!container || !track) return;
+
+    // Se la larghezza del binario è minore o uguale al contenitore, nascondi i tasti
+    if (track.scrollWidth <= container.offsetWidth) {
+        prevBtn.classList.add('hidden-btn');
+        nextBtn.classList.add('hidden-btn');
+    } else {
+        prevBtn.classList.remove('hidden-btn');
+        nextBtn.classList.remove('hidden-btn');
+    }
+}
+
+// 3. Funzione di movimento (quella che abbiamo sistemato prima)
+function moveCarousel(direction) {
+    const track = document.getElementById('carousel-track');
+    const items = document.querySelectorAll('.carousel-item');
+    const container = document.querySelector('.carousel-track-container');
+    
+    if (!track || items.length === 0) return;
+
+    const itemWidth = 315; 
+    const visibleWidth = container.offsetWidth;
+    const maxScroll = track.scrollWidth - visibleWidth;
+    
+    currentIndex += direction;
+
+    let offset = currentIndex * itemWidth;
+
+    // Limiti
+    if (offset < 0) {
+        offset = 0;
+        currentIndex = 0;
+    }
+    if (offset > maxScroll) {
+        offset = maxScroll;
+        currentIndex = Math.ceil(maxScroll / itemWidth);
+    }
+
+    track.style.setProperty("margin-left", "-" + offset + "px", "important");
+}
+
+// 4. Funzioni per lo Zoom dell'immagine
+function openModal(src) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("imgZoom");
+    modal.style.display = "block";
+    modalImg.src = src;
+}
+
+// Ricalcola visibilità bottoni se l'utente ridimensiona la finestra
+window.addEventListener('resize', checkButtonsVisibility);
 </script>
 
 </body>
