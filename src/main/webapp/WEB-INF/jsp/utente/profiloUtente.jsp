@@ -168,8 +168,15 @@
 	    document.getElementById('confermaPw').value = '';
 	    document.getElementById('pwError').style.display = 'none'; 
 	    
-	    document.querySelector('.back-navigation').style.visibility = 'hidden';
-	    document.querySelector('.password-wrapper').style.display = 'none';
+	    const backNav = document.querySelector('.back-navigation');
+	    if (backNav) {
+	        backNav.style.visibility = 'hidden';
+	    }
+
+	    const passwordWrapper = document.querySelector('.password-wrapper');
+	    if (passwordWrapper) {
+	        passwordWrapper.style.display = 'none';
+	    }
 
 	    const selectCitta = document.getElementById('cittaSelect');
 	    selectCitta.removeAttribute('disabled');
