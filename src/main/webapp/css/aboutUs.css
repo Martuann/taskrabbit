@@ -248,6 +248,7 @@ a.cta:hover {
 
 .four .container {
   display: block;
+  
 }
 
 @media (min-width: 768px) {
@@ -284,6 +285,8 @@ a.cta:hover {
     -webkit-box-pack: justify;
         -ms-flex-pack: justify;
             justify-content: space-between;
+                margin: 15;
+            
   }
 }
 
