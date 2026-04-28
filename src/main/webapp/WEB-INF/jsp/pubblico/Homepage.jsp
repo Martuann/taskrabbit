@@ -26,7 +26,7 @@
 					action="<%=request.getContextPath()%>/RicercaProfessionistiServlet"
 					method="GET" style="display: flex; width: 100%;">
 					<input type="text" list="listaProfessioni" name="professione"
-						placeholder="Di cosa hai bisogno? (es. Pittura, Riparazioni)"
+						placeholder="Di cosa hai bisogno? (es. Imbiancatura, Riparazioni)"
 						required>
 					<datalist id="listaProfessioni">
 						<%
@@ -78,10 +78,10 @@
 				<img src="<%=request.getContextPath()%>/immagini/Imbianchino.png"
 					alt="imbianchino">
 				<div class="card-text">
-					<h3>Pittura</h3>
+					<h3>Imbiancatura</h3>
 					<p>Rinfresca le pareti della tua casa.</p>
 					<form action="<%=request.getContextPath()%>/RicercaProfessionistiServlet" method="GET">
-						<button type="submit" class="view-more" name="professione" value="imbianchino">Vedi Tasker</button>
+						<button type="submit" class="view-more" name="professione" value="Imbiancatura">Vedi Tasker</button>
 					</form>
 				</div>
 			</div>
