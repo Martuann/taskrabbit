@@ -77,7 +77,11 @@
 				</button>
 
 				<div class="area-riservata-menu" id="areaRiservataMenu">
-					<a href="<%=request.getContextPath()%>/Profilo">Mio Profilo</a>
+				<% if (u.getRuolo() == Ruolo.PROFESSIONISTA) { %>
+				<a href="<%=request.getContextPath()%>/ProfiloProfessionistaServlet?idProfessionista=<%= u.getId() %>">Profilo</a>
+					
+				<% }%>
+					<a href="<%=request.getContextPath()%>/Profilo">Modifica Profilo</a>
 					<div class="divider"></div>
 					<a href="<%=request.getContextPath()%>/Logout" class="logout">Esci</a>
 				</div>

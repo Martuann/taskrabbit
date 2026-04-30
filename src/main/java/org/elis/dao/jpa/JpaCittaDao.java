@@ -87,8 +87,19 @@ public class JpaCittaDao implements CittaDao {
 	}
 	@Override
 	public Citta getByName(String cittaDaPulire) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		    try (EntityManager em = emf.createEntityManager()) {
+		        
+		        String jpql = "SELECT c FROM Citta c WHERE c.nome = :nome";
+		        
+		        return em.createQuery(jpql, Citta.class)
+		                 .setParameter("nome", cittaDaPulire)
+		                 .getResultStream()
+		                 .findFirst()
+		                 .orElse(null);
+		                 
+		    } 
+		    
+		}
+	
 
 }

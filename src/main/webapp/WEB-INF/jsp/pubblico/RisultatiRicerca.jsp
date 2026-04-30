@@ -29,11 +29,11 @@
 		<div class="results-header">
 			<h2>
 				<% if (msg.equals("in tutta Italia")) { %>
-				Trovati <strong><%= (professionisti != null) ? professionisti.size() : 0 %></strong>
+				Ci sono <strong><%= (professionisti != null) ? professionisti.size()+" risultati di ricerca per" : 0+"  risultati di ricerca per" %></strong>
 				<span><%= (query != null) ? query : "" %></span> in tutta Italia
 				<% } else { %>
-				Ci sono <strong><%= (professionisti != null) ? professionisti.size() : 0 %></strong>
-				<span><%= (query != null) ? query : "" %></span>
+				Ci sono <strong><%= (professionisti != null) ? professionisti.size()+" risultati di ricerca per" : 0+"  risultati di ricerca per" %></strong>
+				<span><%= (query != null) ?  query : "" %></span>
 				<%= msg %>
 				<% } %>
 			</h2>
