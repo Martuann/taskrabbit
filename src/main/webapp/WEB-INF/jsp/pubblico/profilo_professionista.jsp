@@ -11,7 +11,7 @@
     List<UtenteProfessione> utenteProf = (List<UtenteProfessione>) request.getAttribute("utenteProf");
     List<Immagine> galleria = (List<Immagine>) request.getAttribute("galleria");
     String proPic = (String) request.getAttribute("proPicProfilo");
-    
+    Double media = (Double) request.getAttribute("media");
     if(professionista == null) {
         response.sendRedirect(request.getContextPath() + "/HomepageServlet");
         return;
@@ -19,7 +19,7 @@
 %>
 <head>
     <meta charset="UTF-8">
-    <title>Profilo di <%= ((Utente)request.getAttribute("professionista")).getNome() %></title>
+    <title>Profilo di <%= ((Utente)request.getAttribute("professionista")).getNome() %>    </title>
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/profilo_professionista.css">
 </head>
 <body>
@@ -35,7 +35,7 @@
      src="<%= request.getContextPath() %>/recuperaFoto?idUtenteRichiesto=<%= professionista.getId() %>" 
      alt="Foto Profilo" 
      onerror="this.src='<%= request.getContextPath() %>/immagini/default-avatar.png';">                  
-       <h1 id="nomeprofilo"><%= professionista.getNome() + " " + professionista.getCognome() %></h1>
+       <h1 id="nomeprofilo"><%= professionista.getNome() + " " + professionista.getCognome()%></h1>
                     
                     <p id="p-veicoli"><strong>Veicoli disponibili:</strong> 
                         <% if(veicoli != null && !veicoli.isEmpty()) { 
@@ -132,7 +132,7 @@
         <hr>
 
         <section class="reviews-section">
-            <h2>Cosa dicono i clienti</h2>
+            <h2>Cosa dicono i clienti | <%  if(media != null) { %><%= media%>⭐<%}%></h2>
             <% 
                 List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni"); 
                 List<Utente> listaRecensori = (List<Utente>) request.getAttribute("listaRecensori"); 

@@ -82,7 +82,7 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			
 			
 			
-			
+			Double media = recensioneDao.selectAvgByUtente(idProfessionista);
 			List<Professione> professioniUtente = professioneDao.selectbyUtente(idProfessionista);
 			List<UtenteProfessione> utenteProf = utenteProfessioneDao.selectByUtente(idProfessionista);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);
@@ -121,7 +121,8 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 					}
 				}
 			}
-
+			
+			request.setAttribute("media", media);
 			request.setAttribute("professionista", professionista);
 			request.setAttribute("profeUtente", professioniUtente);
 			request.setAttribute("utenteProf", utenteProf);

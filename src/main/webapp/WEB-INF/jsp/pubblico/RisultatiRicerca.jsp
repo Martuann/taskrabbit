@@ -1,3 +1,4 @@
+<%@page import="java.util.Map"%>
 <%@page import="org.elis.progetto.model.Utente"%>
 <%@page import="org.elis.progetto.model.Citta"%>
 <%@page import="java.util.List"%>
@@ -20,6 +21,7 @@
 	<%
         List<Utente> professionisti = (List<Utente>) request.getAttribute("professionisti");
         List<Citta> listaCitta = (List<Citta>) request.getAttribute("listaCitta");
+        Map<Long,Double> media = (Map<Long,Double>) request.getAttribute("mediaProfessionista");
         String query = (String) request.getAttribute("query");
         String msg = (String) request.getAttribute("messaggioFiltro");
         if (msg == null) msg = "in tutta Italia";
@@ -81,7 +83,8 @@
 				<div class="service-card">
 					<div class="card-text">
 						<h3><%= utente.getNome() + " " + utente.getCognome() %></h3>
-
+						<%if (media.get(utente.getId()) != null) { %><p>Media valutazioni: <%= media.get(utente.getId()) %> ⭐</p><% }else{ %>
+						<p>Nessuna valutazione</p><% } %>
 						<% if (utente.getCitta() != null && utente.getCitta().getNome() != null && 
 							       !utente.getCitta().getNome().isEmpty()) { %>
 						<p class="loc-tag">

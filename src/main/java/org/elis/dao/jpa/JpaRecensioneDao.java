@@ -102,4 +102,17 @@ public class JpaRecensioneDao implements RecensioneDao{
         }
 	}
 
+	@Override
+	public Double selectAvgByUtente(Long idUtente) throws Exception{
+		try (EntityManager em = emf.createEntityManager()) {
+			 return em.createQuery("SELECT avg(r.voto) FROM Recensione r WHERE r.utenteRicevente.id = :uId", Double.class)
+                     .setParameter("uId", idUtente)
+					 .getSingleResult();	
+	
+	
+	
+		}
+		}
+	
+	
 }

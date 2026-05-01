@@ -12,4 +12,5 @@ public interface RecensioneDao {
 	List<Recensione> selectByIdUtenteRicevente(Long idUtenteRicevente)throws Exception;
 	Boolean esisteRecensionePerRichiesta(Long idScrittore, Long idRicevente)throws Exception;
 	List<Recensione> selectByIdUtenteScrittore(Long idUtenteScrittore)throws Exception;
+	Double selectAvgByUtente(Long idUtente) throws Exception;
 }

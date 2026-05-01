@@ -6,11 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.elis.progetto.model.Citta;
 import org.elis.progetto.model.Utente;
 import org.elis.dao.definition.DaoFactory;
+import org.elis.dao.definition.RecensioneDao;
 import org.elis.dao.definition.UtenteDao;
 
 
@@ -18,8 +21,10 @@ import org.elis.dao.definition.UtenteDao;
 public class RicercaProfessionistiServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UtenteDao utenteDao;
+	private RecensioneDao recensioneDao;
 	public void init() throws ServletException {
 	    utenteDao = DaoFactory.getInstance().getUtenteDao();  
+	    recensioneDao = DaoFactory.getInstance().getRecensioneDao();
 	}
 	
 	
@@ -72,8 +77,13 @@ public class RicercaProfessionistiServlet extends HttpServlet {
 
 		try {
 			List<Utente> listaTrovati = utenteDao.ricercaTramiteProfessione(professioneCercata);
+		
 			List<Citta> tutteLeCitta = DaoFactory.getInstance().getCittaDao().getAllCitta();
-
+			Map<Long, Double> mediaProfessionista = new HashMap<>();
+			for(Utente u : listaTrovati) {
+				 recensioneDao.selectAvgByUtente(u.getId());
+				 mediaProfessionista.put(u.getId(), recensioneDao.selectAvgByUtente(u.getId()));
+			}
 
 			if (idCittaDaFiltrare != -1 && listaTrovati != null) {
 				long finalId = idCittaDaFiltrare;
@@ -85,8 +95,9 @@ public class RicercaProfessionistiServlet extends HttpServlet {
 			request.setAttribute("professionisti", listaTrovati);
 			request.setAttribute("query", professioneCercata);
 			request.setAttribute("messaggioFiltro", messaggioFiltro);
+			request.setAttribute("mediaProfessionista", mediaProfessionista);
 			request.getRequestDispatcher("/WEB-INF/jsp/pubblico/RisultatiRicerca.jsp").forward(request, response);
-
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
