@@ -13,327 +13,217 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.elis.dao.definition.DaoFactory;
-import org.elis.dao.definition.DisponibilitaDao;
-import org.elis.dao.definition.OrarioBaseDao;
-import org.elis.dao.definition.ProfessioneDao;
-import org.elis.dao.definition.RichiestaDao;
-import org.elis.dao.definition.UtenteDao;
-import org.elis.dao.definition.UtenteProfessioneDao;
-import org.elis.dao.definition.UtenteVeicoloDao;
-import org.elis.dao.definition.VeicoloDao;
-import org.elis.progetto.model.Disponibilita;
-import org.elis.progetto.model.OrarioBase;
-import org.elis.progetto.model.Professione;
-import org.elis.progetto.model.Richiesta;
-import org.elis.progetto.model.Ruolo;
-import org.elis.progetto.model.StatoRichiesta;
-import org.elis.progetto.model.Utente;
-import org.elis.progetto.model.UtenteProfessione;
-import org.elis.progetto.model.UtenteVeicolo;
-import org.elis.progetto.model.Veicolo;
 
-/**
- * Servlet implementation class InoltroRichieste
- */
+import org.elis.dao.definition.*;
+import org.elis.progetto.model.*;
+
 @WebServlet("/InoltroRichieste")
 public class InoltroRichieste extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private RichiestaDao richiestaDao;
-	private UtenteDao utenteDao;
-	private ProfessioneDao professioneDao;
-	private VeicoloDao veicoloDao;
+    private static final long serialVersionUID = 1L;
+    private RichiestaDao richiestaDao;
+    private UtenteDao utenteDao;
+    private ProfessioneDao professioneDao;
+    private VeicoloDao veicoloDao;
     private UtenteVeicoloDao utenteVeicoloDao;
     private UtenteProfessioneDao utenteProfessioneDao;
     private DisponibilitaDao dispDao;
     private OrarioBaseDao orarioDao;
-	    /**
-	     * @see HttpServlet#HttpServlet()
-	     */
-	    
-	        
+
     @Override
     public void init() throws ServletException {
-        
-        richiestaDao = DaoFactory.getInstance().getRichiestaDao();
-        utenteDao = DaoFactory.getInstance().getUtenteDao();
-        professioneDao = DaoFactory.getInstance().getProfessioneDao();
-        veicoloDao = DaoFactory.getInstance().getVeicoloDao();
-        utenteVeicoloDao = DaoFactory.getInstance().getUtenteVeicoloDao();    
-        utenteProfessioneDao=DaoFactory.getInstance().getUtenteProfessioneDao();
-        dispDao=DaoFactory.getInstance().getDisponibilitaDao();
-        orarioDao=DaoFactory.getInstance().getOrarioBaseDao();
-}
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+        DaoFactory factory = DaoFactory.getInstance();
+        richiestaDao = factory.getRichiestaDao();
+        utenteDao = factory.getUtenteDao();
+        professioneDao = factory.getProfessioneDao();
+        veicoloDao = factory.getVeicoloDao();
+        utenteVeicoloDao = factory.getUtenteVeicoloDao();
+        utenteProfessioneDao = factory.getUtenteProfessioneDao();
+        dispDao = factory.getDisponibilitaDao();
+        orarioDao = factory.getOrarioBaseDao();
+    }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	    Long idProfessionista;
-    	    try {
-    	        idProfessionista = Long.parseLong(request.getParameter("id_professionista"));
-    	    } catch (NumberFormatException | NullPointerException e) {
-    	    	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
-    	    	return;
-    	    }
+        Long idProfessionista;
+        try {
+            idProfessionista = Long.parseLong(request.getParameter("id_professionista"));
+        } catch (NumberFormatException | NullPointerException e) {
+            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
+            return;
+        }
 
-    	    Utente professionista;
-    	    List<Veicolo> veicolo ;
-    	    List<Disponibilita> dispo ;
-    	    List<OrarioBase> orario;
-    	    List<UtenteVeicolo> utenteVeicolo;
-    	    List<Professione> professioni;
-    	    List<UtenteProfessione> utenteProfessioni;
-    	    List<Richiesta> occupate;
+        try {
+            Utente professionista = utenteDao.ricercaPerId(idProfessionista);
+            if (professionista == null || !professionista.getRuolo().equals(Ruolo.PROFESSIONISTA)) {
+                response.sendError(404, "Professionista non trovato.");
+                return;
+            }
 
-    	    try {
-    	        professionista = utenteDao.ricercaPerId(idProfessionista);
-    	        if (professionista == null || !professionista.getRuolo().equals(Ruolo.PROFESSIONISTA)) {
-    	            response.sendError(404, "Professionista non trovato o profilo non valido.");
-    	            return;
-    	        }
-    	        veicolo = veicoloDao.getVeicolibyUtente(idProfessionista);
-    	        dispo = dispDao.getDisponibilitaPerUtente(idProfessionista);
-    	        orario = orarioDao.getOrariByUtente(idProfessionista);
-    	        utenteVeicolo = utenteVeicoloDao.getDettagliVeicoliUtente(idProfessionista);
-    	        professioni = professioneDao.selectbyUtente(idProfessionista);
-    	        utenteProfessioni = utenteProfessioneDao.selectByUtente(idProfessionista);
-    	        occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
-    	    } catch (Exception e) {
-    	        e.printStackTrace();
-    	        response.sendError(500, "Errore nel collegamento con il db");
-    	        return;
-    	    }
+            // Recupero dati dal DB
+            List<Veicolo> veicoli = veicoloDao.getVeicolibyUtente(idProfessionista);
+            List<Disponibilita> eccezioni = dispDao.getDisponibilitaPerUtente(idProfessionista);
+            List<OrarioBase> orariBase = orarioDao.getOrariByUtente(idProfessionista);
+            List<UtenteVeicolo> utenteVeicoli = utenteVeicoloDao.getDettagliVeicoliUtente(idProfessionista);
+            List<Professione> professioni = professioneDao.selectbyUtente(idProfessionista);
+            List<UtenteProfessione> utenteProf = utenteProfessioneDao.selectByUtente(idProfessionista);
+            List<Richiesta> occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
 
-    	    List<Disponibilita> dispProssimeDueSettimane = new ArrayList<Disponibilita>();
-    	    LocalDate dataOggi = LocalDate.now();
-    	    LocalDate oggiPiuDueSettimane = dataOggi.plusWeeks(2);
+            List<Disponibilita> dispProssimeDueSettimane = new ArrayList<>();
+            LocalDate dataCorrente = LocalDate.now();
+            LocalDate finePeriodo = dataCorrente.plusWeeks(2);
+            LocalTime adessoPiuDue = LocalTime.now().plusHours(2);
+            LocalDate oggiReal = LocalDate.now();
 
-    	    while (dataOggi.isBefore(oggiPiuDueSettimane)) {
-    	        LocalTime inizio = null;
-    	        LocalTime fine = null;
-    	        Disponibilita eccezione = null;
+            while (!dataCorrente.isAfter(finePeriodo)) {
+                LocalTime inizio = null;
+                LocalTime fine = null;
 
-    	        for (int i = 0; i < dispo.size(); i++) {
-    	        	   if (dispo.get(i) != null && dispo.get(i).getData() != null && 
-    	        		        dispo.get(i).getData().equals(dataOggi)) {
-    	                eccezione = dispo.get(i);
-    	                break;
-    	            }
-    	        }
+                for (Disponibilita d : eccezioni) {
+                    if (d.getData() != null && d.getData().equals(dataCorrente)) {
+                        inizio = d.getInizio();
+                        fine = d.getFine();
+                        break;
+                    }
+                }
 
-    	        if (eccezione != null) {
-    	            inizio = eccezione.getInizio();
-    	            fine = eccezione.getFine();
-    	        } else {
-    	            DayOfWeek giorno = dataOggi.getDayOfWeek();
-    	            for (int i = 0; i < orario.size(); i++) {
-    	                if (orario.get(i).getGiornoSettimana().equals(giorno)) {
-    	                    inizio = orario.get(i).getOraInizio();
-    	                    fine = orario.get(i).getOraFine();
-    	                    break;
-    	                }
-    	            }
-    	        }
+                if (inizio == null) {
+                    DayOfWeek giorno = dataCorrente.getDayOfWeek();
+                    for (OrarioBase ob : orariBase) {
+                        if (ob.getGiornoSettimana().equals(giorno)) {
+                            inizio = ob.getOraInizio();
+                            fine = ob.getOraFine();
+                            break;
+                        }
+                    }
+                }
 
-    	        if (inizio != null && fine != null) {
-    	            LocalTime ora = inizio;
-    	            while (ora.isBefore(fine)) {
-    	                boolean trovato = false;
-    	                if (occupate != null) {
-    	                    for (int i=0; i<occupate.size();i++){
-    	                        if (occupate.get(i).getData().equals(dataOggi) && 
-    	                            (occupate.get(i).getStato() == StatoRichiesta.in_corso || occupate.get(i).getStato() == StatoRichiesta.completato) &&
-    	                            !ora.isBefore(occupate.get(i).getOrarioInizio()) && ora.isBefore(occupate.get(i).getOrarioFine())) {
-    	                            trovato = true;
-    	                            break;
-    	                        }
-    	                    }
-    	                }
+                if (inizio != null && fine != null && inizio.isBefore(fine)) {
+                    LocalTime ora = inizio;
 
-    	                if (trovato == false) {
-    	                    Disponibilita slot = new Disponibilita();
-    	                    slot.setUtente(professionista);
-    	                    slot.setData(dataOggi);
-    	                    slot.setInizio(ora);
-    	                    slot.setFine(ora.plusHours(1));
-    	                    dispProssimeDueSettimane.add(slot);
-    	                }
-    	                ora = ora.plusHours(1);
-    	            }
-    	        }
-    	        dataOggi = dataOggi.plusDays(1);
-    	    }
+                    while (ora.isBefore(fine)) {
+                        LocalTime oraInizioGiro = ora; 
 
-    	    request.setAttribute("professionista", professionista);
-    	    request.setAttribute("utenteProf", utenteProfessioni);
-    	    request.setAttribute("ListaProf", professioni);
-    	    request.setAttribute("veicoli", veicolo);
-    	    request.setAttribute("utenteVeicolo", utenteVeicolo);
-    	 
-    	    request.setAttribute("dispProssimeDueSettimane", dispProssimeDueSettimane);
+                        if (dataCorrente.equals(oggiReal) && ora.isBefore(adessoPiuDue)) {
+                            int minuti = adessoPiuDue.getMinute();
+                            
+                            if (minuti == 0) {
+                                ora = adessoPiuDue;
+                            } else if (minuti <= 30) {
+                                ora = adessoPiuDue.withMinute(30).withSecond(0).withNano(0);
+                            } else {
+                                ora = adessoPiuDue.plusHours(1).withMinute(0).withSecond(0).withNano(0);
+                            }
 
-    	    request.getRequestDispatcher("/WEB-INF/jsp/utente/RichiestaUtente.jsp").forward(request, response);	}
-    	
-		
-		
-	
+                            if (!ora.isBefore(fine)) break;
+                        }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+                        Richiesta occupata = null;
+                        for (Richiesta r : occupate) {
+                            if (r.getData().equals(dataCorrente) &&
+                               (r.getStato() == StatoRichiesta.in_corso || r.getStato() == StatoRichiesta.completato) &&
+                               !ora.isBefore(r.getOrarioInizio()) && ora.isBefore(r.getOrarioFine())) {
+                                occupata = r;
+                                break;
+                            }
+                        }
+
+                        if (occupata != null) {
+                            ora = occupata.getOrarioFine();
+                        } else {
+                            LocalTime fineSlot = fine;
+                            for (Richiesta r : occupate) {
+                                if (r.getData().equals(dataCorrente) &&
+                                    r.getOrarioInizio().isAfter(ora) &&
+                                    r.getOrarioInizio().isBefore(fineSlot)) {
+                                    fineSlot = r.getOrarioInizio();
+                                }
+                            }
+
+                            Disponibilita slot = new Disponibilita();
+                            slot.setUtente(professionista);
+                            slot.setData(dataCorrente);
+                            slot.setInizio(ora);
+                            slot.setFine(fineSlot);
+                            dispProssimeDueSettimane.add(slot);
+
+                            ora = fineSlot;
+                        }
+
+                        if (!ora.isAfter(oraInizioGiro)) {
+                            ora = ora.plusMinutes(15);
+                        }
+                    }
+                }
+                dataCorrente = dataCorrente.plusDays(1);
+            }
+
+            request.setAttribute("professionista", professionista);
+            request.setAttribute("utenteProf", utenteProf);
+            request.setAttribute("ListaProf", professioni);
+            request.setAttribute("veicoli", veicoli);
+            request.setAttribute("utenteVeicolo", utenteVeicoli);
+            request.setAttribute("dispProssimeDueSettimane", dispProssimeDueSettimane);
+
+            request.getRequestDispatcher("/WEB-INF/jsp/utente/RichiestaUtente.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(500, "Errore nel caricamento dati.");
+        }
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+        if (utenteLoggato == null) {
+            response.sendRedirect(request.getContextPath() + "/Login.jsp");
+            return;
+        }
 
-     
-
-        Long idProfessionista, idProfess;
-        LocalDate dataValida;
-        LocalTime oraInizio;
-        int oreSelezionate;
-        String indirizzo;
         try {
-            idProfessionista = Long.valueOf(request.getParameter("id_professionista"));
-            idProfess = Long.valueOf(request.getParameter("id_professione"));
-            dataValida = LocalDate.parse(request.getParameter("data_scelta"));
-            oraInizio = LocalTime.parse(request.getParameter("ora_inizio"));
-            oreSelezionate = Integer.parseInt(request.getParameter("durata_ore"));
-            indirizzo=request.getParameter("indirizzo");
+            Long idProfessionista = Long.valueOf(request.getParameter("id_professionista"));
+            Long idProfessione = Long.valueOf(request.getParameter("id_professione"));
+            LocalDate dataScelta = LocalDate.parse(request.getParameter("data_scelta"));
+            LocalTime oraInizio = LocalTime.parse(request.getParameter("ora_inizio"));
+            int durataOre = Integer.parseInt(request.getParameter("durata_ore"));
+            LocalTime oraFine = oraInizio.plusHours(durataOre);
+            String indirizzo = request.getParameter("indirizzo");
 
-        } catch (Exception e) {
-        	//response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_Professionista=" + request.getParameter("id_professionista") + "&error=dati_non_validi");
-        	response.sendRedirect(request.getContextPath() + "/HomepageServlet");
-        	return;
-        }
-
-        if (dataValida.isBefore(LocalDate.now())) {
-            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
-            return;
-        }
-      
-        
-        LocalTime oraFine = oraInizio.plusHours(oreSelezionate);
-
-        List<Richiesta> occupate;
-        List<Disponibilita> dispo;
-        List<OrarioBase> orario;
-        UtenteProfessione up;
-        Utente professionista;
-        Professione professione;
-        
-     
-        
-        try {
-            
-            up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProfessionista, idProfess);
-            occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
-            dispo = dispDao.getDisponibilitaPerUtente(idProfessionista);
-            orario = orarioDao.getOrariByUtente(idProfessionista);
-            professionista = utenteDao.ricercaPerId(idProfessionista);
-        
-            professione = professioneDao.selectById(idProfess);
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(500, "Errore nel collegamento con il db");
-            return;
-        }
-        
-        if (up == null || professionista == null || professione == null) {
-            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
-            return;
-        }
-        if (!professionista.getRuolo().equals(Ruolo.PROFESSIONISTA)) {
-        	response.sendError(404, "Il profilo richiesto non è un professionista valido.");
-        	return;
-        }
-        for (Richiesta r : occupate) {
-            if (r.getData().equals(dataValida)
-                    && (r.getStato() == StatoRichiesta.in_corso
-                            || r.getStato() == StatoRichiesta.completato)
-                    && oraInizio.isBefore(r.getOrarioFine())
-                    && oraFine.isAfter(r.getOrarioInizio())) {
-                response.sendRedirect(request.getContextPath()
-                        + "/InoltroRichieste?id_professionista=" + idProfessionista
-                        + "&error=conflitto");
+            if (dataScelta.isBefore(LocalDate.now())) {
+                response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_professionista=" + idProfessionista + "&error=data_passata");
                 return;
             }
-        }
-        
-        LocalTime limiteInizio = null;
-        LocalTime limiteFine   = null;
 
-        for (Disponibilita d : dispo) {
-            if (d.getData().equals(dataValida)) {
-                limiteInizio = d.getInizio();
-                limiteFine   = d.getFine();
-                break;
-            }
-        }
-        if (limiteInizio == null) {
-            DayOfWeek giorno = dataValida.getDayOfWeek();
-            for (OrarioBase ob : orario) {
-                if (ob.getGiornoSettimana().equals(giorno)) {
-                    limiteInizio = ob.getOraInizio();
-                    limiteFine   = ob.getOraFine();
-                    break;
+            List<Richiesta> occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
+            for (Richiesta r : occupate) {
+                if (r.getData().equals(dataScelta) &&
+                    (r.getStato() == StatoRichiesta.in_corso || r.getStato() == StatoRichiesta.completato) &&
+                    oraInizio.isBefore(r.getOrarioFine()) && oraFine.isAfter(r.getOrarioInizio())) {
+                    response.sendRedirect(request.getContextPath() + "/InoltroRichieste?id_professionista=" + idProfessionista + "&error=conflitto");
+                    return;
                 }
             }
-        }
-        if (limiteInizio == null
-                || oraInizio.isBefore(limiteInizio)
-                || oraFine.isAfter(limiteFine)) {
-            response.sendRedirect(request.getContextPath()
-                    + "/InoltroRichieste?id_professionista=" + idProfessionista
-                    + "&error=fuori_orario");
-            return;
-        }
 
-        
-        
+            UtenteProfessione up = utenteProfessioneDao.selectByIdUtenteIdProfessione(idProfessionista, idProfessione);
+            BigDecimal prezzoTotale = up.getTariffaH().multiply(new BigDecimal(durataOre));
 
+            Richiesta richiesta = new Richiesta();
+            richiesta.setUtenteRichiedente(utenteLoggato);
+            richiesta.setUtenteRichiesto(utenteDao.ricercaPerId(idProfessionista));
+            richiesta.setProfessione(professioneDao.selectById(idProfessione));
+            richiesta.setData(dataScelta);
+            richiesta.setOrarioInizio(oraInizio);
+            richiesta.setOrarioFine(oraFine);
+            richiesta.setCostoEffettivo(prezzoTotale);
+            richiesta.setStato(StatoRichiesta.in_attesa);
+            richiesta.setIndirizzo(indirizzo);
+            richiesta.setDescrizione(request.getParameter("descrizione"));
 
-        BigDecimal prezzoTotale = up.getTariffaH().multiply(new BigDecimal(oreSelezionate));
-        
-        
-        
-        Veicolo veicoloScelto = null;
-        String idVeicoloString = request.getParameter("id_veicolo");
-        if (idVeicoloString != null && !idVeicoloString.isEmpty()) {
-            try {
-                Long idV = Long.valueOf(idVeicoloString);
-                UtenteVeicolo uv = utenteVeicoloDao.selectByUtenteEVeicolo(idProfessionista, idV);
-                if (uv != null) {
-                    prezzoTotale  = prezzoTotale.add(uv.getAggiuntaServizio());
-                    veicoloScelto = veicoloDao.ricercaPerId(idV);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-
-            }
-        }
-        
- 
-        Richiesta richiesta = new Richiesta();
-        richiesta.setUtenteRichiedente(utenteLoggato);
-        richiesta.setUtenteRichiesto(professionista);
-        richiesta.setProfessione(professione);
-        richiesta.setData(dataValida);
-        richiesta.setOrarioInizio(oraInizio);
-        richiesta.setOrarioFine(oraFine);
-        richiesta.setCostoEffettivo(prezzoTotale);
-        richiesta.setStato(StatoRichiesta.in_attesa);
-        richiesta.setDescrizione(request.getParameter("descrizione"));
-        richiesta.setIndirizzo(indirizzo);
-        richiesta.setVeicolo(veicoloScelto); 
-
-        try {
             richiestaDao.insert(richiesta);
+            response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet");
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(500, "Errore durante il salvataggio della richiesta");
-            return;
+            response.sendRedirect(request.getContextPath() + "/HomepageServlet");
         }
-
-        response.sendRedirect(request.getContextPath() + "/CronologiaRichiesteServlet");
-    	}
     }
+}
