@@ -150,7 +150,7 @@ return utenteAgg;
 	@Override
 	public List<Utente> ricercaTramiteProfessione(String professione) throws Exception {
 		try (EntityManager em = emf.createEntityManager()) {
-			TypedQuery<Utente> query = em.createQuery("SELECT up.utente FROM UtenteProfessione up WHERE up.professione.nome = :professione", Utente.class);
+			TypedQuery<Utente> query = em.createQuery("SELECT up.utente FROM UtenteProfessione up WHERE up.professione.nome = :professione and up.tariffaH>0", Utente.class);
 			query.setParameter("professione", professione);
 	        
 

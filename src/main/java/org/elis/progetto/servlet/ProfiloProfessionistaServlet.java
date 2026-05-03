@@ -84,7 +84,7 @@ public class ProfiloProfessionistaServlet extends HttpServlet {
 			
 			Double media = recensioneDao.selectAvgByUtente(idProfessionista);
 			List<Professione> professioniUtente = professioneDao.selectbyUtente(idProfessionista);
-			List<UtenteProfessione> utenteProf = utenteProfessioneDao.selectByUtente(idProfessionista);
+			List<UtenteProfessione> utenteProf = utenteProfessioneDao.selectByUtenteandtariffa(idProfessionista);
 			List<Immagine> immagini = immagineDao.selectByIdUtente(idProfessionista);
 			List<Recensione> recensioni = recensioneDao.selectByIdUtenteRicevente(idProfessionista);
 			List<Veicolo> veicoli = veicoloDao.getVeicolibyUtente(idProfessionista);

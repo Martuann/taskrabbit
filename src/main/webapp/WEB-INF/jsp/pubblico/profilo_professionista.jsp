@@ -132,7 +132,7 @@
         <hr>
 
         <section class="reviews-section">
-            <h2>Cosa dicono i clienti | <%  if(media != null) { %><%= media%>⭐<%}%></h2>
+            <h2>Cosa dicono i clienti  <%  if(media != null) { %>| <%= media%>⭐<%}%></h2>
             <% 
                 List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni"); 
                 List<Utente> listaRecensori = (List<Utente>) request.getAttribute("listaRecensori"); 
@@ -164,7 +164,7 @@
                 }
             else { %> <p>Non ci sono ancora recensioni per questo professionista.</p> <% } %>
 	</section>         
-	  <% if(!isProprietario && utenteLoggato != null) { %>
+	  <% if(!isProprietario && utenteLoggato != null && utenteLoggato.getRuolo().equals(Ruolo.UTENTE_BASE)) { %>
     <section class="contact-section">
         <h2>Vuoi contattare questo professionista?</h2>
         <form action="<%= request.getContextPath() %>/InoltroRichieste" method="Get">

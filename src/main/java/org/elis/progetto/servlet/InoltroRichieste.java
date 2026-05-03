@@ -58,13 +58,12 @@ public class InoltroRichieste extends HttpServlet {
                 return;
             }
 
-            // Recupero dati dal DB
             List<Veicolo> veicoli = veicoloDao.getVeicolibyUtente(idProfessionista);
             List<Disponibilita> eccezioni = dispDao.getDisponibilitaPerUtente(idProfessionista);
             List<OrarioBase> orariBase = orarioDao.getOrariByUtente(idProfessionista);
             List<UtenteVeicolo> utenteVeicoli = utenteVeicoloDao.getDettagliVeicoliUtente(idProfessionista);
             List<Professione> professioni = professioneDao.selectbyUtente(idProfessionista);
-            List<UtenteProfessione> utenteProf = utenteProfessioneDao.selectByUtente(idProfessionista);
+            List<UtenteProfessione> utenteProf = utenteProfessioneDao.selectByUtenteandtariffa(idProfessionista);
             List<Richiesta> occupate = richiestaDao.selectByIdUtenteRichiesto(idProfessionista);
 
             List<Disponibilita> dispProssimeDueSettimane = new ArrayList<>();

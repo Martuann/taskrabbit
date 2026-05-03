@@ -119,6 +119,17 @@ public class JpaUtenteProfessioneDao implements UtenteProfessioneDao{
 	   
 	}
 	}
+
+	@Override
+	public List<UtenteProfessione> selectByUtenteandtariffa(long idUtente) throws Exception {
+		try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                "SELECT up FROM UtenteProfessione up WHERE up.utente.id = :idU and up.tariffaH>0", 
+                UtenteProfessione.class)
+                .setParameter("idU", idUtente)
+                .getResultList();
+        }	
+	}
 	
 	
 	

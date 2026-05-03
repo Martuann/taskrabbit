@@ -12,5 +12,6 @@ public interface UtenteProfessioneDao {
 	UtenteProfessione selectByIdUtenteIdProfessione(Long idUtente, Long idProfessione)throws Exception;
 	public List<UtenteProfessione> selectByUtente(long idUtente)throws Exception;
 	Boolean checkTariffeCritiche(Long utenteId) throws Exception;
+	public List<UtenteProfessione> selectByUtenteandtariffa(long idUtente)throws Exception;
 
 }
