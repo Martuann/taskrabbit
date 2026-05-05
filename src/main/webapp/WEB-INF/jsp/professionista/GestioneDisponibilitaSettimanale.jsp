@@ -106,7 +106,7 @@
 						}
 					}
 
-					boolean lavora = (dispTrovata != null || (dispTrovata == null && standardGiorno != null));
+					boolean lavora = !chiusoEsplicito && (dispTrovata != null || (dispTrovata == null && standardGiorno != null)); 
 					String inizio = "09:00"; 
 					String fine = "18:00";
 
